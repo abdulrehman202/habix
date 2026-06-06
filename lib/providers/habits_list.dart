@@ -5,10 +5,10 @@ import 'package:habix/providers/habit_category.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 List<Habit> allHabits = [
-  Habit('Walking', Category.HEALTH, '30 minutes', true, false, false,0),
-  Habit('Drink Water', Category.HEALTH, '8 glasses of water', true, false, false,0),
-  Habit('Exercise', Category.PRODUCTIVITY, '15 minutes', false, true, false,0),
-  Habit('Read Book', Category.MIND, '30 minutes', true, false, false,0),
+  Habit('Walking', Category.HEALTH, '30 minutes', Interval.DAILY ,0),
+  Habit('Drink Water', Category.HEALTH, '8 glasses of water', Interval.DAILY,0),
+  Habit('Exercise', Category.PRODUCTIVITY, '15 minutes', Interval.WEEKDAYS,0),
+  Habit('Read Book', Category.MIND, '30 minutes', Interval.WEEKEND,0),
 ];
 
 // final habitsProvider = Provider((ref)=> allHabits);

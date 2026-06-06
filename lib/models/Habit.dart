@@ -7,16 +7,20 @@ enum Category{
   OTHER
 }
 
+enum Interval{
+  DAILY,
+  WEEKDAYS,
+  WEEKEND,
+}
+
 class Habit {
 String name;
 Category category;
 String description;
-bool isDaily;
-bool onWeekDay;
-bool onWeekend;
+Interval interval;
 int streaks;
 
-Habit(this.name, this.category, this.description,this.isDaily, this.onWeekDay, this.onWeekend,this.streaks
+Habit(this.name, this.category, this.description,this.interval,this.streaks
 );
   
 }

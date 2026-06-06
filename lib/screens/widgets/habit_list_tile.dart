@@ -10,11 +10,11 @@ Map<Category, IconData> icons = {
 };
 
 Map<Category, Color> iconsColor = {
-  Category.MORNING: Colors.amberAccent,
-  Category.MIND: const Color.fromARGB(255, 135, 205, 237),
-  Category.HEALTH: const Color.fromARGB(255, 222, 148, 236),
-  Category.PRODUCTIVITY: Colors.blueGrey,
-  Category.OTHER: const Color.fromARGB(255, 122, 137, 224),
+  Category.MORNING: const Color.fromARGB(255, 241, 232, 199),
+  Category.MIND: const Color.fromARGB(255, 183, 232, 255),
+  Category.HEALTH: const Color.fromARGB(255, 246, 205, 254),
+  Category.PRODUCTIVITY: const Color.fromARGB(255, 187, 232, 255),
+  Category.OTHER: const Color.fromARGB(255, 182, 193, 255),
 }; 
 
 class HabitTile extends StatelessWidget {
