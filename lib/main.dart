@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:habix/screens/tabs.dart';
 
 void main() {
@@ -25,7 +26,15 @@ class MyApp extends StatelessWidget {
       //   )
         
       // ),
-      theme: ThemeData().copyWith(
+      
+      theme: ThemeData( 
+        fontFamily: GoogleFonts.andika ().fontFamily,
+      ).copyWith(
+        
+        appBarTheme: AppBarTheme(
+          backgroundColor: Colors.white,
+          foregroundColor: kColorScheme.primary
+        ),
         colorScheme: kColorScheme,
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           showUnselectedLabels: false,

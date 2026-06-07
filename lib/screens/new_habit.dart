@@ -17,9 +17,24 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   TextEditingController _nameController = TextEditingController(), _descriptionController = TextEditingController();
   Category _category = Category.OTHER;
   Interval _interval = Interval.DAILY;
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _nameController.dispose();
+    _descriptionController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        actions: [
+          IconButton(onPressed: ()=>Navigator.pop(context), icon: Icon(Icons.close))
+        ],
+        automaticallyImplyLeading: false,
+        title: Center(child: Text('New Habit')),
+      ),
       floatingActionButton: FilledButton(onPressed: (){ref.read(habitsListProvider.notifier).addHabit(
         Habit(_nameController
         .text, _category, _descriptionController.text, _interval, 0)
@@ -35,7 +50,19 @@ class _NewHabitState extends ConsumerState<NewHabit> {
               _interval = ref.watch(newHabitIntervalProvider);
               return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
+
                 children: [
+                  Center(
+                    child: Image.asset(
+                      'assets/images/calendar.jpg',
+                      fit: BoxFit.fitHeight,
+                      width: constraints.maxWidth,
+                      height: 150,
+                      errorBuilder: (context, error, stackTrace) => Container(),
+                    ),
+                  ),
+                  Center(child: Text('Let\'s add a new habit to the schedule',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)),
+                  SizedBox(height: 10,),
                   TextField(
                     controller: _nameController,
                     decoration: InputDecoration(
