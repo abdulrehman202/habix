@@ -37,7 +37,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
         automaticallyImplyLeading: false,
         title: Center(child: Text('New Habit')),
       ),
-      bottomNavigationBar: _button(),
       body: Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: 20, vertical: 10),
         child: SingleChildScrollView(
@@ -109,7 +108,8 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                     
                     SizedBox(height: 10,),
                     categoryOption(constraints.maxWidth),
-                    
+                    SizedBox(height: 15,),
+                  _button()
                       ],
                     ),
                   ),
@@ -160,6 +160,8 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   Text('Category', style: TextStyle(fontWeight: FontWeight.bold),),
                   SizedBox(height: 10,),
                   categoryOption(constraints.maxWidth),
+                  SizedBox(height: 15,),
+                  _button()
                   
                 ],
               );
@@ -215,13 +217,14 @@ class _NewHabitState extends ConsumerState<NewHabit> {
     return Wrap(
       alignment: w>maxScreenSizeInPortraitMode? WrapAlignment.center: WrapAlignment.start,
       children: Category.values.map((c)=> c!=Category.ALL? Container(
-        margin: EdgeInsets.only(bottom: 5),
+        height: 100,
+        margin: EdgeInsets.only(bottom: 5,right: 10),
         child: Column(
           children: [
             GestureDetector(onTap: ()=>ref.read(newHabitCategoryProvider.notifier).changeCategorySelection(c), child: Container(
               width: w/Category.values.length,
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-              margin: EdgeInsets.only(right: 10,bottom: 10),
+              margin: EdgeInsets.only(bottom: 10),
               decoration: _category == c?   BoxDecoration(
                   border:  Border.all(width:2),
                 borderRadius: BorderRadius.circular(10),
