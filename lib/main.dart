@@ -29,6 +29,12 @@ class MyApp extends StatelessWidget {
       // ),
       
       theme: ThemeData( 
+        filledButtonTheme: FilledButtonThemeData(
+          style: FilledButton.styleFrom(
+    shape: RoundedRectangleBorder(
+      borderRadius: BorderRadius.circular(5.0), // Adjust radius here
+    ),)
+        ),
         fontFamily: GoogleFonts.andika ().fontFamily,
       ).copyWith(
         

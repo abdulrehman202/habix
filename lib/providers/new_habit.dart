@@ -18,3 +18,12 @@ class NewHabitCategory extends StateNotifier<Category>{
 }
 
 final newHabitCategoryProvider = StateNotifierProvider<NewHabitCategory, Category>((ref)=>NewHabitCategory());
+
+class NewHabitButtonText extends StateNotifier<String>{
+
+  NewHabitButtonText():super('');
+
+  void updateHabitName(String txt)=>state = txt;
+}
+
+final newHabitButtonText = StateNotifierProvider<NewHabitButtonText, String>((ref)=>NewHabitButtonText());

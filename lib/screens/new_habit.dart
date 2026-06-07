@@ -37,12 +37,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
         automaticallyImplyLeading: false,
         title: Center(child: Text('New Habit')),
       ),
-      floatingActionButton: FilledButton(onPressed: (){ref.read(habitsListProvider.notifier).addHabit(
-        Habit(_nameController
-        .text, _category, _descriptionController.text, _interval, 0)
-      );
-      Navigator.pop(context);
-      }, child: Text('Add Habit')),
+      bottomNavigationBar: _button(),
       body: Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: 20, vertical: 10),
         child: SingleChildScrollView(
@@ -80,6 +75,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                     SizedBox(height: 10,),
                     TextField(
                       controller: _nameController,
+                      onChanged: (txt)=>ref.read(newHabitButtonText.notifier).updateHabitName(txt),
                       decoration: InputDecoration(
                         hint: Text('Walk, Drink Water, Yoga'),
                         label: Text('Name'),
@@ -139,7 +135,8 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   SizedBox(height: 10,),
                   TextField(
                     controller: _nameController,
-                    decoration: InputDecoration(
+                    onChanged: (txt)=>ref.read(newHabitButtonText.notifier).updateHabitName(txt),
+                      decoration: InputDecoration(
                       hint: Text('Walk, Drink Water, Yoga'),
                       label: Text('Name'),
                       border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
@@ -192,6 +189,26 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       )).toList(),
     ); 
   }
+
+  _button(){final hName = ref.watch(newHabitButtonText);    
+    return Container(
+      margin: EdgeInsets.all(8),
+      child: TextButton(
+        
+        onPressed: ()
+        {
+          ref.read(habitsListProvider.notifier).addHabit(
+          Habit(_nameController
+          .text, _category, _descriptionController.text, _interval, 0)
+        );
+        Navigator.pop(context);
+        
+        },
+        child: Text('Add $hName as my new Hobby'),
+      ),
+    );
+    }
+
   
   categoryOption(double w) 
   {
@@ -200,7 +217,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       children: Category.values.map((c)=> c!=Category.ALL? Container(
         margin: EdgeInsets.only(bottom: 5),
         child: Column(
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(onTap: ()=>ref.read(newHabitCategoryProvider.notifier).changeCategorySelection(c), child: Container(
               width: w/Category.values.length,
