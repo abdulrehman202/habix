@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart' hide Interval;
+import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/constants.dart';
 import 'package:habix/models/Habit.dart';
 import 'package:habix/providers/habits_list.dart';
 import 'package:habix/providers/new_habit.dart';
@@ -48,7 +50,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             builder: (context, constraints) {
               _category = ref.watch(newHabitCategoryProvider);
               _interval = ref.watch(newHabitIntervalProvider);
-              return constraints.maxWidth>600?_landscape(constraints): _portrait(constraints);
+              return constraints.maxWidth>maxScreenSizeInPortraitMode?_landscape(constraints): _portrait(constraints);
             }
           ),
         )
@@ -74,7 +76,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                         errorBuilder: (context, error, stackTrace) => Container(),
                       ),
                     ),
-                    Center(child: Text('Let\'s add a new habit to the schedule',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)),
+                    Center(child: Text('Let us know about the new habit you are about to add to your schedule',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),textAlign: TextAlign.center,)),
                     SizedBox(height: 10,),
                     TextField(
                       controller: _nameController,
@@ -123,7 +125,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   {
     return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
-
                 children: [
                   Center(
                     child: Image.asset(
@@ -134,7 +135,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                       errorBuilder: (context, error, stackTrace) => Container(),
                     ),
                   ),
-                  Center(child: Text('Let\'s add a new habit to the schedule',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)),
+                  Center(child: Text('Let us know about the new habit you are about to add to your schedule',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),textAlign: TextAlign.center,)),
                   SizedBox(height: 10,),
                   TextField(
                     controller: _nameController,
@@ -187,7 +188,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             shape: BoxShape.rectangle,
             color: const Color.fromARGB(255, 225, 225, 225)
           ),
-          child: Text(i.name.capitalize, style: TextStyle(fontWeight: _interval == i?FontWeight.bold: FontWeight.normal),))),
+          child: Text(i.name.capitalize,maxLines: 1, style: TextStyle(fontWeight: _interval == i?FontWeight.bold: FontWeight.normal),))),
       )).toList(),
     ); 
   }
@@ -195,12 +196,11 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   categoryOption(double w) 
   {
     return Wrap(
-      alignment: w>600? WrapAlignment.center: WrapAlignment.start,
-      spacing: 10,
+      alignment: w>maxScreenSizeInPortraitMode? WrapAlignment.center: WrapAlignment.start,
       children: Category.values.map((c)=> c!=Category.ALL? Container(
         margin: EdgeInsets.only(bottom: 5),
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
+          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             GestureDetector(onTap: ()=>ref.read(newHabitCategoryProvider.notifier).changeCategorySelection(c), child: Container(
               width: w/Category.values.length,
@@ -217,7 +217,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
               color: const Color.fromARGB(255, 225, 225, 225)
               ),
               child: Icon(icons[c],))),
-          Text(c.name, style: TextStyle(fontSize: 10,),)
+          Text(c.name, style: TextStyle(fontSize: 10,),textAlign: TextAlign.center,)
           ],
         ),
       ):Container()).toList(),
