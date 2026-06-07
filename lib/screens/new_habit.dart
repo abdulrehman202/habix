@@ -48,7 +48,80 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             builder: (context, constraints) {
               _category = ref.watch(newHabitCategoryProvider);
               _interval = ref.watch(newHabitIntervalProvider);
-              return Column(
+              return constraints.maxWidth>600?_landscape(constraints): _portrait(constraints);
+            }
+          ),
+        )
+      )
+    );
+  }
+  
+  Widget _landscape(BoxConstraints constraints)
+  {
+    return Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Expanded(
+                    child: Column(
+                      children: [
+                        
+                    Center(
+                      child: Image.asset(
+                        'assets/images/calendar.jpg',
+                        fit: BoxFit.fitHeight,
+                        width: constraints.maxWidth,
+                        height: 150,
+                        errorBuilder: (context, error, stackTrace) => Container(),
+                      ),
+                    ),
+                    Center(child: Text('Let\'s add a new habit to the schedule',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),)),
+                    SizedBox(height: 10,),
+                    TextField(
+                      controller: _nameController,
+                      decoration: InputDecoration(
+                        hint: Text('Walk, Drink Water, Yoga'),
+                        label: Text('Name'),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                      ),
+                    ),
+                    SizedBox(height: 10,),
+                    TextField(
+                      controller: _descriptionController,
+                      decoration: InputDecoration(
+                        hint: Text('8 glass of water, 30 minute of exercise'),
+                        label: Text('Decscription'),
+                        border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
+                        
+                      ),
+                    ),
+                    
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: [
+                        Text('Interval',style: TextStyle(fontWeight: FontWeight.bold),),
+                        SizedBox(height: 10,),
+                    intervalOption(constraints.maxWidth),
+                    SizedBox(height: 10,),
+                    Text('Category', style: TextStyle(fontWeight: FontWeight.bold),),
+                    
+                    SizedBox(height: 10,),
+                    categoryOption(constraints.maxWidth),
+                    
+                      ],
+                    ),
+                  ),
+                ],
+              );
+  }
+
+  Widget _portrait(BoxConstraints constraints)
+  {
+    return Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
 
                 children: [
@@ -92,11 +165,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   
                 ],
               );
-            }
-          ),
-        )
-      )
-    );
   }
   
   Widget intervalOption(double w) 
@@ -127,27 +195,31 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   categoryOption(double w) 
   {
     return Wrap(
-      alignment: WrapAlignment.start,
-      children: Category.values.map((c)=> c!=Category.ALL? Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
-          GestureDetector(onTap: ()=>ref.read(newHabitCategoryProvider.notifier).changeCategorySelection(c), child: Container(
-            width: w/Category.values.length,
-            padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-            margin: EdgeInsets.only(right: 10,bottom: 10),
-            decoration: _category == c?   BoxDecoration(
-                border:  Border.all(width:2),
-              borderRadius: BorderRadius.circular(10),
-              shape: BoxShape.rectangle,
-            color: const Color.fromARGB(255, 225, 225, 225)
-            ):BoxDecoration(
-              borderRadius: BorderRadius.circular(10),
-              shape: BoxShape.rectangle,
-            color: const Color.fromARGB(255, 225, 225, 225)
-            ),
-            child: Icon(icons[c],))),
-        Text(c.name, style: TextStyle(fontSize: 10),)
-        ],
+      alignment: w>600? WrapAlignment.center: WrapAlignment.start,
+      spacing: 10,
+      children: Category.values.map((c)=> c!=Category.ALL? Container(
+        margin: EdgeInsets.only(bottom: 5),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            GestureDetector(onTap: ()=>ref.read(newHabitCategoryProvider.notifier).changeCategorySelection(c), child: Container(
+              width: w/Category.values.length,
+              padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
+              margin: EdgeInsets.only(right: 10,bottom: 10),
+              decoration: _category == c?   BoxDecoration(
+                  border:  Border.all(width:2),
+                borderRadius: BorderRadius.circular(10),
+                shape: BoxShape.rectangle,
+              color: const Color.fromARGB(255, 225, 225, 225)
+              ):BoxDecoration(
+                borderRadius: BorderRadius.circular(10),
+                shape: BoxShape.rectangle,
+              color: const Color.fromARGB(255, 225, 225, 225)
+              ),
+              child: Icon(icons[c],))),
+          Text(c.name, style: TextStyle(fontSize: 10,),)
+          ],
+        ),
       ):Container()).toList(),
     );
   }
