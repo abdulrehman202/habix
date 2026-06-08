@@ -4,6 +4,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/models/Habit.dart';
 import 'package:habix/providers/habit_category.dart';
 import 'package:habix/providers/habits_list.dart';
+import 'package:habix/providers/new_habit.dart';
+import 'package:habix/screens/new_habit.dart';
 import 'package:habix/screens/widgets/habit_list_tile.dart';
 
 extension abc on String{
@@ -56,7 +58,12 @@ class _AllHabitsState extends ConsumerState<AllHabits> {
                   separatorBuilder: (context, index) => Divider(),
                   shrinkWrap: true,
                   itemCount: habits.length,
-                  itemBuilder: (context, index)=> HabitTile(habit: habits[index])),
+                  itemBuilder: (context, index)=> HabitTile(
+                    onHabitSelected: (){
+                      ref.read(newHabitCategoryProvider.notifier).changeCategorySelection(habits[index].category);
+                      ref.read(newHabitIntervalProvider.notifier).changeIntervalSelection(habits[index].interval);
+                      Navigator.push( context, MaterialPageRoute(builder: (ctx)=>NewHabit(habit: habits[index],)));},
+                    habit: habits[index])),
                ),
              )
           

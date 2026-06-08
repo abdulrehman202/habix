@@ -19,11 +19,13 @@ Map<Category, Color> iconsColor = {
 
 class HabitTile extends StatelessWidget {
   Habit habit;
-  HabitTile({super.key,required this.habit});
+  VoidCallback onHabitSelected;
+  HabitTile({super.key,required this.habit, required this.onHabitSelected});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      onTap: onHabitSelected,
       leading: Container(
             
             padding: EdgeInsets.all(10.0),
