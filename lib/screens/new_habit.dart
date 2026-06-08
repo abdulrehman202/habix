@@ -27,6 +27,14 @@ class _NewHabitState extends ConsumerState<NewHabit> {
     _descriptionController.dispose();
     super.dispose();
   }
+
+  _resetStates()
+  {
+    ref.invalidate(newHabitIntervalProvider);
+    ref.invalidate(newHabitCategoryProvider);
+    ref.invalidate(newHabitReminderTime);
+    ref.invalidate(newHabitButtonText);
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,7 +47,9 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       ),
       appBar: AppBar(
         actions: [
-          IconButton(onPressed: ()=>Navigator.pop(context), icon: Icon(Icons.close))
+          IconButton(onPressed: (){
+            _resetStates();
+            Navigator.pop(context);}, icon: Icon(Icons.close))
         ],
         automaticallyImplyLeading: false,
         title: Center(child: Text('New Habit')),
@@ -215,7 +225,8 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           Habit(_nameController
           .text, _category, _descriptionController.text, _interval, 0)
         );
-        Navigator.pop(context);
+            _resetStates();
+            Navigator.pop(context);
         
         },
         child: Text('Add $hName as my new Hobby'),
