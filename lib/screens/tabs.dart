@@ -28,14 +28,16 @@ class _TabScreenState extends State<TabScreen> {
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       body: activeScreen,
-      floatingActionButton: FloatingActionButton(shape: CircleBorder(), onPressed: ()
+      floatingActionButton: FloatingActionButton(
+        elevation: 9,
+        shape: CircleBorder(), onPressed: ()
       {
         Navigator.push(context, MaterialPageRoute(builder: (context)=>NewHabit()));
       },child: Icon(Icons.add),),
       bottomNavigationBar: BottomAppBar(
+        shadowColor: Colors.grey,
+        color: Colors.black,
         padding: EdgeInsets.zero,
-        height: 100,
-        shape: CircularNotchedRectangle(),
         child: BottomNavigationBar(
           currentIndex: _selectedTabIndex,
         onTap: (i) {
@@ -55,7 +57,7 @@ class _TabScreenState extends State<TabScreen> {
           ),
           BottomNavigationBarItem(icon: Icon(Icons.person), label: 'Profile'),
         ],
-      ),
+              ),
       )
     );
   }

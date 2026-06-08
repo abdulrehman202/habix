@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
       // ),
       
       theme: ThemeData( 
+        scaffoldBackgroundColor: Colors.white,
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
     shape: RoundedRectangleBorder(

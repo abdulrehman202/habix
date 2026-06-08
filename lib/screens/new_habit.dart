@@ -30,6 +30,13 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      bottomNavigationBar: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          _button(),
+        ],
+      ),
       appBar: AppBar(
         actions: [
           IconButton(onPressed: ()=>Navigator.pop(context), icon: Icon(Icons.close))
@@ -66,7 +73,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                         'assets/images/calendar.jpg',
                         fit: BoxFit.fitHeight,
                         width: constraints.maxWidth,
-                        height: 150,
+                        height: 100,
                         errorBuilder: (context, error, stackTrace) => Container(),
                       ),
                     ),
@@ -91,6 +98,8 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                         
                       ),
                     ),
+                  SizedBox(height: 10,),
+                  _reminderTimeSet(),
                     
                       ],
                     ),
@@ -108,8 +117,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                     
                     SizedBox(height: 10,),
                     categoryOption(constraints.maxWidth),
-                    SizedBox(height: 15,),
-                  _button()
                       ],
                     ),
                   ),
@@ -157,11 +164,11 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   SizedBox(height: 10,),
                   intervalOption(constraints.maxWidth),
                   SizedBox(height: 10,),
+                  _reminderTimeSet(),
+                  SizedBox(height: 10,),
                   Text('Category', style: TextStyle(fontWeight: FontWeight.bold),),
                   SizedBox(height: 10,),
                   categoryOption(constraints.maxWidth),
-                  SizedBox(height: 15,),
-                  _button()
                   
                 ],
               );
@@ -192,13 +199,18 @@ class _NewHabitState extends ConsumerState<NewHabit> {
     ); 
   }
 
-  _button(){final hName = ref.watch(newHabitButtonText);    
+  Widget _button(){final hName = ref.watch(newHabitButtonText);    
     return Container(
-      margin: EdgeInsets.all(8),
+      alignment: Alignment.center,
+      margin: EdgeInsets.only(bottom: 15),
       child: TextButton(
-        
         onPressed: ()
         {
+          if(_nameController.text.isEmpty || _descriptionController.text.isEmpty)
+          {
+            ScaffoldMessenger.of(context).showSnackBar(SnackBar(duration: Duration(milliseconds: 750), content: Text('Please fill all the fields') ));
+            return;
+          }
           ref.read(habitsListProvider.notifier).addHabit(
           Habit(_nameController
           .text, _category, _descriptionController.text, _interval, 0)
@@ -217,7 +229,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
     return Wrap(
       alignment: w>maxScreenSizeInPortraitMode? WrapAlignment.center: WrapAlignment.start,
       children: Category.values.map((c)=> c!=Category.ALL? Container(
-        height: 100,
+        height: 90,
         margin: EdgeInsets.only(bottom: 5,right: 10),
         child: Column(
           children: [
@@ -240,6 +252,27 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           ],
         ),
       ):Container()).toList(),
+    );
+  }
+  
+  Widget _reminderTimeSet()
+  {
+    final time = ref.watch(newHabitReminderTime);
+    return ListTile(
+      onTap: ()async {
+        
+        final selectedTime = await showTimePicker(
+          initialEntryMode: TimePickerEntryMode.inputOnly,
+          context: context, initialTime: TimeOfDay.now());
+        ref.read(newHabitReminderTime.notifier).updateHabitReminder(selectedTime??time);
+        },
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8)
+      ),
+      tileColor: const Color.fromARGB(255, 232, 232, 232),
+      leading: Icon(Icons.alarm),
+      title: Text(time.format(context).toString()),
+      trailing: Icon(Icons.keyboard_arrow_right_rounded),
     );
   }
 }

@@ -1,3 +1,5 @@
+// import 'package:flutter/material.dart';
+import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/models/Habit.dart';
 
@@ -27,3 +29,12 @@ class NewHabitButtonText extends StateNotifier<String>{
 }
 
 final newHabitButtonText = StateNotifierProvider<NewHabitButtonText, String>((ref)=>NewHabitButtonText());
+
+class NewHabitReminderTime extends StateNotifier<TimeOfDay>{
+
+  NewHabitReminderTime():super(TimeOfDay.now());
+
+  void updateHabitReminder(TimeOfDay time)=>state = time;
+}
+
+final newHabitReminderTime = StateNotifierProvider<NewHabitReminderTime, TimeOfDay>((ref)=>NewHabitReminderTime());
