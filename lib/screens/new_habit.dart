@@ -187,13 +187,13 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   Widget intervalOption(double w) 
   {
     return Row(
-      
-      children: Interval.values.map((i)=>Expanded(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        ...Interval.values.map((i)=>Expanded(
         child: GestureDetector(onTap: ()=>ref.read(newHabitIntervalProvider.notifier).changeIntervalSelection(i), child: Container(
           alignment: Alignment.center,
-          width: w/3,
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-          margin: EdgeInsets.only(right: 10),
+          margin: EdgeInsets.only(right: i.index==2?0: 5),
           decoration: _interval == i? BoxDecoration(
             border: Border.all(width: 2),
             borderRadius: BorderRadius.circular(10),
@@ -205,7 +205,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             color: const Color.fromARGB(255, 225, 225, 225)
           ),
           child: Text(i.name.capitalize,maxLines: 1, style: TextStyle(fontWeight: _interval == i?FontWeight.bold: FontWeight.normal),))),
-      )).toList(),
+      ))],
     ); 
   }
 
@@ -238,10 +238,11 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   categoryOption(double w) 
   {
     return Wrap(
-      alignment: w>maxScreenSizeInPortraitMode? WrapAlignment.center: WrapAlignment.start,
+      alignment: w>maxScreenSizeInPortraitMode? WrapAlignment.center:WrapAlignment.start,
       children: Category.values.map((c)=> c!=Category.ALL? Container(
         height: 90,
-        margin: EdgeInsets.only(bottom: 5,right: 10),
+        width: 80,
+        margin: EdgeInsets.only(bottom: 5,right: w>maxScreenSizeInPortraitMode?10:0),
         child: Column(
           children: [
             GestureDetector(onTap: ()=>ref.read(newHabitCategoryProvider.notifier).changeCategorySelection(c), child: Container(
@@ -259,7 +260,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
               color: const Color.fromARGB(255, 225, 225, 225)
               ),
               child: Icon(icons[c],))),
-          Text(c.name, style: TextStyle(fontSize: 10,),textAlign: TextAlign.center,)
+          Text(c.name, style: TextStyle(fontSize: 10,),textAlign: TextAlign.center,overflow: TextOverflow.ellipsis,)
           ],
         ),
       ):Container()).toList(),
