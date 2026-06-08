@@ -302,7 +302,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           Navigator.pop(context);
         },
         child: Text(
-          widget.habit != null ? 'Add $hName as my new Hobby' : 'Update Habit',
+          widget.habit == null ? 'Add $hName as my new Hobby' : 'Update Habit',
         ),
       ),
     );
