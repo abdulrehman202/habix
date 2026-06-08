@@ -38,13 +38,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      bottomNavigationBar: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          _button(),
-        ],
-      ),
       appBar: AppBar(
         actions: [
           IconButton(onPressed: (){
@@ -172,14 +165,29 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   SizedBox(height: 10,),
                   Text('Interval',style: TextStyle(fontWeight: FontWeight.bold),),
                   SizedBox(height: 10,),
-                  intervalOption(constraints.maxWidth),
-                  SizedBox(height: 10,),
-                  _reminderTimeSet(),
+                  Card(
+                    elevation: 5,
+                    child: 
+                  Container(
+                    margin: EdgeInsets.all(15),
+                    child: Column(
+                      children: [
+                        intervalOption(constraints.maxWidth),
+                    SizedBox(height: 20,),
+                    _reminderTimeSet(),
+                      ],
+                    ),
+                  ),),
                   SizedBox(height: 10,),
                   Text('Category', style: TextStyle(fontWeight: FontWeight.bold),),
                   SizedBox(height: 10,),
-                  categoryOption(constraints.maxWidth),
-                  
+                  Card(
+                    elevation: 5,
+                    child: Container(
+                      margin: EdgeInsets.only(top: 10),
+                      child: categoryOption(constraints.maxWidth))),
+                  SizedBox(height: 10,),
+                  _button()
                 ],
               );
   }
@@ -195,7 +203,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
           margin: EdgeInsets.only(right: i.index==2?0: 5),
           decoration: _interval == i? BoxDecoration(
-            border: Border.all(width: 2),
+            border: Border.all(width: 2,color: Colors.blueGrey),
             borderRadius: BorderRadius.circular(10),
             shape: BoxShape.rectangle,
             color: const Color.fromARGB(255, 225, 225, 225)
@@ -210,10 +218,10 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   }
 
   Widget _button(){final hName = ref.watch(newHabitButtonText);    
-    return Container(
-      alignment: Alignment.center,
-      margin: EdgeInsets.only(bottom: 15),
-      child: TextButton(
+    return SizedBox(
+      width: double.infinity,
+      height: 60,
+      child: FilledButton(
         onPressed: ()
         {
           if(_nameController.text.isEmpty || _descriptionController.text.isEmpty)
@@ -235,7 +243,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
     }
 
   
-  categoryOption(double w) 
+  Widget categoryOption(double w) 
   {
     return Wrap(
       alignment: w>maxScreenSizeInPortraitMode? WrapAlignment.center:WrapAlignment.start,
@@ -250,7 +258,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
               padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
               margin: EdgeInsets.only(bottom: 10),
               decoration: _category == c?   BoxDecoration(
-                  border:  Border.all(width:2),
+                  border:  Border.all(width:2,color:  Colors.blueGrey),
                 borderRadius: BorderRadius.circular(10),
                 shape: BoxShape.rectangle,
               color: const Color.fromARGB(255, 225, 225, 225)
@@ -283,8 +291,14 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       ),
       tileColor: const Color.fromARGB(255, 232, 232, 232),
       leading: Icon(Icons.alarm),
-      title: Text(time.format(context).toString()),
-      trailing: Icon(Icons.keyboard_arrow_right_rounded),
+      title: Text('Reminder', style: TextStyle(fontWeight: FontWeight.bold),),
+      trailing: Row(
+      mainAxisSize: MainAxisSize.min,
+        children: [
+          Text(time.format(context).toString(),style: TextStyle(fontSize: 15),),
+          Icon(Icons.keyboard_arrow_right_rounded),
+        ],
+      ),
     );
   }
 }

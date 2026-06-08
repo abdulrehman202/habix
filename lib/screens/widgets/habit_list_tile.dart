@@ -23,33 +23,27 @@ class HabitTile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-      Container(
-        
-        padding: EdgeInsets.all(10.0),
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: iconsColor[habit.category]
-        ),
-      width: 50,
-        child: Icon( icons[habit.category])),
-        Expanded(
-          child: ListTile(
-            trailing: _trailingWidget(habit.streaks),
-            title: Text(habit.name),
-            subtitle: Text(habit.description,
-          )),
-        ),
-      ],
-    );
+    return ListTile(
+      leading: Container(
+            
+            padding: EdgeInsets.all(10.0),
+            decoration: BoxDecoration(
+    shape: BoxShape.circle,
+    color: iconsColor[habit.category]
+            ),
+          width: 50,
+            child: Icon( icons[habit.category])),
+      trailing: _trailingWidget(habit.streaks),
+      title: Text(habit.name),
+      subtitle: Text(habit.description,
+    ));
   }
   
   _trailingWidget(int streaks) 
   {
     return Row(
       mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
     children: [
       Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -58,7 +52,7 @@ class HabitTile extends StatelessWidget {
           Text('Streaks',style: TextStyle(fontWeight: FontWeight.bold),)
         ],
       ),
-      SizedBox(width: 10,),
+      SizedBox(width: 3,),
       Icon(Icons.arrow_forward_ios_rounded),
     ],
   );

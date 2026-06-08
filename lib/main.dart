@@ -29,6 +29,9 @@ class MyApp extends StatelessWidget {
       // ),
       
       theme: ThemeData( 
+        cardTheme: CardThemeData(
+          color: Colors.white
+        ),
         scaffoldBackgroundColor: Colors.white,
         filledButtonTheme: FilledButtonThemeData(
           style: FilledButton.styleFrom(
