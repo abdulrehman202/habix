@@ -10,11 +10,11 @@ Map<Category, IconData> icons = {
 };
 
 Map<Category, Color> iconsColor = {
-  Category.MORNING: const Color.fromARGB(255, 241, 232, 199),
-  Category.MIND: const Color.fromARGB(255, 183, 232, 255),
-  Category.HEALTH: const Color.fromARGB(255, 246, 205, 254),
-  Category.PRODUCTIVITY: const Color.fromARGB(255, 187, 232, 255),
-  Category.OTHER: const Color.fromARGB(255, 182, 193, 255),
+  Category.MORNING:  Colors.blue,
+  Category.MIND: Colors.purple,
+  Category.HEALTH: Colors.green,
+  Category.PRODUCTIVITY: Colors.red,
+  Category.OTHER: Colors.orange,
 }; 
 
 class HabitTile extends StatelessWidget {
@@ -31,7 +31,7 @@ class HabitTile extends StatelessWidget {
             padding: EdgeInsets.all(10.0),
             decoration: BoxDecoration(
     shape: BoxShape.circle,
-    color: iconsColor[habit.category]
+    color: iconsColor[habit.category]!.withValues(alpha: 0.5)
             ),
           width: 50,
             child: Icon( icons[habit.category])),

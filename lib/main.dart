@@ -47,8 +47,17 @@ class MyApp extends StatelessWidget {
           foregroundColor: kColorScheme.primary
         ),
         colorScheme: kColorScheme,
+        floatingActionButtonTheme: FloatingActionButtonThemeData(
+          foregroundColor: Colors.white,
+          backgroundColor: kColorScheme.primary
+        ),
+        bottomAppBarTheme: BottomAppBarTheme(
+          elevation: 0,
+          color: Colors.white,
+        ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
-          showUnselectedLabels: false,
+          elevation: 0,
+          backgroundColor: Colors.white,
           selectedItemColor: kColorScheme.primary,
           unselectedItemColor: Colors.black54,
         )

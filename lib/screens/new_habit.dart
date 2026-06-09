@@ -243,15 +243,16 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                 margin: EdgeInsets.only(right: i.index == 2 ? 0 : 5),
                 decoration: _interval == i
                     ? BoxDecoration(
-                        border: Border.all(width: 2, color: Colors.blueGrey),
+                        border: Border.all(width: 1, color: Colors.green),
                         borderRadius: BorderRadius.circular(10),
                         shape: BoxShape.rectangle,
-                        color: const Color.fromARGB(255, 225, 225, 225),
+                        color: Colors.green.withValues(alpha: 0.2),
                       )
                     : BoxDecoration(
+                        border: Border.all(width: 1, color: Colors.grey),
                         borderRadius: BorderRadius.circular(10),
                         shape: BoxShape.rectangle,
-                        color: const Color.fromARGB(255, 225, 225, 225),
+                        // color: const Color.fromARGB(255, 225, 225, 225),
                       ),
                 child: Text(
                   i.name.capitalize,
@@ -340,26 +341,16 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                                 ? BoxDecoration(
                                     border: Border.all(
                                       width: 2,
-                                      color: Colors.blueGrey,
+                                      color: iconsColor[c]!,
                                     ),
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(15),
                                     shape: BoxShape.rectangle,
-                                    color: const Color.fromARGB(
-                                      255,
-                                      225,
-                                      225,
-                                      225,
-                                    ),
+                                    color: iconsColor[c]!.withValues(alpha: 0.2),
                                   )
                                 : BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10),
+                                    borderRadius: BorderRadius.circular(15),
                                     shape: BoxShape.rectangle,
-                                    color: const Color.fromARGB(
-                                      255,
-                                      225,
-                                      225,
-                                      225,
-                                    ),
+                                    color: iconsColor[c]!.withValues(alpha: 0.2),
                                   ),
                             child: Icon(icons[c]),
                           ),
@@ -392,8 +383,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             .read(newHabitReminderTime.notifier)
             .updateHabitReminder(selectedTime ?? time);
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
-      tileColor: const Color.fromARGB(255, 232, 232, 232),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),side: BorderSide(width: 1,color: Colors.grey.withValues(alpha: 0.7))),
       leading: Icon(Icons.alarm),
       title: Text('Reminder', style: TextStyle(fontWeight: FontWeight.bold)),
       trailing: Row(
