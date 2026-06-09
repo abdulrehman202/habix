@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habix/screens/habit_screen.dart';
 import 'package:habix/screens/new_habit.dart';
+import 'package:habix/screens/today_screen.dart';
 
 class TabScreen extends StatefulWidget {
   const TabScreen({super.key});
@@ -16,7 +17,7 @@ class _TabScreenState extends State<TabScreen> {
   @override
   Widget build(BuildContext context) {
     if (_selectedTabIndex == 0) {
-      activeScreen = Scaffold(body: Center(child: Text('Today')));
+      activeScreen = TodayScreen();
     } else if (_selectedTabIndex == 1) {
       activeScreen = AllHabits();
     } else if (_selectedTabIndex == 2) {

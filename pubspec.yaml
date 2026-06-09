@@ -38,6 +38,7 @@ dependencies:
   chips_choice: ^3.0.1
   state_notifier: ^1.0.0
   google_fonts: ^6.3.2
+  horizontal_week_calendar: ^0.0.20
 
 dev_dependencies:
   flutter_test:
