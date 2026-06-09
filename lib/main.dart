@@ -51,10 +51,6 @@ class MyApp extends StatelessWidget {
           foregroundColor: Colors.white,
           backgroundColor: kColorScheme.primary
         ),
-        bottomAppBarTheme: BottomAppBarTheme(
-          elevation: 0,
-          color: Colors.white,
-        ),
         bottomNavigationBarTheme: BottomNavigationBarThemeData(
           elevation: 0,
           backgroundColor: Colors.white,

@@ -39,10 +39,7 @@ class _TabScreenState extends State<TabScreen> {
         },
         child: Icon(Icons.add),
       ),
-      bottomNavigationBar: BottomAppBar(
-        height: 70,
-        padding: EdgeInsets.zero,
-        child: BottomNavigationBar(
+      bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           currentIndex: _selectedTabIndex,
           onTap: (i) {
@@ -69,7 +66,6 @@ class _TabScreenState extends State<TabScreen> {
             ),
           ],
         ),
-      ),
     );
   }
 }
