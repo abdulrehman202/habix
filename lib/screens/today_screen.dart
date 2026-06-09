@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/constants.dart';
 import 'package:habix/providers/habits_list.dart';
+import 'package:habix/screens/habit_detail.dart';
+import 'package:habix/screens/new_habit.dart';
 import 'package:habix/screens/widgets/habit_list_tile.dart';
 import 'package:horizontal_week_calendar/horizontal_week_calendar.dart';
 
@@ -86,15 +88,19 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                       child: Padding(
                         padding: const EdgeInsets.all(8.0),
                         child: CheckboxListTile(
-                          
-                          secondary: Container(
-                        padding: EdgeInsets.all(10.0),
-                                  decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: iconsColor[habitsListOnDate[index].category]!.withValues(alpha: 0.5)
-                                  ),
-                                width: 50,
-                        child: Icon( icons[habitsListOnDate[index].category])),
+                          secondary: GestureDetector(
+                            onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context)=>HabitDetail(
+                              habit: habitsListOnDate[index],
+                            ))),
+                            child: Container(
+                                                    padding: EdgeInsets.all(10.0),
+                                    decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color: iconsColor[habitsListOnDate[index].category]!.withValues(alpha: 0.5)
+                                    ),
+                                  width: 50,
+                                                    child: Icon( icons[habitsListOnDate[index].category])),
+                          ),
                           title: Text(habitsListOnDate[index].name,style: TextStyle(fontWeight: FontWeight.bold),),
                           subtitle: Text(habitsListOnDate[index].description),
                           value: false, onChanged: (isChecked){}),
