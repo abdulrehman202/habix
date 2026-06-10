@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/constants.dart';
 import 'package:habix/screens/habit_screen.dart';
-import 'package:material_charts/material_charts.dart';
+import 'package:material_charts/material_charts.dart' hide LegendPosition;
+import 'package:pie_chart/pie_chart.dart';
 
 enum TimePeriod { TODAY, WEEK, MONTH }
 
@@ -98,55 +99,65 @@ class _StatisticsState extends ConsumerState<Statistics> {
 
   Widget _pieChart() 
   {
-    final data = [
-      const PieChartData(value: 30, label: 'Mobile', color: Colors.blue),
-      const PieChartData(value: 25, label: 'Desktop', color: Colors.red),
-      const PieChartData(value: 20, label: 'Tablet', color: Colors.green),
-      const PieChartData(value: 15, label: 'Watch', color: Colors.orange),
-      const PieChartData(value: 10, label: 'Other', color: Colors.purple),
-    ];
+    final dataMap = <String, double>{
+    "Flutter": 5,
+    "React": 3,
+    "Xamarin": 2,
+    "Ionic": 2,
+  };
 
+  final legendLabels = <String, String>{
+    "Flutter": "Flutter legend",
+    "React": "React legend",
+    "Xamarin": "Xamarin legend",
+    "Ionic": "Ionic legend",
+  };
+
+  final colorList = <Color>[
+    const Color(0xfffdcb6e),
+    const Color(0xff0984e3),
+    const Color(0xfffd79a8),
+    const Color(0xffe17055),
+    const Color(0xff6c5ce7),
+  ];
+
+  final gradientList = <List<Color>>[
+    [
+      const Color.fromRGBO(223, 250, 92, 1),
+      const Color.fromRGBO(129, 250, 112, 1),
+    ],
+    [
+      const Color.fromRGBO(129, 182, 205, 1),
+      const Color.fromRGBO(91, 253, 199, 1),
+    ],
+    [
+      const Color.fromRGBO(175, 63, 62, 1.0),
+      const Color.fromRGBO(254, 154, 92, 1),
+    ]
+  ];
 
     return Card(
       elevation: 3,
       child: Container(
-        height: 300,
-                      width: screenSize>maxScreenSizeInPortraitMode? (screenSize/2)-50:screenSize-50,
         margin: EdgeInsets.only(left: 20,top: 10),
+        width: screenSize>maxScreenSizeInPortraitMode?screenSize/2:screenSize,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text('Habit Completion', style: TextStyle(fontWeight: FontWeight.bold)),
-            SizedBox(height: 40),
-            Center(
-              child: Stack(
-                alignment: Alignment.center,
-                children: [
-                  MaterialPieChart(
-                    padding: EdgeInsets.all(8.0),
-                      data: data,
-                      width: screenSize>maxScreenSizeInPortraitMode? screenSize/2:screenSize,
-                      height: 200,
-                      style: const PieChartStyle(
-                        showConnectorLines: false,
-                        showValues: false,
-                        showLabels: false,
-                        ),
-                    ),
-                    CircleAvatar(
-                      radius: 60,
-                      backgroundColor: Colors.white,
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        children: [
-                          Text('100%',style: TextStyle(fontSize: 25, fontWeight: FontWeight.bold),),
-                          Text('Completed',style: TextStyle(fontSize: 10,),)
-                        ],
-                      ),
-                    ),
-                ],
-              ),
+            SizedBox(height: 20),
+            Container(
+              padding: EdgeInsets.all(40),
+              child: PieChart(
+                
+                legendOptions: LegendOptions(
+                  showLegendsInRow: screenSize<=864&& screenSize>maxScreenSizeInPortraitMode,
+                  legendPosition: screenSize<=864&& screenSize>maxScreenSizeInPortraitMode ?LegendPosition.bottom: LegendPosition.right
+                ),
+                centerText: '100% completed',
+                ringStrokeWidth: 20,
+                chartType: ChartType.ring,
+                dataMap: dataMap),
             ),
           ],
         ),

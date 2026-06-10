@@ -41,6 +41,7 @@ dependencies:
   horizontal_week_calendar: ^0.0.20
   table_calendar: ^3.1.3
   material_charts: ^0.0.25
+  pie_chart: ^5.4.0
 
 dev_dependencies:
   flutter_test:
