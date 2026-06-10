@@ -47,7 +47,11 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                   fontWeight: FontWeight.bold
                 ),),
                 SizedBox(height: 20,),
-                _horizontaCalendar(),
+                Row(
+                  children: [
+                    Expanded(child: _horizontaCalendar()),
+                  ],
+                ),
                 SizedBox(height: 20,),
                 Expanded(
                   child: _habitsList()

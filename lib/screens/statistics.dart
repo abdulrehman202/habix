@@ -1,0 +1,146 @@
+import 'package:chart_sparkline/chart_sparkline.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/screens/habit_screen.dart';
+import 'package:material_charts/material_charts.dart';
+
+enum TimePeriod{
+    TODAY,
+    WEEK,
+    MONTH,
+  }
+
+class Statistics extends ConsumerStatefulWidget {
+  const Statistics({super.key});
+
+  @override
+  ConsumerState<Statistics> createState() => _StatisticsState();
+}
+
+class _StatisticsState extends ConsumerState<Statistics> {
+  
+  TimePeriod _selectedTimeperiod = TimePeriod.TODAY;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Center(child: Text('Statistics')),
+        actions: [TextButton(onPressed: (){}, child: Text('Insights'))],
+      ),
+      body: LayoutBuilder(builder: (context, constraints)
+      {
+        return _portrait();// constraints.maxWidth>maxScreenSizeInPortraitMode?_portrait():_landscape();
+      }),
+    );
+  }
+  
+  Widget _portrait() {
+    return Container(
+      margin: EdgeInsetsDirectional.symmetric(horizontal: 10),
+      child: SingleChildScrollView(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            _dropdown(),
+            SizedBox(height: 10,),
+            _graph(),
+          ],
+        ),
+      ),
+    );
+  }
+  
+  Widget _landscape()
+  {
+    return Container();
+  }
+  
+  Widget _dropdown()
+  {
+    return Card(
+      child: DropdownButton<TimePeriod>(
+      padding: EdgeInsets.symmetric(horizontal: 10),
+        value: _selectedTimeperiod,
+        underline: Container(),
+        items: TimePeriod.values.map((tp)=>DropdownMenuItem<TimePeriod>(
+          value: tp,
+          child: Text( '${tp != TimePeriod.TODAY?'This':''} ${ tp.name.capitalize}'))).toList() , onChanged: (tp){
+            setState(() {
+              _selectedTimeperiod = tp!;
+            });
+          }),
+    ); 
+  }
+  
+  Widget _graph()
+  {
+    final series = [
+      ChartSeries(
+        smoothLine: true,
+        name: '',
+        dataPoints: _selectedTimeperiod == TimePeriod.MONTH? [
+          ChartDataPoint(value: 10, label: 'Week 1'),
+          ChartDataPoint(value: 25, label: 'Week 2'),
+          ChartDataPoint(value: 15, label: 'Week 3'),
+          ChartDataPoint(value: 30, label: 'Week 4'),
+        ]: [
+          ChartDataPoint(value: 10, label: 'Monday'),
+          ChartDataPoint(value: 25, label: 'Tuesday'),
+          ChartDataPoint(value: 15, label: 'Wednesday'),
+          ChartDataPoint(value: 30, label: 'Thursday'),
+          ChartDataPoint(value: 45, label: 'Friday'),
+          ChartDataPoint(value: 60, label: 'Saturday'),
+          ChartDataPoint(value: 15, label: 'Sunday'),
+        ],
+        color: Colors.green,
+      ),
+       ChartSeries(
+        showPoints: false,
+        name: '',
+        dataPoints: const [
+          ChartDataPoint(value: 0, label: ''),
+          ChartDataPoint(value: 10, label: ''),
+          ChartDataPoint(value: 20, label: ''),
+          ChartDataPoint(value: 30, label: ''),
+          ChartDataPoint(value: 40, label: ''),
+          ChartDataPoint(value: 50, label: ''),
+          ChartDataPoint(value: 60, label: ''),
+          ChartDataPoint(value: 70, label: ''),
+          ChartDataPoint(value: 80, label: ''),
+          ChartDataPoint(value: 90, label: ''),
+          ChartDataPoint(value: 100, label: ''),
+        ],
+        color: Colors.transparent,
+      ),
+    ];
+    return Card(
+      
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+              Text('Overview', style: TextStyle(fontWeight: FontWeight.bold),),
+              Text('78 %', style: TextStyle(fontWeight: FontWeight.bold),),
+            ],),
+            SizedBox(height: 20,),
+            MultiLineChart(
+              
+                        series: series,
+                        style: const MultiLineChartStyle(
+                          horizontalGridLines: 4,
+                          
+            colors: [Colors.green],
+            showLegend: false
+                        ),
+                        height: 300,
+                      ),
+          ],
+        ),
+      ),
+    );
+  }
+}
