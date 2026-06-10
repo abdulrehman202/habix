@@ -47,12 +47,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                   fontWeight: FontWeight.bold
                 ),),
                 SizedBox(height: 20,),
-                Row(
-                  children: [
-                    Expanded(child: _horizontaCalendar()),
-                  ],
-                ),
-                SizedBox(height: 20,),
+                _horizontaCalendar(),
                 Expanded(
                   child: _habitsList()
                 )
@@ -63,6 +58,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
   Widget _horizontaCalendar()
   {
     return HorizontalWeekCalendar(
+      
       showTopNavbar: false,
       activeBackgroundColor: Colors.green,
       inactiveBackgroundColor: Colors.grey.withValues(alpha: 0.2),
@@ -75,7 +71,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
       onDateChange: (date) {
     setState(() {
     });
-  },
+      },
     );
   }
   
@@ -84,6 +80,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
     
     final habitsListOnDate = ref.watch(habitsListProvider);
     return ListView.builder(
+      padding: EdgeInsets.zero,
                     physics: ScrollPhysics(),
                     itemCount: habitsListOnDate.length,
                     shrinkWrap: true,
