@@ -37,7 +37,7 @@ class HabitTile extends StatelessWidget {
             child: Icon( icons[habit.category])),
       trailing: _trailingWidget(habit.streaks),
       title: Text(habit.name),
-      subtitle: Text(habit.description,
+      subtitle: Text(habit.descriptionDetail(),
     ));
   }
   

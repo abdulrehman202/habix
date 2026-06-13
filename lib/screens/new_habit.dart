@@ -28,7 +28,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
     super.initState();
     if (widget.habit != null) {
       _nameController.text = widget.habit!.name;
-      _descriptionController.text = widget.habit!.description;
+      _descriptionController.text = widget.habit!.quantity.toString();
     }
   }
 
@@ -294,7 +294,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                 Habit(
                   _nameController.text,
                   _category,
-                  _descriptionController.text,
+                  int.parse(_descriptionController.text),
                   _interval,
                   0,
                 ),

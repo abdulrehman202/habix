@@ -42,7 +42,7 @@ class _HabitDetailState extends ConsumerState<HabitDetail> {
                 _iconHeading(),
             SizedBox(height: 10,),
             Text(widget.habit.name,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
-            Text(widget.habit.description,),
+            Text(widget.habit.descriptionDetail() ,),
             Align(
               alignment: Alignment.bottomLeft,
               child: Text('Overview',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),)),
@@ -91,7 +91,7 @@ class _HabitDetailState extends ConsumerState<HabitDetail> {
             _iconHeading(),
             SizedBox(height: 10,),
             Text(widget.habit.name,style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),),
-            Text(widget.habit.description,),
+            Text(widget.habit.descriptionDetail(),),
             Align(
               alignment: Alignment.bottomLeft,
               child: Text('Overview',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),)),

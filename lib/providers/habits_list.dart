@@ -5,10 +5,10 @@ import 'package:habix/providers/habit_category.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 List<Habit> allHabits = [
-  Habit('Walking', Category.HEALTH, '30 minutes', Interval.DAILY ,0),
-  Habit('Drink Water', Category.HEALTH, '8 glasses of water', Interval.DAILY,0),
-  Habit('Exercise', Category.PRODUCTIVITY, '15 minutes', Interval.WEEKDAYS,0),
-  Habit('Read Book', Category.MIND, '30 minutes', Interval.WEEKEND,0),
+  RegularHabit('Walking', Category.HEALTH, 30, Interval.DAILY ,0),
+  WaterHabit('Drink Water', Category.HEALTH, 8, Interval.DAILY,0),
+  RegularHabit('Exercise', Category.PRODUCTIVITY, 15, Interval.WEEKDAYS,0),
+  ReadingHabit('Read Book', Category.MIND, 30, Interval.WEEKEND,0),
 ];
 
 // final habitsProvider = Provider((ref)=> allHabits);
@@ -20,6 +20,18 @@ class HabitsListNotifier extends StateNotifier<List<Habit>>{
   
   void addHabit (Habit habit){
     state = [...state, habit];
+  }
+
+  void incrementProgress (int index){
+    List<Habit> l = state;
+    l[index].progress++;
+    state=[...l];
+  }
+
+  void decrementProgress (int index){
+    List<Habit> l = state;
+    l[index].progress--;
+    state=[...l];
   }
 
 }
