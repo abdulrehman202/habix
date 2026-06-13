@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habix/screens/habit_screen.dart';
 import 'package:habix/screens/new_habit.dart';
+import 'package:habix/screens/profile_screen.dart';
 import 'package:habix/screens/statistics.dart';
 import 'package:habix/screens/today_screen.dart';
 
@@ -24,7 +25,7 @@ class _TabScreenState extends State<TabScreen> {
     } else if (_selectedTabIndex == 3) {
       activeScreen = Statistics();
     } else if (_selectedTabIndex == 4) {
-      activeScreen = Center(child: Text('Profile'));
+      activeScreen = Profile();
     }
 
     return Scaffold(
