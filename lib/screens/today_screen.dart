@@ -187,15 +187,29 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                         HabitDetail(habit: habitsListOnDate[index]),
                   ),
                 ),
-                child: Container(
-                  padding: EdgeInsets.all(10.0),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: iconsColor[habitsListOnDate[index].category]!
-                        .withValues(alpha: 0.5),
-                  ),
-                  width: 50,
-                  child: Icon(icons[habitsListOnDate[index].category]),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    Container(
+                      padding: EdgeInsets.all(10.0),
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: iconsColor[habitsListOnDate[index].category]!
+                            .withValues(alpha: 0.5),
+                      ),
+                      width: 50,
+                      height: 50,
+                      child: Icon(icons[habitsListOnDate[index].category]),
+                    ),
+                    SizedBox(
+                      width: 50,
+                      height: 60,
+                      child: CircularProgressIndicator(
+                        color: iconsColor[habitsListOnDate[index].category],
+                        value: habitsListOnDate[index].progress/habitsListOnDate[index].quantity,
+                      ),
+                    ),
+                  ],
                 ),
               ),
               title: Text(
