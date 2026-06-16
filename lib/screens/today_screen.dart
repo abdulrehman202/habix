@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/constants.dart';
+import 'package:habix/utilities/constants.dart';
 import 'package:habix/providers/habits_list.dart';
 import 'package:habix/providers/today_screen.dart';
 import 'package:habix/screens/habit_detail.dart';
-import 'package:habix/screens/new_habit.dart';
 import 'package:habix/screens/widgets/habit_list_tile.dart';
+import 'package:habix/utilities/extensions.dart';
 import 'package:horizontal_week_calendar/horizontal_week_calendar.dart';
 
 class TodayScreen extends ConsumerStatefulWidget {
@@ -17,6 +17,26 @@ class TodayScreen extends ConsumerStatefulWidget {
 
 class _TodayScreenState extends ConsumerState<TodayScreen> {
   late DateTime _selectedDate;
+@override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    
+  precacheImage(const AssetImage('assets/images/habbit_tracker.jpg'), context);
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
     _selectedDate = ref.watch(dateProvider);
@@ -73,7 +93,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
       inactiveBackgroundColor: Colors.transparent,
       inactiveTextColor: Colors.black,
       activeTextColor: Colors.black,
-      initialDate: DateTime.now(),
+      initialDate: _selectedDate,
       borderRadius: BorderRadius.circular(15),
       monthColor: Colors.green,
       minDate: DateTime.now().subtract(Duration(days: 720)),
@@ -240,7 +260,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
   {
     return CalendarDatePicker(
       
-      initialDate: DateTime.now(), 
+      initialDate: _selectedDate, 
       firstDate: DateTime.now().subtract(Duration(days: 720)),
       lastDate: DateTime.now().add(Duration(days: 720)), onDateChanged: (date)
     {
@@ -249,67 +269,4 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
   }
 }
 
-extension on int{
 
-  String get dayInAlphabets
-  {
-    switch(this){
-      case DateTime.monday:
-      return 'Monday';
-      case DateTime.tuesday:
-      return 'Tuesday';
-      case DateTime.wednesday:
-      return 'Wednesday';
-      case DateTime.thursday:
-      return 'Thursday';
-      case DateTime.friday:
-      return 'Friday';
-      case DateTime.saturday:
-      return 'Saturday';
-
-      case DateTime.sunday:
-      return 'Sunday';
-
-      default:
-      return '';
-    }
-  }
-
-  String get monthInAlphabets
-  {
-    switch(this){
-      case DateTime.january:
-      return 'January';
-      case DateTime.february:
-      return 'February';
-      case DateTime.march:
-      return 'March';
-
-      case DateTime.april:
-      return 'April';
-
-      case DateTime.may:
-      return 'May';
-      
-      case DateTime.june:
-      return 'June';
-      
-      case DateTime.july:
-      return 'July';
-      case DateTime.august:
-      return 'August';
-      case DateTime.september:
-      return 'September';
-      case DateTime.october:
-      return 'October';
-      case DateTime.november:
-      return 'November';
-
-      case DateTime.december:
-      return 'December';
-
-      default:
-      return '';
-    }
-  }
-}

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/constants.dart';
+import 'package:habix/utilities/constants.dart';
 import 'package:habix/screens/habit_screen.dart';
+import 'package:habix/utilities/extensions.dart';
 import 'package:material_charts/material_charts.dart' hide LegendPosition;
 import 'package:pie_chart/pie_chart.dart';
 

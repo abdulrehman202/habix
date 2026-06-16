@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/constants.dart';
+import 'package:habix/utilities/constants.dart';
 
 class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});

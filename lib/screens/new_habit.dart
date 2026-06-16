@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/constants.dart';
+import 'package:habix/utilities/constants.dart';
 import 'package:habix/models/Habit.dart';
 import 'package:habix/providers/habits_list.dart';
 import 'package:habix/providers/new_habit.dart';
 import 'package:habix/screens/habit_screen.dart';
 import 'package:habix/screens/widgets/habit_list_tile.dart';
+import 'package:habix/utilities/ImagePath.dart';
+import 'package:habix/utilities/extensions.dart';
 
 class NewHabit extends ConsumerStatefulWidget {
   Habit? habit;
@@ -46,6 +48,14 @@ class _NewHabitState extends ConsumerState<NewHabit> {
     ref.invalidate(newHabitCategoryProvider);
     ref.invalidate(newHabitReminderTime);
     ref.invalidate(newHabitButtonText);
+  }
+
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+    
+  precacheImage( AssetImage(calendarImagePath), context);
   }
 
   @override
@@ -92,7 +102,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             children: [
               Center(
                 child: Image.asset(
-                  'assets/images/calendar.jpg',
+                  calendarImagePath,
                   fit: BoxFit.fitHeight,
                   width: constraints.maxWidth,
                   height: 100,

@@ -7,13 +7,8 @@ import 'package:habix/providers/habits_list.dart';
 import 'package:habix/providers/new_habit.dart';
 import 'package:habix/screens/new_habit.dart';
 import 'package:habix/screens/widgets/habit_list_tile.dart';
-
-extension abc on String{
-
-  get capitalize {
-    return this[0].toUpperCase() + substring(1).toLowerCase();
-  }
-}
+import 'package:habix/utilities/ImagePath.dart';
+import 'package:habix/utilities/extensions.dart';
 
 class AllHabits extends ConsumerStatefulWidget {
   const AllHabits({super.key});
@@ -24,6 +19,13 @@ class AllHabits extends ConsumerStatefulWidget {
 
 class _AllHabitsState extends ConsumerState<AllHabits> {
   Category? _selectedCategory = Category.ALL;
+  
+  @override
+  void didChangeDependencies() {
+    // TODO: implement didChangeDependencies
+    super.didChangeDependencies();
+  precacheImage( AssetImage( emptyListPlaceholder), context);
+  }
   @override
   Widget build(BuildContext context) {
     _selectedCategory = ref.watch(habitsCategoryProvider);
@@ -55,7 +57,7 @@ class _AllHabitsState extends ConsumerState<AllHabits> {
                  children: [
                    Expanded(
                     flex: 3,
-                    child: Image.asset('assets/images/habbit_tracker.jpg',errorBuilder: (context, error, stackTrace) => Container(), fit: BoxFit.fitHeight,)),
+                    child: Image.asset('${baseImagePath}habbit_tracker.jpg',errorBuilder: (context, error, stackTrace) => Container(),  fit: BoxFit.fitHeight,)),
                  Expanded(
             flex: 1,
             child: Text('You don\'t have any Habit in this category',style: TextStyle(fontWeight: FontWeight.bold),)),
