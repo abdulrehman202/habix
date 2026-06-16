@@ -51,7 +51,16 @@ class _AllHabitsState extends ConsumerState<AllHabits> {
             value: _selectedCategory, onChanged: (category)=>ref.read(habitsCategoryProvider.notifier).changeCategory(category)),
       
              Expanded(
-               child: Container(
+               child: habits.isEmpty?Column(
+                 children: [
+                   Expanded(
+                    flex: 3,
+                    child: Image.asset('assets/images/habbit_tracker.jpg',errorBuilder: (context, error, stackTrace) => Container(), fit: BoxFit.fitHeight,)),
+                 Expanded(
+            flex: 1,
+            child: Text('You don\'t have any Habit in this category',style: TextStyle(fontWeight: FontWeight.bold),)),
+                 ],
+               ): Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
                  child: ListView.separated(
                   physics: ScrollPhysics(),

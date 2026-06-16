@@ -1,3 +1,5 @@
+import 'package:uuid/uuid.dart';
+
 enum Category{
   ALL,
   MORNING,
@@ -13,15 +15,19 @@ enum Interval{
   WEEKEND,
 }
 
+var uuid = Uuid();
+
 class Habit  {
+  String id = uuid.v4();
 String name;
 Category category;
 int quantity;
 int progress = 0;
 Interval interval;
-int streaks;
+int streaks = 0;
+DateTime time;
 
-Habit(this.name, this.category, this.quantity,this.interval,this.streaks,);
+Habit(this.name, this.category, this.quantity,this.interval,this.time);
 
 String descriptionDetail() {
   return '';
@@ -31,7 +37,7 @@ String descriptionDetail() {
 
 class WaterHabit extends Habit
 {
-  WaterHabit(super.name, super.category, super.quantity, super.interval, super.streaks);
+  WaterHabit(super.name, super.category, super.quantity, super.interval,super.time);
   
   @override
   String descriptionDetail() {
@@ -40,7 +46,7 @@ class WaterHabit extends Habit
 }
 
 class RegularHabit extends Habit{
-  RegularHabit(super.name, super.category, super.quantity, super.interval, super.streaks);
+  RegularHabit(super.name, super.category, super.quantity, super.interval,super.time);
   
   @override
   String descriptionDetail() {
@@ -50,7 +56,7 @@ class RegularHabit extends Habit{
 
 class ReadingHabit extends Habit
 {
-  ReadingHabit(super.name, super.category, super.quantity, super.interval, super.streaks);
+  ReadingHabit(super.name, super.category, super.quantity, super.interval,super.time);
   
   @override
   String descriptionDetail() {

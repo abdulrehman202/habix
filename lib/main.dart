@@ -39,7 +39,7 @@ class MyApp extends StatelessWidget {
       borderRadius: BorderRadius.circular(5.0), // Adjust radius here
     ),)
         ),
-        fontFamily: GoogleFonts.andika ().fontFamily,
+        fontFamily: GoogleFonts  .comfortaa ().fontFamily,
       ).copyWith(
         
         appBarTheme: AppBarTheme(

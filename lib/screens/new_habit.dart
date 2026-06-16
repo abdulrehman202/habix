@@ -296,7 +296,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   _category,
                   int.parse(_descriptionController.text),
                   _interval,
-                  0,
+                  DateTime.now()
                 ),
               );
           _resetStates();

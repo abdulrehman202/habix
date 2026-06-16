@@ -5,10 +5,11 @@ import 'package:habix/providers/habit_category.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 List<Habit> allHabits = [
-  RegularHabit('Walking', Category.HEALTH, 30, Interval.DAILY ,0),
-  WaterHabit('Drink Water', Category.HEALTH, 8, Interval.DAILY,0),
-  RegularHabit('Exercise', Category.PRODUCTIVITY, 15, Interval.WEEKDAYS,0),
-  ReadingHabit('Read Book', Category.MIND, 30, Interval.WEEKEND,0),
+  RegularHabit('Walking', Category.HEALTH, 30, Interval.DAILY ,DateTime.now().subtract(Duration(days: 1))),
+  WaterHabit('Drink Water', Category.HEALTH, 8, Interval.DAILY,DateTime.now().add(Duration(days: 1))),
+  RegularHabit('Exercise', Category.PRODUCTIVITY, 15, Interval.WEEKDAYS,DateTime.now().subtract(Duration(days: 2))),
+  ReadingHabit('Read Book', Category.MIND, 30, Interval.WEEKEND,DateTime.now().add(Duration(days: 3))),
+  ReadingHabit('Long Drive', Category.MIND, 20, Interval.WEEKEND,DateTime.now()),
 ];
 
 // final habitsProvider = Provider((ref)=> allHabits);
@@ -22,18 +23,19 @@ class HabitsListNotifier extends StateNotifier<List<Habit>>{
     state = [...state, habit];
   }
 
-  void incrementProgress (int index){
+  void incrementProgress (Habit habit){
     List<Habit> l = state;
+    int index = l.indexOf(habit);
     l[index].progress++;
     state=[...l];
   }
 
-  void decrementProgress (int index){
+  void decrementProgress (Habit habit){
     List<Habit> l = state;
+    int index = l.indexOf(habit);
     l[index].progress--;
     state=[...l];
   }
-
 }
 
 final habitsListProvider = StateNotifierProvider<HabitsListNotifier, List<Habit>>((ref){
