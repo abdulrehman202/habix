@@ -71,6 +71,9 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
         SizedBox(height: 20),
         _horizontaCalendar(),
         SizedBox(height: 10),
+
+        _progressBar(),
+        SizedBox(height: 20),
         _dayRow(),
         SizedBox(height: 10),
         
@@ -85,6 +88,46 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
           '${_selectedDate.day} ${_selectedDate.month.monthInAlphabets} ${_selectedDate.year} ( ${_selectedDate.weekday.dayInAlphabets} )',
           style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
         );
+  }
+  Widget _progressBar()
+  { final list = ref.watch(habitsListProvider);
+    final habitsListToday = list
+        .where(
+          (h) =>
+              h.time.day == _selectedDate.day &&
+              h.time.month == _selectedDate.month &&
+              h.time.year == _selectedDate.year
+        )
+        .toList();
+
+        final completedHabitsList= list
+        .where(
+          (h) =>
+              h.time.day == _selectedDate.day &&
+              h.time.month == _selectedDate.month &&
+              h.time.year == _selectedDate.year && h.progress == h.quantity
+        )
+        .toList();
+
+        double percentageOfCompletedTasks = completedHabitsList.length/habitsListToday.length;
+    return habitsListToday.isEmpty?Container(): Column(
+      crossAxisAlignment: CrossAxisAlignment.end,
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text('Progress'),
+            Text('${percentageOfCompletedTasks*100}%'),
+          ],
+        ),
+        SizedBox(height: 5,),
+        LinearProgressIndicator(
+          backgroundColor: Colors.blueGrey.withValues(alpha: 0.2),
+          minHeight: 20,
+          value: percentageOfCompletedTasks,
+        ),
+      ],
+    );
   }
   Widget _horizontaCalendar() {
     return HorizontalWeekCalendar(
@@ -244,7 +287,14 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
               Expanded(child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _dayRow(),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(child: _dayRow()),
+                      
+                      Expanded(child: _landscapeProgressBar())
+                    ],
+                  ),
                   SizedBox(height: 10,),
                   Expanded(child: _habitsList()),
                 ],
@@ -266,6 +316,47 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
     {
       ref.read(dateProvider.notifier).changeDate(date);
     });
+  }
+  
+  Widget _landscapeProgressBar()
+  {
+    final list = ref.watch(habitsListProvider);
+    final habitsListToday = list
+        .where(
+          (h) =>
+              h.time.day == _selectedDate.day &&
+              h.time.month == _selectedDate.month &&
+              h.time.year == _selectedDate.year
+        )
+        .toList();
+
+        final completedHabitsList= list
+        .where(
+          (h) =>
+              h.time.day == _selectedDate.day &&
+              h.time.month == _selectedDate.month &&
+              h.time.year == _selectedDate.year && h.progress == h.quantity
+        )
+        .toList();
+
+        double percentageOfCompletedTasks = completedHabitsList.length/habitsListToday.length;
+    return habitsListToday.isEmpty?Container(): Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      children: [
+        Text('Progress: '),
+        SizedBox(width: 5,),
+        Expanded(
+          child: LinearProgressIndicator(
+            backgroundColor: Colors.blueGrey.withValues(alpha: 0.2),
+            minHeight: 20,
+            value: percentageOfCompletedTasks,
+          ),
+        ),
+        SizedBox(width: 5,),
+        Text('${percentageOfCompletedTasks*100}%'),
+      ],
+    );
+ 
   }
 }
 

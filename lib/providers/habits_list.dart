@@ -2,13 +2,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/models/Habit.dart';
 import 'package:habix/providers/habit_category.dart';
-import 'package:state_notifier/state_notifier.dart';
 
 List<Habit> allHabits = [
-  RegularHabit('Walking', Category.HEALTH, 30, Interval.DAILY ,DateTime.now().subtract(Duration(days: 1))),
-  WaterHabit('Drink Water', Category.HEALTH, 8, Interval.DAILY,DateTime.now().add(Duration(days: 1))),
-  RegularHabit('Exercise', Category.PRODUCTIVITY, 15, Interval.WEEKDAYS,DateTime.now().subtract(Duration(days: 2))),
-  ReadingHabit('Read Book', Category.MIND, 30, Interval.WEEKEND,DateTime.now().add(Duration(days: 3))),
+  RegularHabit('Walking', Category.HEALTH, 30, Interval.DAILY ,DateTime.now()),
+  WaterHabit('Drink Water', Category.HEALTH, 8, Interval.DAILY,DateTime.now()),
+  RegularHabit('Exercise', Category.PRODUCTIVITY, 15, Interval.WEEKDAYS,DateTime.now()),
+  ReadingHabit('Read Book', Category.MIND, 30, Interval.WEEKEND,DateTime.now()),
   ReadingHabit('Long Drive', Category.MIND, 20, Interval.WEEKEND,DateTime.now()),
 ];
 
