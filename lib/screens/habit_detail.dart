@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/providers/habits_list.dart';
 import 'package:habix/utilities/constants.dart';
 import 'package:habix/models/Habit.dart';
 import 'package:habix/screens/widgets/habit_list_tile.dart';
@@ -126,8 +127,13 @@ class _HabitDetailState extends ConsumerState<HabitDetail> {
         style: FilledButton.styleFrom(
           backgroundColor: iconsColor[widget.habit.category]!.withValues(alpha: 0.4)
         ),
-        onPressed: () {
-          Navigator.pop(context);
+        onPressed:(){
+          ref.read(habitsListProvider.notifier)
+                                        .markAsComplete(
+                                          widget.habit
+                                        );
+                              Navigator.pop(context);
+
         },
         child: Text(
           'Mark as done',

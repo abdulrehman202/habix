@@ -35,6 +35,13 @@ class HabitsListNotifier extends StateNotifier<List<Habit>>{
     l[index].progress--;
     state=[...l];
   }
+
+  void markAsComplete (Habit habit){
+    List<Habit> l = state;
+    int index = l.indexOf(habit);
+    l[index].progress = l[index].quantity;
+    state=[...l];
+  }
 }
 
 final habitsListProvider = StateNotifierProvider<HabitsListNotifier, List<Habit>>((ref){

@@ -125,7 +125,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text('Progress'),
-                  Text('${percentageOfCompletedTasks * 100}%'),
+                  Text('${(percentageOfCompletedTasks * 100).round()}%'),
                 ],
               ),
               SizedBox(height: 5),
@@ -173,10 +173,10 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
               children: [
                 Expanded(
                   flex: 3,
-                  child: Image.asset(
+                  child: Image.asset( 
                     'assets/images/habbit_tracker.jpg',
                     errorBuilder: (context, error, stackTrace) => Container(),
-                    fit: BoxFit.fitHeight,
+                    fit: BoxFit.fill,
                   ),
                 ),
                 Expanded(
@@ -206,7 +206,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                         context,
                         MaterialPageRoute(
                           builder: (context) =>
-                              HabitDetail(habit: habitsListOnDate[index]),
+                              HabitDetail(habit: habitsListOnDate[index],
+                              ),
                         ),
                       ),
                       child: CircularPercentIndicator(
@@ -307,19 +308,18 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
   }
 
   Widget _landscape() {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(
+    return Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Expanded(child: Column(
+                children: [
+                  Text(
           'Small habits, big changes,',
           style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
         ),
-        SizedBox(height: 20),
-        Expanded(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Expanded(child: _verticalCalendar()),
+                  Expanded(child: _verticalCalendar()),
+                ],
+              )),
               SizedBox(width: 10),
               Expanded(
                 child: Column(
@@ -339,20 +339,23 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                 ),
               ),
             ],
-          ),
-        ),
-      ],
-    );
+          );
   }
 
-  _verticalCalendar() {
-    return CalendarDatePicker(
-      initialDate: _selectedDate,
-      firstDate: DateTime.now().subtract(Duration(days: 720)),
-      lastDate: DateTime.now().add(Duration(days: 720)),
-      onDateChanged: (date) {
-        ref.read(dateProvider.notifier).changeDate(date);
-      },
+  Widget _verticalCalendar() {
+    return SingleChildScrollView(
+      child: Column(
+        children: [
+          CalendarDatePicker(
+            initialDate: _selectedDate,
+            firstDate: DateTime.now().subtract(Duration(days: 720)),
+            lastDate: DateTime.now().add(Duration(days: 720)),
+            onDateChanged: (date) {
+              ref.read(dateProvider.notifier).changeDate(date);
+            },
+          ),
+        ],
+      ),
     );
   }
 
