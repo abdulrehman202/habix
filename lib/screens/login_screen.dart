@@ -51,34 +51,36 @@ final _passwordController = TextEditingController();
           ),
           Container(
             margin:EdgeInsets.only(top: clipperHeight - 30 , right: 10,left: 10),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-              Text('Sign In',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
-              SizedBox(height: 20,),
-              TextField(
-                keyboardType: TextInputType.emailAddress,
-                decoration: InputDecoration(
-                  hint: Text('example@abc.com'),
-                  label: Text('Email'),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                Text('Sign In',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
+                SizedBox(height: 20,),
+                TextField(
+                  keyboardType: TextInputType.emailAddress,
+                  decoration: InputDecoration(
+                    hint: Text('example@abc.com'),
+                    label: Text('Email'),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                    ),
                   ),
                 ),
-              ),
-              SizedBox(height: 10,),
-              PasswordTextField(controller: _passwordController),
-              SizedBox(height: 30,),
-              SizedBox(
-                width: double.infinity,
-                child: FilledButton(onPressed: _login, child: Text('Sign In'))),
+                SizedBox(height: 10,),
+                PasswordTextField(controller: _passwordController),
+                SizedBox(height: 30,),
                 SizedBox(
-                  height: 10,
-                ),
-                SizedBox(
-                width: double.infinity,
-                child: TextButton(onPressed: _moveToCreateAccountScreen, child: Text('Create Account')))
-            ],))
+                  width: double.infinity,
+                  child: FilledButton(onPressed: _login, child: Text('Sign In'))),
+                  SizedBox(
+                    height: 10,
+                  ),
+                  SizedBox(
+                  width: double.infinity,
+                  child: TextButton(onPressed: _moveToCreateAccountScreen, child: Text('Create Account')))
+              ],),
+            ))
         ],
       )
     );

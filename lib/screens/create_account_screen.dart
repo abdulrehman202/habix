@@ -23,6 +23,7 @@ final _confirmPasswordController = TextEditingController();
               width: double.infinity,
               color: Theme.of(context).colorScheme.primary,
               child: Column(
+                
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   SizedBox(height: 80,),
@@ -49,44 +50,46 @@ final _confirmPasswordController = TextEditingController();
               left: 10,
               right: 10,
             ),
-            child: Column(
-              children: [
-                Text(
-                  'Create an Account',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                ),
-                SizedBox(height: 20),
-                TextField(
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    label: Text('Email'),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Text(
+                    'Create an Account',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
+                  ),
+                  SizedBox(height: 20),
+                  TextField(
+                    keyboardType: TextInputType.emailAddress,
+                    decoration: InputDecoration(
+                      label: Text('Email'),
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
                     ),
                   ),
-                ),
-                SizedBox(height: 10),
-                PasswordTextField(controller: _passwordController),
-                SizedBox(height: 10),
-                PasswordTextField(controller: _confirmPasswordController, hint: 'Confirm Password',),
-                SizedBox(height: 20),
-
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(
-                    onPressed: () {},
-                    child: Text('Create my Account'),
+                  SizedBox(height: 10),
+                  PasswordTextField(controller: _passwordController),
+                  SizedBox(height: 10),
+                  PasswordTextField(controller: _confirmPasswordController, hint: 'Confirm Password',),
+                  SizedBox(height: 20),
+              
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(
+                      onPressed: () {},
+                      child: Text('Create my Account'),
+                    ),
                   ),
-                ),
-                SizedBox(height: 10),
-                SizedBox(
-                  width: double.infinity,
-                  child: TextButton(
-                    onPressed: _moveToLoginScreen,
-                    child: Text('I already have an Account'),
+                  SizedBox(height: 10),
+                  SizedBox(
+                    width: double.infinity,
+                    child: TextButton(
+                      onPressed: _moveToLoginScreen,
+                      child: Text('I already have an Account'),
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
