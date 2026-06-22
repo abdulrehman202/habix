@@ -8,7 +8,7 @@ List<Habit> allHabits = [
   WaterHabit('Drink Water', Category.HEALTH, 8, Interval.DAILY,DateTime.now()),
   RegularHabit('Exercise', Category.PRODUCTIVITY, 15, Interval.WEEKDAYS,DateTime.now()),
   ReadingHabit('Read Book', Category.MIND, 30, Interval.WEEKEND,DateTime.now()),
-  ReadingHabit('Long Drive', Category.MIND, 20, Interval.WEEKEND,DateTime.now()),
+  RegularHabit('Long Drive', Category.MIND, 20, Interval.WEEKEND,DateTime.now()),
 ];
 
 // final habitsProvider = Provider((ref)=> allHabits);
