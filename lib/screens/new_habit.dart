@@ -5,9 +5,8 @@ import 'package:habix/utilities/constants.dart';
 import 'package:habix/models/Habit.dart';
 import 'package:habix/providers/habits_list.dart';
 import 'package:habix/providers/new_habit.dart';
-import 'package:habix/screens/habit_screen.dart';
 import 'package:habix/screens/widgets/habit_list_tile.dart';
-import 'package:habix/utilities/ImagePath.dart';
+import 'package:habix/utilities/image_paths.dart';
 import 'package:habix/utilities/extensions.dart';
 
 class NewHabit extends ConsumerStatefulWidget {

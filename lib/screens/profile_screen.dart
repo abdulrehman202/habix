@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/utilities/constants.dart';
 
 class Profile extends ConsumerStatefulWidget {
   const Profile({super.key});
@@ -10,7 +9,6 @@ class Profile extends ConsumerStatefulWidget {
 }
 
 class _ProfileState extends ConsumerState<Profile> {
-  late double _screenHeight;
   late double _screenWidth;
 
   @override
@@ -24,7 +22,6 @@ class _ProfileState extends ConsumerState<Profile> {
       ),
       body: LayoutBuilder(builder: (context, constraints)
       {
-        _screenHeight = constraints.maxHeight;
         _screenWidth = constraints.maxWidth;
 
         return _portrait();// _screenWidth>maxScreenSizeInPortraitMode?_landscape():_portrait();

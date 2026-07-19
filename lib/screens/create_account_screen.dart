@@ -22,11 +22,12 @@ final _confirmPasswordController = TextEditingController();
               height: clipperHeight,
               width: double.infinity,
               color: Theme.of(context).colorScheme.primary,
+              alignment: Alignment.center,
               child: Column(
                 
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 80,),
+                  SizedBox(height: 10,),
                   Text('Welcome to Habix',
                   style: TextStyle(
                     color: Theme.of(context).colorScheme.onPrimary,

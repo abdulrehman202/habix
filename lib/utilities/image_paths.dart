@@ -1,4 +1,4 @@
-const baseImagePath = 'assets/images/';
+final baseImagePath = 'assets/images/';
 
 String emptyListPlaceholder = '${baseImagePath}habbit_tracker.jpg';
 String calendarImagePath = '${baseImagePath}calendar.jpg';

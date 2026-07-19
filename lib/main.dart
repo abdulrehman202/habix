@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habix/screens/create_account_screen.dart';
-import 'package:habix/screens/login_screen.dart';
-import 'package:habix/screens/tabs.dart';
 
 void main() {
   runApp( ProviderScope(child: MyApp()));

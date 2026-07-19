@@ -63,3 +63,11 @@ class ReadingHabit extends Habit
     return '${super.quantity} pages';
   }
 }
+
+extension example on Habit{
+
+  String get editedDescription{
+    return '${descriptionDetail()} is edited';
+  }
+
+}
