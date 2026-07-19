@@ -17,15 +17,31 @@ class AllHabits extends ConsumerStatefulWidget {
   ConsumerState<AllHabits> createState() => _AllHabitsState();
 }
 
-class _AllHabitsState extends ConsumerState<AllHabits> {
+class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProviderStateMixin{
   Category? _selectedCategory = Category.ALL;
+  late AnimationController _animationController;
   
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
   precacheImage( AssetImage( emptyListPlaceholder), context);
   }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _animationController = AnimationController(vsync: this,
+    duration: Duration(milliseconds: 300),
+
+    );
+
+    _animationController.forward();
+  }
+
+
   @override
   Widget build(BuildContext context) {
     _selectedCategory = ref.watch(habitsCategoryProvider);
@@ -69,17 +85,33 @@ class _AllHabitsState extends ConsumerState<AllHabits> {
                   separatorBuilder: (context, index) => Divider(),
                   shrinkWrap: true,
                   itemCount: habits.length,
-                  itemBuilder: (context, index)=> HabitTile(
-                    onHabitSelected: (){
-                      ref.read(newHabitCategoryProvider.notifier).changeCategorySelection(habits[index].category);
-                      ref.read(newHabitIntervalProvider.notifier).changeIntervalSelection(habits[index].interval);
-                      Navigator.push( context, MaterialPageRoute(builder: (ctx)=>NewHabit(habit: habits[index],)));},
-                    habit: habits[index])),
+                  itemBuilder: (context, index)=> AnimatedBuilder(
+                    animation: _animationController,
+                    child: HabitTile(
+                          onHabitSelected: (){
+                            ref.read(newHabitCategoryProvider.notifier).changeCategorySelection(habits[index].category);
+                            ref.read(newHabitIntervalProvider.notifier).changeIntervalSelection(habits[index].interval);
+                            Navigator.push( context, MaterialPageRoute(builder: (ctx)=>NewHabit(habit: habits[index],)));},
+                          habit: habits[index]),
+                    builder: (context, child) {
+                      return Padding(
+                        padding: EdgeInsetsGeometry.only(top: 100 - _animationController.value*100),
+                        child: child,
+                      );
+                    }
+                  )),
                ),
              )
           
         ],
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _animationController.dispose();
+    super.dispose();
   }
 }

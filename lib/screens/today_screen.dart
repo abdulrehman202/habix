@@ -1,3 +1,4 @@
+import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/utilities/constants.dart';
@@ -16,8 +17,11 @@ class TodayScreen extends ConsumerStatefulWidget {
   ConsumerState<TodayScreen> createState() => _TodayScreenState();
 }
 
-class _TodayScreenState extends ConsumerState<TodayScreen> {
+class _TodayScreenState extends ConsumerState<TodayScreen> with SingleTickerProviderStateMixin {
   late DateTime _selectedDate;
+  late AnimationController _animationController;
+  
+  late ConfettiController _controllerCenter;
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -32,6 +36,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
   @override
   void dispose() {
     // TODO: implement dispose
+    _animationController.dispose();
+    _controllerCenter.dispose();
     super.dispose();
   }
 
@@ -39,6 +45,11 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
   void initState() {
     // TODO: implement initState
     super.initState();
+_controllerCenter =
+        ConfettiController(duration: const Duration(seconds: 10));
+    _animationController = AnimationController(vsync: this,
+    duration: Duration(seconds: 2)
+    );
   }
 
   @override
@@ -51,15 +62,38 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
           IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
         ],
       ),
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          return Container(
-            margin: EdgeInsets.symmetric(horizontal: 10),
-            child: constraints.maxWidth > maxScreenSizeInPortraitMode + 220
-                ? _landscape()
-                : _portrait(),
-          );
-        },
+      body: Stack(
+        children: [
+          LayoutBuilder(
+            builder: (context, constraints) {
+              return Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: constraints.maxWidth > maxScreenSizeInPortraitMode + 220
+                    ? _landscape()
+                    : _portrait(),
+              );
+            },
+          ),
+          Align(
+            alignment: Alignment.center,
+            child: ConfettiWidget(
+              numberOfParticles: 50,
+              confettiController: _controllerCenter,
+              blastDirectionality: BlastDirectionality
+                  .explosive, // don't specify a direction, blast randomly
+              shouldLoop:
+                  true, // start again as soon as the animation is finished
+              colors: const [
+                Colors.green,
+                Colors.blue,
+                Colors.pink,
+                Colors.orange,
+                Colors.purple
+              ], // manually specify the colors to be used
+               // define a custom shape/path.
+            ),
+          ),
+        ],
       ),
     );
   }
@@ -94,6 +128,9 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
   }
 
   Widget _progressBar() {
+    
+    _animationController.forward();
+    
     final list = ref.watch(habitsListProvider);
     final habitsListToday = list
         .where(
@@ -129,12 +166,18 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                 ],
               ),
               SizedBox(height: 5),
-              LinearProgressIndicator(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                backgroundColor: Colors.blueGrey.withValues(alpha: 0.2),
-                minHeight: 20,
-                value: percentageOfCompletedTasks,
+              AnimatedBuilder(
+                animation: _animationController,
+                builder: (context,child) {
+                  return LinearProgressIndicator(
+                    borderRadius: BorderRadius.all(Radius.circular(10)),
+                    backgroundColor: Colors.blueGrey.withValues(alpha: 0.2),
+                    minHeight: 20,
+                    value: percentageOfCompletedTasks * _animationController.value,
+                  );
+                }
               ),
+              
             ],
           );
   }
@@ -284,6 +327,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen> {
                                         );
                                     if (habitsListOnDate[index].progress ==
                                         habitsListOnDate[index].quantity) {
+                                          
+                _controllerCenter.play();
                                       ScaffoldMessenger.of(
                                         context,
                                       ).showSnackBar(

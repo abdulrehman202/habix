@@ -46,6 +46,7 @@ dependencies:
   percent_indicator: ^4.2.5
   flutter_custom_clippers: ^2.1.0
   flutter_native_splash: ^2.4.7
+  confetti: ^0.8.0
 
 dev_dependencies:
   flutter_test:
