@@ -20,12 +20,24 @@ class TodayScreen extends ConsumerStatefulWidget {
   ConsumerState<TodayScreen> createState() => _TodayScreenState();
 }
 
-class _TodayScreenState extends ConsumerState<TodayScreen> with SingleTickerProviderStateMixin {
+class _TodayScreenState extends ConsumerState<TodayScreen>
+    with SingleTickerProviderStateMixin {
   late DateTime _selectedDate;
-  
+
   late ConfettiController _controllerCenter;
 
   final AudioPlayer _audioPlayer = AudioPlayer();
+
+  late final AnimationController _controller = AnimationController(
+    duration: const Duration(milliseconds: 500),
+    vsync: this,
+  );
+
+  late final Animation<Offset> _offsetAnimation = Tween<Offset>(
+    begin: const Offset(-1.5, 0.0),
+    end: Offset.zero,
+  ).animate(CurvedAnimation(parent: _controller, curve: Curves.easeIn));
+
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -42,6 +54,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> with SingleTickerProv
     // TODO: implement dispose
     _controllerCenter.dispose();
     _audioPlayer.dispose();
+    _controller.dispose();
     super.dispose();
   }
 
@@ -49,8 +62,9 @@ class _TodayScreenState extends ConsumerState<TodayScreen> with SingleTickerProv
   void initState() {
     // TODO: implement initState
     super.initState();
-_controllerCenter =
-        ConfettiController(duration: const Duration(seconds: 2));
+    _controllerCenter = ConfettiController(
+      duration: const Duration(seconds: 2),
+    );
   }
 
   @override
@@ -89,9 +103,9 @@ _controllerCenter =
                 Colors.blue,
                 Colors.pink,
                 Colors.orange,
-                Colors.purple
+                Colors.purple,
               ], // manually specify the colors to be used
-               // define a custom shape/path.
+              // define a custom shape/path.
             ),
           ),
         ],
@@ -129,8 +143,6 @@ _controllerCenter =
   }
 
   Widget _progressBar() {
-    
-    
     final list = ref.watch(habitsListProvider);
     final habitsListToday = list
         .where(
@@ -166,8 +178,7 @@ _controllerCenter =
                 ],
               ),
               SizedBox(height: 5),
-              AnimatedProgressBar(value: percentageOfCompletedTasks)
-              
+              AnimatedProgressBar(value: percentageOfCompletedTasks),
             ],
           );
   }
@@ -191,6 +202,7 @@ _controllerCenter =
   }
 
   Widget _habitsList() {
+    _controller.forward();
     final list = ref.watch(habitsListProvider);
     final habitsListOnDate = list
         .where(
@@ -208,7 +220,13 @@ _controllerCenter =
             itemCount: habitsListOnDate.length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
-              return Card(
+              return 
+              AnimatedBuilder(
+                animation: _controller, builder: (context,child)=> Container(
+                margin: EdgeInsets.only( top: 200 - 200 * _controller.value ),
+                child: child,
+              ),
+                child: Card(
                 elevation: 5,
                 child: ListTile(
                   minTileHeight: 75,
@@ -317,6 +335,7 @@ _controllerCenter =
                           ),
                       
                 ),
+              )
               );
             },
           );
@@ -324,37 +343,39 @@ _controllerCenter =
 
   Widget _landscape() {
     return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Expanded(
+          child: Column(
+            children: [
+              Text(
+                'Small habits, big changes,',
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
+              ),
+              Expanded(child: _verticalCalendar()),
+            ],
+          ),
+        ),
+        SizedBox(width: 10),
+        Expanded(
+          child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(child: Column(
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-          'Small habits, big changes,',
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.bold),
-        ),
-                  Expanded(child: _verticalCalendar()),
-                ],
-              )),
-              SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Expanded(child: _dayRow()),
+                  Expanded(child: _dayRow()),
 
-                        Expanded(child: _landscapeProgressBar()),
-                      ],
-                    ),
-                    SizedBox(height: 10),
-                    Expanded(child: _habitsList()),
-                  ],
-                ),
+                  Expanded(child: _landscapeProgressBar()),
+                ],
               ),
+              SizedBox(height: 10),
+              Expanded(child: _habitsList()),
             ],
-          );
+          ),
+        ),
+      ],
+    );
   }
 
   Widget _verticalCalendar() {
