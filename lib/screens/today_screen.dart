@@ -1,6 +1,7 @@
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/screens/widgets/animated_progress_bar.dart';
 import 'package:habix/utilities/constants.dart';
 import 'package:habix/providers/habits_list.dart';
 import 'package:habix/providers/today_screen.dart';
@@ -82,7 +83,7 @@ _controllerCenter =
               blastDirectionality: BlastDirectionality
                   .explosive, // don't specify a direction, blast randomly
               shouldLoop:
-                  true, // start again as soon as the animation is finished
+                  false, // start again as soon as the animation is finished
               colors: const [
                 Colors.green,
                 Colors.blue,
@@ -166,17 +167,7 @@ _controllerCenter =
                 ],
               ),
               SizedBox(height: 5),
-              AnimatedBuilder(
-                animation: _animationController,
-                builder: (context,child) {
-                  return LinearProgressIndicator(
-                    borderRadius: BorderRadius.all(Radius.circular(10)),
-                    backgroundColor: Colors.blueGrey.withValues(alpha: 0.2),
-                    minHeight: 20,
-                    value: percentageOfCompletedTasks * _animationController.value,
-                  );
-                }
-              ),
+              AnimatedProgressBar(value: percentageOfCompletedTasks)
               
             ],
           );
@@ -435,12 +426,7 @@ _controllerCenter =
               Text('Progress: '),
               SizedBox(width: 5),
               Expanded(
-                child: LinearProgressIndicator(
-                borderRadius: BorderRadius.all(Radius.circular(10)),
-                  backgroundColor: Colors.blueGrey.withValues(alpha: 0.2),
-                  minHeight: 20,
-                  value: percentageOfCompletedTasks,
-                ),
+                child: AnimatedProgressBar(value: percentageOfCompletedTasks),
               ),
               SizedBox(width: 5),
               Text('${percentageOfCompletedTasks * 100}%'),
