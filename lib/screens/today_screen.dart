@@ -20,7 +20,6 @@ class TodayScreen extends ConsumerStatefulWidget {
 
 class _TodayScreenState extends ConsumerState<TodayScreen> with SingleTickerProviderStateMixin {
   late DateTime _selectedDate;
-  late AnimationController _animationController;
   
   late ConfettiController _controllerCenter;
   @override
@@ -37,7 +36,6 @@ class _TodayScreenState extends ConsumerState<TodayScreen> with SingleTickerProv
   @override
   void dispose() {
     // TODO: implement dispose
-    _animationController.dispose();
     _controllerCenter.dispose();
     super.dispose();
   }
@@ -47,10 +45,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> with SingleTickerProv
     // TODO: implement initState
     super.initState();
 _controllerCenter =
-        ConfettiController(duration: const Duration(seconds: 10));
-    _animationController = AnimationController(vsync: this,
-    duration: Duration(seconds: 2)
-    );
+        ConfettiController(duration: const Duration(seconds: 2));
   }
 
   @override
@@ -130,7 +125,6 @@ _controllerCenter =
 
   Widget _progressBar() {
     
-    _animationController.forward();
     
     final list = ref.watch(habitsListProvider);
     final habitsListToday = list
@@ -271,8 +265,16 @@ _controllerCenter =
                       habitsListOnDate[index].descriptionDetail(),
                       maxLines: 1,
                     ),
-                    trailing:
-                        habitsListOnDate[index].progress ==
+                    trailing: 
+                    AnimatedSwitcher(
+            duration: const Duration(milliseconds: 500),
+            transitionBuilder: (Widget child, Animation<double> animation) {
+              return ScaleTransition(scale: animation, child: child);
+            },
+            child: Container(
+              key: ValueKey<bool>(habitsListOnDate[index].progress ==
+                            habitsListOnDate[index].quantity),
+                            child: habitsListOnDate[index].progress ==
                             habitsListOnDate[index].quantity
                         ? Container(
                             padding: EdgeInsets.all(8),
@@ -336,6 +338,9 @@ _controllerCenter =
                               ),
                             ],
                           ),
+            )
+          ),
+                        
                   ),
                 ),
               );
