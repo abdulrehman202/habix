@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -22,6 +23,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen> with SingleTickerProv
   late DateTime _selectedDate;
   
   late ConfettiController _controllerCenter;
+
+  final AudioPlayer _audioPlayer = AudioPlayer();
   @override
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
@@ -37,6 +40,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen> with SingleTickerProv
   void dispose() {
     // TODO: implement dispose
     _controllerCenter.dispose();
+    _audioPlayer.dispose();
     super.dispose();
   }
 
@@ -225,123 +229,112 @@ _controllerCenter =
             itemBuilder: (context, index) {
               return Card(
                 elevation: 5,
-                child: Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: ListTile(
-                    minTileHeight: 75,
-                    leading: GestureDetector(
-                      onTap: () => Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) =>
-                              HabitDetail(habit: habitsListOnDate[index],
-                              ),
-                        ),
-                      ),
-                      child: CircularPercentIndicator(
-                        radius: 20,
-                        lineWidth: 3.0,
-                        percent:
-                            habitsListOnDate[index].progress /
-                            habitsListOnDate[index].quantity,
-                        progressColor:
-                            iconsColor[habitsListOnDate[index].category]!,
-                        center: ClipOval(
-                          child: ColoredBox(
-                            color: iconsColor[habitsListOnDate[index].category]!.withValues(alpha: 0.3),
-                            child: Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Icon(icons[habitsListOnDate[index].category],size: 20,),
-                            )),
-                        ),
+                child: ListTile(
+                  minTileHeight: 75,
+                  leading: GestureDetector(
+                    onTap: () => Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) =>
+                            HabitDetail(habit: habitsListOnDate[index],
+                            ),
                       ),
                     ),
-                    title: Text(
-                      habitsListOnDate[index].name,
-                      maxLines: 1,
-                      style: TextStyle(fontWeight: FontWeight.bold),
+                    child: CircularPercentIndicator(
+                      radius: 20,
+                      lineWidth: 3.0,
+                      percent:
+                          habitsListOnDate[index].progress /
+                          habitsListOnDate[index].quantity,
+                      progressColor:
+                          iconsColor[habitsListOnDate[index].category]!,
+                      center: ClipOval(
+                        child: ColoredBox(
+                          color: iconsColor[habitsListOnDate[index].category]!.withValues(alpha: 0.3),
+                          child: Padding(
+                            padding: const EdgeInsets.all(8.0),
+                            child: Icon(icons[habitsListOnDate[index].category],size: 20,),
+                          )),
+                      ),
                     ),
-                    subtitle: Text(
-                      habitsListOnDate[index].descriptionDetail(),
-                      maxLines: 1,
-                    ),
-                    trailing: 
-                    AnimatedSwitcher(
-            duration: const Duration(milliseconds: 500),
-            transitionBuilder: (Widget child, Animation<double> animation) {
-              return ScaleTransition(scale: animation, child: child);
-            },
-            child: Container(
-              key: ValueKey<bool>(habitsListOnDate[index].progress ==
-                            habitsListOnDate[index].quantity),
-                            child: habitsListOnDate[index].progress ==
-                            habitsListOnDate[index].quantity
-                        ? Container(
-                            padding: EdgeInsets.all(8),
-                            decoration: BoxDecoration(
-                              color: Colors.grey.withValues(alpha: 0.3),
-                              borderRadius: BorderRadius.all(
-                                Radius.circular(10),
+                  ),
+                  title: Text(
+                    habitsListOnDate[index].name,
+                    maxLines: 1,
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
+                  subtitle: Text(
+                    habitsListOnDate[index].descriptionDetail(),
+                    maxLines: 1,
+                  ),
+                  trailing: 
+                  AnimatedSwitcher(
+                            duration: const Duration(milliseconds: 500),
+                            transitionBuilder: (Widget child, Animation<double> animation) {
+                              return ScaleTransition(scale: animation, child: child);
+                            },
+                            child: Container(
+                              key: ValueKey<bool>(habitsListOnDate[index].progress ==
+                          habitsListOnDate[index].quantity),
+                          child: habitsListOnDate[index].progress ==
+                          habitsListOnDate[index].quantity
+                      ? Container(
+                          padding: EdgeInsets.all(8),
+                          decoration: BoxDecoration(
+                            color: Colors.grey.withValues(alpha: 0.3),
+                            borderRadius: BorderRadius.all(
+                              Radius.circular(10),
+                            ),
+                          ),
+                          child: Text('Completed'),
+                        )
+                      : Row(
+                          mainAxisSize: MainAxisSize.min,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            IconButton(
+                              onPressed: () {
+                                if (habitsListOnDate[index].progress > 0) {
+                                  ref
+                                      .read(habitsListProvider.notifier)
+                                      .decrementProgress(
+                                        habitsListOnDate[index],
+                                      );
+                                }
+                              },
+                              icon: Icon(Icons.remove),
+                            ),
+                            SizedBox(
+                              width: 30,
+                              child: Text(
+                                habitsListOnDate[index].progress.toString(),
+                                textAlign: TextAlign.center,
                               ),
                             ),
-                            child: Text('Completed'),
-                          )
-                        : Row(
-                            mainAxisSize: MainAxisSize.min,
-                            mainAxisAlignment: MainAxisAlignment.start,
-                            children: [
-                              IconButton(
-                                onPressed: () {
-                                  if (habitsListOnDate[index].progress > 0) {
-                                    ref
-                                        .read(habitsListProvider.notifier)
-                                        .decrementProgress(
-                                          habitsListOnDate[index],
-                                        );
-                                  }
-                                },
-                                icon: Icon(Icons.remove),
-                              ),
-                              SizedBox(
-                                width: 30,
-                                child: Text(
-                                  habitsListOnDate[index].progress.toString(),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ),
-                              IconButton(
-                                onPressed: () {
-                                  if (habitsListOnDate[index].progress <
-                                      habitsListOnDate[index].quantity) {
-                                    ref
-                                        .read(habitsListProvider.notifier)
-                                        .incrementProgress(
-                                          habitsListOnDate[index],
-                                        );
-                                    if (habitsListOnDate[index].progress ==
-                                        habitsListOnDate[index].quantity) {
-                                          
-                _controllerCenter.play();
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          content: Text(
-                                            'Congratulations on completing your goal',
-                                          ),
-                                        ),
+                            IconButton(
+                              onPressed: () async {
+                                if (habitsListOnDate[index].progress <
+                                    habitsListOnDate[index].quantity) {
+                                  ref
+                                      .read(habitsListProvider.notifier)
+                                      .incrementProgress(
+                                        habitsListOnDate[index],
                                       );
-                                    }
+                                  if (habitsListOnDate[index].progress ==
+                                      habitsListOnDate[index].quantity) {
+                                       await _audioPlayer.play(AssetSource('sounds/celebration.mp3')); 
+                                        _controllerCenter.play();
+                                    
                                   }
-                                },
-                                icon: Icon(Icons.add),
-                              ),
-                            ],
+                                }
+                              },
+                              icon: Icon(Icons.add),
+                            ),
+                          ], 
+                        ),
+                            )
                           ),
-            )
-          ),
-                        
-                  ),
+                      
                 ),
               );
             },
