@@ -6,6 +6,7 @@ import 'package:habix/providers/habit_category.dart';
 import 'package:habix/providers/habits_list.dart';
 import 'package:habix/providers/new_habit.dart';
 import 'package:habix/screens/new_habit.dart';
+import 'package:habix/screens/widgets/epmty_list_widget.dart';
 import 'package:habix/screens/widgets/habit_list_tile.dart';
 import 'package:habix/utilities/image_paths.dart';
 import 'package:habix/utilities/extensions.dart';
@@ -69,16 +70,9 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
             value: _selectedCategory, onChanged: (category)=>ref.read(habitsCategoryProvider.notifier).changeCategory(category)),
       
              Expanded(
-               child: habits.isEmpty?Column(
-                 children: [
-                   Expanded(
-                    flex: 3,
-                    child: Image.asset('${baseImagePath}habbit_tracker.jpg',errorBuilder: (context, error, stackTrace) => Container(),  fit: BoxFit.fitHeight,)),
-                 Expanded(
-            flex: 1,
-            child: Text('You don\'t have any Habit in this category',style: TextStyle(fontWeight: FontWeight.bold),)),
-                 ],
-               ): Container(
+               child: habits.isEmpty?
+               EmptyListWidget()
+               : Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
                  child: ListView.separated(
                   physics: ScrollPhysics(),

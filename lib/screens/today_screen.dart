@@ -3,6 +3,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/screens/widgets/animated_progress_bar.dart';
+import 'package:habix/screens/widgets/epmty_list_widget.dart';
 import 'package:habix/utilities/constants.dart';
 import 'package:habix/providers/habits_list.dart';
 import 'package:habix/providers/today_screen.dart';
@@ -200,27 +201,7 @@ _controllerCenter =
         )
         .toList();
     return habitsListOnDate.isEmpty
-        ? Center(
-            child: Column(
-              children: [
-                Expanded(
-                  flex: 3,
-                  child: Image.asset( 
-                    'assets/images/habbit_tracker.jpg',
-                    errorBuilder: (context, error, stackTrace) => Container(),
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                Expanded(
-                  flex: 1,
-                  child: Text(
-                    'No habits on this date',
-                    style: TextStyle(fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ],
-            ),
-          )
+        ? EmptyListWidget()
         : ListView.builder(
             padding: EdgeInsets.zero,
             physics: ScrollPhysics(),
