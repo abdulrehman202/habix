@@ -23,6 +23,10 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   Category _category = Category.OTHER;
   Interval _interval = Interval.DAILY;
 
+  final _formKey = GlobalKey<FormState>();
+
+  late String _name, _description;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -30,6 +34,9 @@ class _NewHabitState extends ConsumerState<NewHabit> {
     if (widget.habit != null) {
       _nameController.text = widget.habit!.name;
       _descriptionController.text = widget.habit!.quantity.toString();
+
+      _name = widget.habit!.name;
+      _description = widget.habit!.quantity.toString();
     }
   }
 
@@ -42,7 +49,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   }
 
   _resetStates() {
-    
     ref.invalidate(newHabitIntervalProvider);
     ref.invalidate(newHabitCategoryProvider);
     ref.invalidate(newHabitReminderTime);
@@ -53,13 +59,12 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   void didChangeDependencies() {
     // TODO: implement didChangeDependencies
     super.didChangeDependencies();
-    
-  precacheImage( AssetImage(calendarImagePath), context);
+
+    precacheImage(AssetImage(calendarImagePath), context);
   }
 
   @override
   Widget build(BuildContext context) {
-    
     _category = ref.watch(newHabitCategoryProvider);
     _interval = ref.watch(newHabitIntervalProvider);
 
@@ -116,34 +121,13 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                 ),
               ),
               SizedBox(height: 10),
-              TextField(
-                controller: _nameController,
-                onChanged: (txt) =>
-                    ref.read(newHabitButtonText.notifier).updateHabitName(txt),
-                decoration: InputDecoration(
-                  hint: Text('Walk, Drink Water, Yoga'),
-                  label: Text('Name'),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                controller: _descriptionController,
-                decoration: InputDecoration(
-                  hint: Text('8 glass of water, 30 minute of exercise'),
-                  label: Text('Decscription'),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                ),
-              ),
+              _nameAndDescriptionForm(),
               SizedBox(height: 10),
               _reminderTimeSet(),
             ],
           ),
         ),
+        SizedBox(width: 20),
         Expanded(
           child: Column(
             mainAxisSize: MainAxisSize.min,
@@ -157,10 +141,61 @@ class _NewHabitState extends ConsumerState<NewHabit> {
 
               SizedBox(height: 10),
               categoryOption(constraints.maxWidth),
+              SizedBox(height: 10),
+              _button(),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  Widget _nameAndDescriptionForm() {
+    return Form(
+      key: _formKey,
+      child: Column(
+        children: [
+          TextFormField(
+            validator: (value) {
+              if (value == null || value.isEmpty) {
+                return 'Invalid entry';
+              }
+              return null;
+            },
+            onSaved: (value) => _name = value!,
+            controller: _nameController,
+            onChanged: (txt) =>
+                ref.read(newHabitButtonText.notifier).updateHabitName(txt),
+            decoration: InputDecoration(
+              hint: Text('Walk, Drink Water, Yoga'),
+              label: Text('Name'),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+          SizedBox(height: 10),
+          TextFormField(
+            controller: _descriptionController,
+            maxLines: 1,
+
+            onSaved: (value) => _description = value!,
+            validator: (value) {
+              if (value == null || value.isEmpty || int.parse(value) == 0) {
+                return 'Invalid entry';
+              }
+              return null;
+            },
+            decoration: InputDecoration(
+              hint: Text('8 glass of water, 30 minute of exercise'),
+              label: Text('Decscription'),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+            ),
+          ),
+        ],
+      ),
     );
   }
 
@@ -185,25 +220,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           ),
         ),
         SizedBox(height: 10),
-        TextField(
-          controller: _nameController,
-          onChanged: (txt) =>
-              ref.read(newHabitButtonText.notifier).updateHabitName(txt),
-          decoration: InputDecoration(
-            hint: Text('Walk, Drink Water, Yoga'),
-            label: Text('Name'),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
-        SizedBox(height: 10),
-        TextField(
-          controller: _descriptionController,
-          decoration: InputDecoration(
-            hint: Text('8 glass of water, 30 minute of exercise'),
-            label: Text('Decscription'),
-            border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
-          ),
-        ),
+        _nameAndDescriptionForm(),
         SizedBox(height: 10),
         Text('Interval', style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 10),
@@ -287,29 +304,23 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       height: 60,
       child: FilledButton(
         onPressed: () {
-          if (_nameController.text.isEmpty ||
-              _descriptionController.text.isEmpty) {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(
-                duration: Duration(milliseconds: 750),
-                content: Text('Please fill all the fields'),
-              ),
-            );
-            return;
+          if (_formKey.currentState!.validate()) {
+            _formKey.currentState!.save();
+
+            if(widget.habit == null ) {ref
+                .read(habitsListProvider.notifier)
+                .addHabit(
+                  Habit(
+                    _name,
+                    _category,
+                    int.parse(_description),
+                    _interval,
+                    DateTime.now(),
+                  ),
+                );}
+            _resetStates();
+            Navigator.pop(context);
           }
-          ref
-              .read(habitsListProvider.notifier)
-              .addHabit(
-                Habit(
-                  _nameController.text,
-                  _category,
-                  int.parse(_descriptionController.text),
-                  _interval,
-                  DateTime.now()
-                ),
-              );
-          _resetStates();
-          Navigator.pop(context);
         },
         child: Text(
           widget.habit == null ? 'Add $hName as my new Hobby' : 'Update Habit',
@@ -354,12 +365,16 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                                     ),
                                     borderRadius: BorderRadius.circular(15),
                                     shape: BoxShape.rectangle,
-                                    color: iconsColor[c]!.withValues(alpha: 0.2),
+                                    color: iconsColor[c]!.withValues(
+                                      alpha: 0.2,
+                                    ),
                                   )
                                 : BoxDecoration(
                                     borderRadius: BorderRadius.circular(15),
                                     shape: BoxShape.rectangle,
-                                    color: iconsColor[c]!.withValues(alpha: 0.2),
+                                    color: iconsColor[c]!.withValues(
+                                      alpha: 0.2,
+                                    ),
                                   ),
                             child: Icon(icons[c]),
                           ),
@@ -392,7 +407,10 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             .read(newHabitReminderTime.notifier)
             .updateHabitReminder(selectedTime ?? time);
       },
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8),side: BorderSide(width: 1,color: Colors.grey.withValues(alpha: 0.7))),
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(8),
+        side: BorderSide(width: 1, color: Colors.grey.withValues(alpha: 0.7)),
+      ),
       leading: Icon(Icons.alarm),
       title: Text('Reminder', style: TextStyle(fontWeight: FontWeight.bold)),
       trailing: Row(
