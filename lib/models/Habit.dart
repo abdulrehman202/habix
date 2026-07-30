@@ -30,7 +30,7 @@ DateTime time;
 Habit(this.name, this.category, this.quantity,this.interval,this.time);
 
 String descriptionDetail() {
-  return 'Repeat $quantity times';
+  return '$quantity Repititons';
 }
   
 }

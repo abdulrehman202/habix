@@ -55,6 +55,8 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
         mainAxisSize: MainAxisSize.min,
         children: [
           ChipsChoice<Category>.single(
+            scrollToSelectedOnChanged: true,
+            clipBehavior: Clip.none,
             padding: EdgeInsets.zero,
             choiceStyle: C2ChipStyle.filled(
           color: Colors.white,

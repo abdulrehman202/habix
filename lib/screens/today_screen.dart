@@ -429,7 +429,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                 child: AnimatedProgressBar(value: percentageOfCompletedTasks),
               ),
               SizedBox(width: 5),
-              Text('${percentageOfCompletedTasks * 100}%'),
+              Text('${(percentageOfCompletedTasks * 100).round()}%'),
             ],
           );
   }

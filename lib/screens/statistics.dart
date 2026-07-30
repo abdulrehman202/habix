@@ -99,42 +99,13 @@ class _StatisticsState extends ConsumerState<Statistics> {
 
   Widget _pieChart() 
   {
-    final dataMap = <String, double>{
-    "Flutter": 5,
-    "React": 3,
-    "Xamarin": 2,
-    "Ionic": 2,
+    final dataMap =  <String, double>{
+    "Mind" : 5,
+    "Health": 3,
+    "Productivity": 2,
+    "Morning": 2,
+    "Other": 7,
   };
-
-  final legendLabels = <String, String>{
-    "Flutter": "Flutter legend",
-    "React": "React legend",
-    "Xamarin": "Xamarin legend",
-    "Ionic": "Ionic legend",
-  };
-
-  final colorList = <Color>[
-    const Color(0xfffdcb6e),
-    const Color(0xff0984e3),
-    const Color(0xfffd79a8),
-    const Color(0xffe17055),
-    const Color(0xff6c5ce7),
-  ];
-
-  final gradientList = <List<Color>>[
-    [
-      const Color.fromRGBO(223, 250, 92, 1),
-      const Color.fromRGBO(129, 250, 112, 1),
-    ],
-    [
-      const Color.fromRGBO(129, 182, 205, 1),
-      const Color.fromRGBO(91, 253, 199, 1),
-    ],
-    [
-      const Color.fromRGBO(175, 63, 62, 1.0),
-      const Color.fromRGBO(254, 154, 92, 1),
-    ]
-  ];
 
     return Card(
       elevation: 3,
@@ -147,16 +118,18 @@ class _StatisticsState extends ConsumerState<Statistics> {
             Text('Habit Completion', style: TextStyle(fontWeight: FontWeight.bold)),
             SizedBox(height: 20),
             Container(
-              padding: EdgeInsets.all(40),
+              padding: EdgeInsets.all(30),
               child: PieChart(
-                
                 legendOptions: LegendOptions(
                   showLegendsInRow: screenSize<=864&& screenSize>maxScreenSizeInPortraitMode,
                   legendPosition: screenSize<=864&& screenSize>maxScreenSizeInPortraitMode ?LegendPosition.bottom: LegendPosition.right
                 ),
-                centerText: '100% completed',
-                ringStrokeWidth: 20,
-                chartType: ChartType.ring,
+                chartValuesOptions: ChartValuesOptions(
+                  showChartValuesOutside: true,
+                  showChartValueBackground: false,
+                  showChartValuesInPercentage: true,
+                  decimalPlaces: 0
+                ),
                 dataMap: dataMap),
             ),
           ],
