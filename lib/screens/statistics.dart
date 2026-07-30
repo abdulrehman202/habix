@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/models/Habit.dart';
+import 'package:habix/providers/habits_list.dart';
 import 'package:habix/utilities/constants.dart';
 import 'package:habix/utilities/extensions.dart';
 import 'package:material_charts/material_charts.dart' hide LegendPosition;
@@ -16,7 +18,15 @@ class Statistics extends ConsumerStatefulWidget {
 
 class _StatisticsState extends ConsumerState<Statistics> {
   TimePeriod _selectedTimeperiod = TimePeriod.TODAY;
-  late double screenSize;
+  late double screenSize;  
+
+  final categorizedList = [
+    HabitBucket.filter( Category.HEALTH , allHabits),
+    HabitBucket.filter( Category.MIND , allHabits),
+    HabitBucket.filter( Category.MORNING , allHabits),
+    HabitBucket.filter( Category.PRODUCTIVITY , allHabits),
+    HabitBucket.filter( Category.OTHER , allHabits),
+  ];  
 
   @override
   Widget build(BuildContext context) {
@@ -99,12 +109,13 @@ class _StatisticsState extends ConsumerState<Statistics> {
 
   Widget _pieChart() 
   {
-    final dataMap =  <String, double>{
-    "Mind" : 5,
-    "Health": 3,
-    "Productivity": 2,
-    "Morning": 2,
-    "Other": 7,
+    final dataMap = <String, double>{
+    Category.MIND.name : categorizedList.firstWhere((e)=>e.category == Category.MIND).list.length/allHabits.length,
+    Category.MORNING.name : categorizedList.firstWhere((e)=>e.category == Category.MORNING).list.length/allHabits.length,
+    Category.HEALTH.name : categorizedList.firstWhere((e)=>e.category == Category.HEALTH).list.length/allHabits.length,
+    Category.PRODUCTIVITY.name : categorizedList.firstWhere((e)=>e.category == Category.PRODUCTIVITY).list.length/allHabits.length,
+    Category.OTHER.name : categorizedList.firstWhere((e)=>e.category == Category.OTHER).list.length/allHabits.length,
+    
   };
 
     return Card(
@@ -143,22 +154,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
       ChartSeries(
         smoothLine: true,
         name: '',
-        dataPoints: _selectedTimeperiod == TimePeriod.MONTH
-            ? [
-                ChartDataPoint(value: 10, label: 'Week 1'),
-                ChartDataPoint(value: 25, label: 'Week 2'),
-                ChartDataPoint(value: 15, label: 'Week 3'),
-                ChartDataPoint(value: 30, label: 'Week 4'),
-              ]
-            : [
-                ChartDataPoint(value: 10, label: 'Monday'),
-                ChartDataPoint(value: 25, label: 'Tuesday'),
-                ChartDataPoint(value: 15, label: 'Wednesday'),
-                ChartDataPoint(value: 30, label: 'Thursday'),
-                ChartDataPoint(value: 45, label: 'Friday'),
-                ChartDataPoint(value: 60, label: 'Saturday'),
-                ChartDataPoint(value: 15, label: 'Sunday'),
-              ],
+        dataPoints: getTimeIntervals( _selectedTimeperiod ), 
         color: Colors.green,
       ),
       ChartSeries(
@@ -207,5 +203,33 @@ class _StatisticsState extends ConsumerState<Statistics> {
         ),
       ),
     );
+  }
+  
+  List<ChartDataPoint> getTimeIntervals(TimePeriod tp) 
+  {
+    if(tp == TimePeriod.MONTH){
+            return [
+                ChartDataPoint(value: 10, label: 'Week 1'),
+                ChartDataPoint(value: 25, label: 'Week 2'),
+                ChartDataPoint(value: 15, label: 'Week 3'),
+                ChartDataPoint(value: 30, label: 'Week 4'),
+              ];}
+            else if(tp==TimePeriod.WEEK) {return [
+                ChartDataPoint(value: 10, label: 'Monday'),
+                ChartDataPoint(value: 25, label: 'Tuesday'),
+                ChartDataPoint(value: 15, label: 'Wednesday'),
+                ChartDataPoint(value: 30, label: 'Thursday'),
+                ChartDataPoint(value: 45, label: 'Friday'),
+                ChartDataPoint(value: 60, label: 'Saturday'),
+                ChartDataPoint(value: 15, label: 'Sunday'),
+              ];}
+              else{
+                return [
+                ChartDataPoint(value: 10, label: '12:00 pm'),
+                ChartDataPoint(value: 15, label: '6:00 pm'),
+                ChartDataPoint(value: 45, label: '12:00 am'),
+                ChartDataPoint(value: 15, label: '6:00 am'),
+              ];
+              }
   }
 }

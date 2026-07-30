@@ -64,6 +64,13 @@ class ReadingHabit extends Habit
   }
 }
 
+class HabitBucket{
+  Category category;
+  List<Habit> list;
+
+  HabitBucket.filter(this.category,List<Habit> all): list = all.where((h)=>h.category == category).toList();
+}
+
 extension example on Habit{
 
   String get editedDescription{

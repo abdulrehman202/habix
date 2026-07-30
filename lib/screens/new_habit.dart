@@ -318,6 +318,10 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                     DateTime.now(),
                   ),
                 );}
+                else{
+                  //update habit code here
+                
+                }
             _resetStates();
             Navigator.pop(context);
           }

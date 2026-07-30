@@ -13,13 +13,20 @@ List<Habit> allHabits = [
 
 // final habitsProvider = Provider((ref)=> allHabits);
 
-
+ 
 class HabitsListNotifier extends StateNotifier<List<Habit>>{
 
   HabitsListNotifier():super(allHabits);
   
   void addHabit (Habit habit){
     state = [...state, habit];
+  }
+
+  void updateHabit (Habit habit){
+    final l = state;
+    final index = l.indexWhere((h)=>h.id==habit.id);
+    l[index] = habit;
+    state = l;
   }
 
   void incrementProgress (Habit habit){
