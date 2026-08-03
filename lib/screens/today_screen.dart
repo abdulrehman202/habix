@@ -147,19 +147,21 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
     final habitsListToday = list
         .where(
           (h) =>
-              h.time.day == _selectedDate.day &&
-              h.time.month == _selectedDate.month &&
-              h.time.year == _selectedDate.year,
+              h.dateCreated.day == _selectedDate.day &&
+              h.dateCreated.month == _selectedDate.month &&
+              h.dateCreated.year == _selectedDate.year,
         )
         .toList();
 
     final completedHabitsList = list
         .where(
           (h) =>
-              h.time.day == _selectedDate.day &&
-              h.time.month == _selectedDate.month &&
-              h.time.year == _selectedDate.year &&
-              h.progress == h.quantity,
+              h.dateCreated.day == _selectedDate.day &&
+              h.dateCreated.month == _selectedDate.month &&
+              h.dateCreated.year == _selectedDate.year &&
+              h.progress == h.quantity  &&
+              h.dateFinished !=null
+              ,
         )
         .toList();
 
@@ -207,9 +209,9 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
     final habitsListOnDate = list
         .where(
           (h) =>
-              h.time.day == _selectedDate.day &&
-              h.time.month == _selectedDate.month &&
-              h.time.year == _selectedDate.year,
+              h.dateCreated.day == _selectedDate.day &&
+              h.dateCreated.month == _selectedDate.month &&
+              h.dateCreated.year == _selectedDate.year,
         )
         .toList();
     return habitsListOnDate.isEmpty
@@ -314,15 +316,15 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                               onPressed: () async {
                                 if (habitsListOnDate[index].progress <
                                     habitsListOnDate[index].quantity) {
-                                  ref
+                                    bool habitCompleted = ref
                                       .read(habitsListProvider.notifier)
                                       .incrementProgress(
                                         habitsListOnDate[index],
                                       );
-                                  if (habitsListOnDate[index].progress ==
-                                      habitsListOnDate[index].quantity) {
+                                  if (habitCompleted) {
                                        await _audioPlayer.play(AssetSource('sounds/celebration.mp3')); 
                                         _controllerCenter.play();
+
                                     
                                   }
                                 }
@@ -400,19 +402,21 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
     final habitsListToday = list
         .where(
           (h) =>
-              h.time.day == _selectedDate.day &&
-              h.time.month == _selectedDate.month &&
-              h.time.year == _selectedDate.year,
+              h.dateCreated.day == _selectedDate.day &&
+              h.dateCreated.month == _selectedDate.month &&
+              h.dateCreated.year == _selectedDate.year,
         )
         .toList();
 
     final completedHabitsList = list
         .where(
           (h) =>
-              h.time.day == _selectedDate.day &&
-              h.time.month == _selectedDate.month &&
-              h.time.year == _selectedDate.year &&
-              h.progress == h.quantity,
+              h.dateCreated.day == _selectedDate.day &&
+              h.dateCreated.month == _selectedDate.month &&
+              h.dateCreated.year == _selectedDate.year &&
+              h.progress == h.quantity &&
+              h.dateFinished!=null
+              ,
         )
         .toList();
 

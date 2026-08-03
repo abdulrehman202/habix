@@ -25,9 +25,10 @@ int quantity;
 int progress = 0;
 Interval interval;
 int streaks = 0;
-DateTime time;
+DateTime dateCreated;
+DateTime? dateFinished;
 
-Habit(this.name, this.category, this.quantity,this.interval,this.time);
+Habit(this.name, this.category, this.quantity,this.interval,this.dateCreated);
 
 String descriptionDetail() {
   return '$quantity Repititons';
@@ -37,7 +38,7 @@ String descriptionDetail() {
 
 class WaterHabit extends Habit
 {
-  WaterHabit(super.name, super.category, super.quantity, super.interval,super.time);
+  WaterHabit(super.name, super.category, super.quantity, super.interval,super.dateCreated);
   
   @override
   String descriptionDetail() {
@@ -46,7 +47,7 @@ class WaterHabit extends Habit
 }
 
 class RegularHabit extends Habit{
-  RegularHabit(super.name, super.category, super.quantity, super.interval,super.time);
+  RegularHabit(super.name, super.category, super.quantity, super.interval,super.dateCreated);
   
   @override
   String descriptionDetail() {
@@ -56,7 +57,7 @@ class RegularHabit extends Habit{
 
 class ReadingHabit extends Habit
 {
-  ReadingHabit(super.name, super.category, super.quantity, super.interval,super.time);
+  ReadingHabit(super.name, super.category, super.quantity, super.interval,super.dateCreated);
   
   @override
   String descriptionDetail() {
