@@ -21,7 +21,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   final TextEditingController _nameController = TextEditingController(),
       _descriptionController = TextEditingController();
   Category _category = Category.OTHER;
-  Interval _interval = Interval.DAILY;
+  HabitInterval _interval = HabitInterval.DAILY;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -257,7 +257,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
       children: [
-        ...Interval.values.map(
+        ...HabitInterval.values.map(
           (i) => Expanded(
             child: GestureDetector(
               onTap: () => ref

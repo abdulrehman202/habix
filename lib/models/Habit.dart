@@ -9,7 +9,7 @@ enum Category{
   OTHER
 }
 
-enum Interval{
+enum HabitInterval{
   DAILY,
   WEEKDAYS,
   WEEKEND,
@@ -23,7 +23,7 @@ String name;
 Category category;
 int quantity;
 int progress = 0;
-Interval interval;
+HabitInterval interval;
 int streaks = 0;
 DateTime dateCreated;
 DateTime? dateFinished;

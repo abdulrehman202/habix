@@ -3,14 +3,14 @@ import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/models/Habit.dart';
 
-class NewHabitInterval extends StateNotifier<Interval>{
+class NewHabitInterval extends StateNotifier<HabitInterval>{
 
-  NewHabitInterval():super(Interval.DAILY);
+  NewHabitInterval():super(HabitInterval.DAILY);
 
-  void changeIntervalSelection(Interval interval)=>state = interval;
+  void changeIntervalSelection(HabitInterval interval)=>state = interval;
 }
 
-final newHabitIntervalProvider = StateNotifierProvider<NewHabitInterval, Interval>((ref)=>NewHabitInterval());
+final newHabitIntervalProvider = StateNotifierProvider<NewHabitInterval, HabitInterval>((ref)=>NewHabitInterval());
 
 class NewHabitCategory extends StateNotifier<Category>{
 

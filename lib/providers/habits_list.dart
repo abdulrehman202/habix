@@ -4,11 +4,11 @@ import 'package:habix/models/Habit.dart';
 import 'package:habix/providers/habit_category.dart';
 
 List<Habit> allHabits = [
-  RegularHabit('Walking', Category.HEALTH, 30, Interval.DAILY ,DateTime.now()),
-  WaterHabit('Drink Water', Category.HEALTH, 8, Interval.DAILY,DateTime.now()),
-  RegularHabit('Exercise', Category.PRODUCTIVITY, 15, Interval.WEEKDAYS,DateTime.now()),
-  ReadingHabit('Read Book', Category.MIND, 30, Interval.WEEKEND,DateTime.now()),
-  RegularHabit('Long Drive', Category.MIND, 20, Interval.WEEKEND,DateTime.now()),
+  RegularHabit('Walking', Category.HEALTH, 30, HabitInterval.DAILY ,DateTime.now()),
+  WaterHabit('Drink Water', Category.HEALTH, 8, HabitInterval.DAILY,DateTime.now()),
+  RegularHabit('Exercise', Category.PRODUCTIVITY, 15, HabitInterval.WEEKDAYS,DateTime.now()),
+  ReadingHabit('Read Book', Category.MIND, 30, HabitInterval.WEEKEND,DateTime.now()),
+  RegularHabit('Long Drive', Category.MIND, 20, HabitInterval.WEEKEND,DateTime.now()),
 ];
 
 // final habitsProvider = Provider((ref)=> allHabits);
@@ -76,3 +76,4 @@ final categorizedlist = Provider((ref)
 
   return allHabitsList.where((h)=>h.category == chosenCategory).toList();
 });
+

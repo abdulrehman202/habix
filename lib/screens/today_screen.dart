@@ -2,6 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/models/Habit.dart';
 import 'package:habix/screens/widgets/animated_progress_bar.dart';
 import 'package:habix/screens/widgets/epmty_list_widget.dart';
 import 'package:habix/utilities/constants.dart';
@@ -27,6 +28,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
   late ConfettiController _controllerCenter;
 
   final AudioPlayer _audioPlayer = AudioPlayer();
+  late List<Habit> habitsListOnDate;
 
   late final AnimationController _controller = AnimationController(
     duration: const Duration(milliseconds: 500),
@@ -70,6 +72,31 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
   @override
   Widget build(BuildContext context) {
     _selectedDate = ref.watch(dateProvider);
+    final list = ref.watch(habitsListProvider);
+    habitsListOnDate = list
+        .where(
+          (h) {
+            if( h.interval== HabitInterval.DAILY)
+            {
+              return true;
+            }
+            
+            else if( h.interval== HabitInterval.WEEKDAYS && _selectedDate.weekday<=5 )
+            {
+              return true;
+            }
+
+            else if( h.interval== HabitInterval.WEEKEND && _selectedDate.weekday>5 )
+            {
+              return true;
+            }
+
+            return false;
+            
+          }
+          
+        )
+        .toList();
     return Scaffold(
       appBar: AppBar(
         title: Text('Good Afternoon Flex,'),
@@ -143,22 +170,12 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
   }
 
   Widget _progressBar() {
-    final list = ref.watch(habitsListProvider);
-    final habitsListToday = list
-        .where(
-          (h) =>
-              h.dateCreated.day == _selectedDate.day &&
-              h.dateCreated.month == _selectedDate.month &&
-              h.dateCreated.year == _selectedDate.year,
-        )
-        .toList();
+    final habitsListToday = habitsListOnDate;
 
-    final completedHabitsList = list
+    final completedHabitsList = habitsListToday
         .where(
           (h) =>
-              h.dateCreated.day == _selectedDate.day &&
-              h.dateCreated.month == _selectedDate.month &&
-              h.dateCreated.year == _selectedDate.year &&
+          
               h.progress == h.quantity  &&
               h.dateFinished !=null
               ,
@@ -205,15 +222,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   Widget _habitsList() {
     _controller.forward();
-    final list = ref.watch(habitsListProvider);
-    final habitsListOnDate = list
-        .where(
-          (h) =>
-              h.dateCreated.day == _selectedDate.day &&
-              h.dateCreated.month == _selectedDate.month &&
-              h.dateCreated.year == _selectedDate.year,
-        )
-        .toList();
+    
     return habitsListOnDate.isEmpty
         ? EmptyListWidget()
         : ListView.builder(
@@ -270,25 +279,26 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                   ),
                   trailing: 
                   AnimatedSwitcher(
-                            duration: const Duration(milliseconds: 500),
+                            duration: const Duration(milliseconds: 200),
                             transitionBuilder: (Widget child, Animation<double> animation) {
-                              return ScaleTransition(scale: animation, child: child);
+                              return FadeTransition(opacity: animation, child: child);
                             },
                             child: Container(
                               key: ValueKey<bool>(habitsListOnDate[index].progress ==
                           habitsListOnDate[index].quantity),
                           child: habitsListOnDate[index].progress ==
                           habitsListOnDate[index].quantity
-                      ? Container(
-                          padding: EdgeInsets.all(8),
-                          decoration: BoxDecoration(
-                            color: Colors.grey.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.all(
-                              Radius.circular(10),
-                            ),
-                          ),
-                          child: Text('Completed'),
-                        )
+                      ? Icon(Icons.check,color: Colors.green,)
+                      // Container(
+                      //     padding: EdgeInsets.all(8),
+                      //     decoration: BoxDecoration(
+                      //       color: Colors.grey.withValues(alpha: 0.3),
+                      //       borderRadius: BorderRadius.all(
+                      //         Radius.circular(10),
+                      //       ),
+                      //     ),
+                      //     child: Text('Completed'),
+                      //   )
                       : Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
@@ -398,22 +408,13 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
   }
 
   Widget _landscapeProgressBar() {
-    final list = ref.watch(habitsListProvider);
-    final habitsListToday = list
-        .where(
-          (h) =>
-              h.dateCreated.day == _selectedDate.day &&
-              h.dateCreated.month == _selectedDate.month &&
-              h.dateCreated.year == _selectedDate.year,
-        )
-        .toList();
 
-    final completedHabitsList = list
+    final habitsListToday = habitsListOnDate;
+
+    final completedHabitsList = habitsListToday
         .where(
           (h) =>
-              h.dateCreated.day == _selectedDate.day &&
-              h.dateCreated.month == _selectedDate.month &&
-              h.dateCreated.year == _selectedDate.year &&
+             
               h.progress == h.quantity &&
               h.dateFinished!=null
               ,
