@@ -2,6 +2,8 @@ import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/core/utilities/constants.dart';
+import 'package:habix/core/utilities/enums.dart';
+import 'package:habix/data/model/habit_model.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/providers/habits_list.dart';
 import 'package:habix/presentation/providers/new_habit.dart';
@@ -310,7 +312,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             if(widget.habit == null ) {ref
                 .read(habitsListProvider.notifier)
                 .addHabit(
-                  Habit(
+                  HabitModel(
                     _name,
                     _category,
                     int.parse(_description),

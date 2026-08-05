@@ -1,6 +1,8 @@
 import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/core/utilities/enums.dart';
+import 'package:habix/data/model/habit_model.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
 import 'package:habix/presentation/providers/habits_list.dart';
@@ -46,7 +48,7 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     _selectedCategory = ref.watch(habitsCategoryProvider);
-    List<Habit> habits = ref.watch(categorizedlist);
+    List<HabitModel> habits = ref.watch(categorizedlist);
 
     return Scaffold(
       appBar: AppBar(title: Text('All Habits'), automaticallyImplyLeading: false,),

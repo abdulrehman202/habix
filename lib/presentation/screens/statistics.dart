@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/core/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/providers/habits_list.dart';
 import 'package:habix/core/utilities/constants.dart';
@@ -21,11 +22,11 @@ class _StatisticsState extends ConsumerState<Statistics> {
   late double screenSize;  
 
   final categorizedList = [
-    HabitBucket.filter( Category.HEALTH , allHabits),
-    HabitBucket.filter( Category.MIND , allHabits),
-    HabitBucket.filter( Category.MORNING , allHabits),
-    HabitBucket.filter( Category.PRODUCTIVITY , allHabits),
-    HabitBucket.filter( Category.OTHER , allHabits),
+    HabitBucket.filter( Category.HEALTH , []),
+    HabitBucket.filter( Category.MIND , []),
+    HabitBucket.filter( Category.MORNING , []),
+    HabitBucket.filter( Category.PRODUCTIVITY , []),
+    HabitBucket.filter( Category.OTHER , []),
   ];  
 
   @override
@@ -109,14 +110,14 @@ class _StatisticsState extends ConsumerState<Statistics> {
 
   Widget _pieChart() 
   {
-    final dataMap = <String, double>{
-    Category.MIND.name : categorizedList.firstWhere((e)=>e.category == Category.MIND).list.length/allHabits.length,
-    Category.MORNING.name : categorizedList.firstWhere((e)=>e.category == Category.MORNING).list.length/allHabits.length,
-    Category.HEALTH.name : categorizedList.firstWhere((e)=>e.category == Category.HEALTH).list.length/allHabits.length,
-    Category.PRODUCTIVITY.name : categorizedList.firstWhere((e)=>e.category == Category.PRODUCTIVITY).list.length/allHabits.length,
-    Category.OTHER.name : categorizedList.firstWhere((e)=>e.category == Category.OTHER).list.length/allHabits.length,
+  //   final dataMap = <String, double>{
+  //   Category.MIND.name : categorizedList.firstWhere((e)=>e.category == Category.MIND).list.length/allHabits.length,
+  //   Category.MORNING.name : categorizedList.firstWhere((e)=>e.category == Category.MORNING).list.length/allHabits.length,
+  //   Category.HEALTH.name : categorizedList.firstWhere((e)=>e.category == Category.HEALTH).list.length/allHabits.length,
+  //   Category.PRODUCTIVITY.name : categorizedList.firstWhere((e)=>e.category == Category.PRODUCTIVITY).list.length/allHabits.length,
+  //   Category.OTHER.name : categorizedList.firstWhere((e)=>e.category == Category.OTHER).list.length/allHabits.length,
     
-  };
+  // };
 
     return Card(
       elevation: 3,
@@ -141,7 +142,7 @@ class _StatisticsState extends ConsumerState<Statistics> {
                   showChartValuesInPercentage: true,
                   decimalPlaces: 0
                 ),
-                dataMap: dataMap),
+                dataMap: {}),
             ),
           ],
         ),

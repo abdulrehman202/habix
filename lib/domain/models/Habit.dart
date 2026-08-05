@@ -1,19 +1,6 @@
+import 'package:habix/core/utilities/enums.dart';
 import 'package:uuid/uuid.dart';
 
-enum Category{
-  ALL,
-  MORNING,
-  HEALTH,
-  MIND,
-  PRODUCTIVITY,
-  OTHER
-}
-
-enum HabitInterval{
-  DAILY,
-  WEEKDAYS,
-  WEEKEND,
-}
 
 var uuid = Uuid();
 

@@ -2,6 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/core/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/screens/widgets/animated_progress_bar.dart';
 import 'package:habix/presentation/screens/widgets/epmty_list_widget.dart';
@@ -72,31 +73,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
   @override
   Widget build(BuildContext context) {
     _selectedDate = ref.watch(dateProvider);
-    final list = ref.watch(habitsListProvider);
-    habitsListOnDate = list
-        .where(
-          (h) {
-            if( h.interval== HabitInterval.DAILY)
-            {
-              return true;
-            }
-            
-            else if( h.interval== HabitInterval.WEEKDAYS && _selectedDate.weekday<=5 )
-            {
-              return true;
-            }
-
-            else if( h.interval== HabitInterval.WEEKEND && _selectedDate.weekday>5 )
-            {
-              return true;
-            }
-
-            return false;
-            
-          }
-          
-        )
-        .toList();
+    habitsListOnDate = ref.watch(habitsListProvider);
     return Scaffold(
       appBar: AppBar(
         title: Text('Good Afternoon Flex,'),
@@ -216,6 +193,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
       maxDate: DateTime.now().add(Duration(days: 720)),
       onDateChange: (date) {
         ref.read(dateProvider.notifier).changeDate(date);
+        ref.read(habitsListProvider.notifier).updateList(date);
       },
     );
   }
@@ -400,6 +378,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
             lastDate: DateTime.now().add(Duration(days: 720)),
             onDateChanged: (date) {
               ref.read(dateProvider.notifier).changeDate(date);
+              ref.read(habitsListProvider.notifier).updateList(date);
             },
           ),
         ],
