@@ -1,11 +1,7 @@
 import 'package:habix/core/utilities/enums.dart';
-import 'package:uuid/uuid.dart';
-
-
-var uuid = Uuid();
 
 class Habit  {
-  String id = uuid.v4();
+  String id;
 String name;
 Category category;
 int quantity;
@@ -15,7 +11,7 @@ int streaks = 0;
 DateTime dateCreated;
 DateTime? dateFinished;
 
-Habit(this.name, this.category, this.quantity,this.interval,this.dateCreated);
+Habit( {required this.id, required this.name, required this.category, required this.quantity,required this.interval,required this.dateCreated});
 
 String descriptionDetail() {
   return '$quantity Repititons';
@@ -23,34 +19,34 @@ String descriptionDetail() {
   
 }
 
-class WaterHabit extends Habit
-{
-  WaterHabit(super.name, super.category, super.quantity, super.interval,super.dateCreated);
+// class WaterHabit extends Habit
+// {
+//   WaterHabit(super.name, super.category, super.quantity, super.interval,super.dateCreated);
   
-  @override
-  String descriptionDetail() {
-    return '${super.quantity} glass of water';
-  }
-}
+//   @override
+//   String descriptionDetail() {
+//     return '${super.quantity} glass of water';
+//   }
+// }
 
-class RegularHabit extends Habit{
-  RegularHabit(super.name, super.category, super.quantity, super.interval,super.dateCreated);
+// class RegularHabit extends Habit{
+//   RegularHabit(super.name, super.category, super.quantity, super.interval,super.dateCreated);
   
-  @override
-  String descriptionDetail() {
-    return '${super.quantity} minutes';
-  }
-}
+//   @override
+//   String descriptionDetail() {
+//     return '${super.quantity} minutes';
+//   }
+// }
 
-class ReadingHabit extends Habit
-{
-  ReadingHabit(super.name, super.category, super.quantity, super.interval,super.dateCreated);
+// class ReadingHabit extends Habit
+// {
+//   ReadingHabit(super.name, super.category, super.quantity, super.interval,super.dateCreated);
   
-  @override
-  String descriptionDetail() {
-    return '${super.quantity} pages';
-  }
-}
+//   @override
+//   String descriptionDetail() {
+//     return '${super.quantity} pages';
+//   }
+// }
 
 class HabitBucket{
   Category category;
@@ -59,10 +55,10 @@ class HabitBucket{
   HabitBucket.filter(this.category,List<Habit> all): list = all.where((h)=>h.category == category).toList();
 }
 
-extension example on Habit{
+// extension example on Habit{
 
-  String get editedDescription{
-    return '${descriptionDetail()} is edited';
-  }
+//   String get editedDescription{
+//     return '${descriptionDetail()} is edited';
+//   }
 
-}
+// }

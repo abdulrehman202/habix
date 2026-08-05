@@ -1,27 +1,29 @@
 import 'package:habix/core/utilities/enums.dart';
+import 'package:habix/data/Mappers/mapper.dart';
 import 'package:habix/data/datasource/habits_list_dummy_source.dart';
 import 'package:habix/data/model/habit_model.dart';
+import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/domain/repositories/habit_repository.dart';
-import 'package:habix/domain/usecase/habit_usecases.dart';
 
 class HabitRepositoryImpl implements HabitRepository{
 
   final HabitsListDummySource _habitsListDummySource = HabitsListDummySource();
   @override
-  void addHabit(HabitModel habit) {
+  void addHabit(Habit habit) {
     // TODO: implement addHabit
-
-    _habitsListDummySource.allHabits.add(habit);
+    HabitModel habitModel = toHabitModel(habit);
+    _habitsListDummySource.allHabits.add(habitModel);
   }
 
   @override
-  List<HabitModel> getAllHabits() {
+  List<Habit> getAllHabits() {
     // TODO: implement getAllHabits
-    return _habitsListDummySource.allHabits;
+    List<HabitModel> list = _habitsListDummySource.allHabits;
+    return  list.map((item)=> toHabit(item) ).toList();
   }
 
   @override
-  List<HabitModel> getAllHabitsOnDate(DateTime dateTime) {
+  List<Habit> getAllHabitsOnDate(DateTime dateTime) {
 
     List<HabitModel> allList = _habitsListDummySource.allHabits;
     // TODO: implement getAllHabitsForToday
@@ -49,21 +51,21 @@ class HabitRepositoryImpl implements HabitRepository{
           }
     ).toList();
 
-    return todaysHabit;
+    return todaysHabit.map((item) => toHabit(item)).toList();
   }
 
   @override
-  void removeHabit(HabitModel habit) {
+  void removeHabit(Habit habit) {
     // TODO: implement removeHabit
   }
 
   @override
-  void updateHabit(HabitModel habit) {
+  void updateHabit(Habit habit) {
     // TODO: implement updateHabit
-
+    HabitModel habitModel = toHabitModel(habit);
     final l = _habitsListDummySource.allHabits;
-    final index = l.indexWhere((h)=>h.id==habit.id);
-    l[index] = habit;
+    final index = l.indexWhere((h)=>h.id==habitModel.id);
+    l[index] = habitModel;
     _habitsListDummySource.allHabits = l;
   }
 }

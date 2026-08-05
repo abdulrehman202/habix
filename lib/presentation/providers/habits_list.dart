@@ -1,7 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/core/utilities/enums.dart';
-import 'package:habix/data/model/habit_model.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
@@ -12,13 +11,13 @@ int days = 0;
 final initialList = HabitUsecases().getAllHabitsOnDate(DateTime.now().add(Duration(days: days)));
 
  
-class HabitsListNotifier extends StateNotifier<List<HabitModel>>{
+class HabitsListNotifier extends StateNotifier<List<Habit>>{
 
   final HabitUsecases _habitUsecases = HabitUsecases();
 
   HabitsListNotifier():super(initialList);
   
-  void addHabit (HabitModel habit){
+  void addHabit (Habit habit){
     _habitUsecases.addHabit(habit);
     state = [...state, habit];
   }
@@ -29,7 +28,7 @@ class HabitsListNotifier extends StateNotifier<List<HabitModel>>{
     state = [...list];
   }
 
-  void updateHabit (HabitModel habit){
+  void updateHabit (Habit habit){
 
     _habitUsecases.updateHabit(habit);
 

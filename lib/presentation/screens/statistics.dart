@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/core/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
-import 'package:habix/presentation/providers/habits_list.dart';
 import 'package:habix/core/utilities/constants.dart';
 import 'package:habix/core/utilities/extensions.dart';
 import 'package:material_charts/material_charts.dart' hide LegendPosition;

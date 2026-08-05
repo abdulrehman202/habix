@@ -1,10 +1,10 @@
-import 'package:habix/data/model/habit_model.dart';
+import 'package:habix/domain/models/Habit.dart';
 
 abstract class HabitRepository {
 
-  List<HabitModel> getAllHabits();
-  void addHabit(HabitModel habit);
-  void removeHabit(HabitModel habit);
-  void updateHabit(HabitModel habit);
-  List<HabitModel> getAllHabitsOnDate(DateTime dateTime);
+  List<Habit> getAllHabits();
+  void addHabit(Habit habit);
+  void removeHabit(Habit habit);
+  void updateHabit(Habit habit);
+  List<Habit> getAllHabitsOnDate(DateTime dateTime);
 }

@@ -1,4 +1,6 @@
 
+import 'package:uuid/uuid.dart';
+
 extension abc on String{
 
   get capitalize {
@@ -69,4 +71,11 @@ extension newExt on int{
       return '';
     }
   }
+}
+
+String getNewHabitId()
+{
+  
+var uuid = Uuid();
+return uuid.v4();
 }
