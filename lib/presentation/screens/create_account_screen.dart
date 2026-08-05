@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:habix/screens/login_screen.dart';
-import 'package:habix/screens/widgets/password_text_box.dart';
+import 'package:habix/presentation/screens/login_screen.dart';
+import 'package:habix/presentation/screens/widgets/password_text_box.dart';
 
 class CreateAccountScreen extends StatelessWidget {
   CreateAccountScreen({super.key});

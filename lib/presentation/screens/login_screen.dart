@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
-import 'package:habix/screens/create_account_screen.dart';
-import 'package:habix/screens/tabs.dart';
-import 'package:habix/screens/widgets/password_text_box.dart';
+import 'package:habix/presentation/screens/create_account_screen.dart';
+import 'package:habix/presentation/screens/tabs.dart';
+import 'package:habix/presentation/screens/widgets/password_text_box.dart';
 
 class LoginScreen extends StatelessWidget {
 

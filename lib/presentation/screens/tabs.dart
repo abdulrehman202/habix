@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:habix/screens/habit_screen.dart';
-import 'package:habix/screens/new_habit.dart';
-import 'package:habix/screens/profile_screen.dart';
-import 'package:habix/screens/statistics.dart';
-import 'package:habix/screens/today_screen.dart';
+import 'package:habix/presentation/screens/habit_screen.dart';
+import 'package:habix/presentation/screens/new_habit.dart';
+import 'package:habix/presentation/screens/profile_screen.dart';
+import 'package:habix/presentation/screens/statistics.dart';
+import 'package:habix/presentation/screens/today_screen.dart';
 
 class TabScreen extends StatefulWidget {
   const TabScreen({super.key});

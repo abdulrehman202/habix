@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:habix/models/Habit.dart';
-import 'package:habix/providers/habit_category.dart';
+import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/presentation/providers/habit_category.dart';
 
 List<Habit> allHabits = [
   RegularHabit('Walking', Category.HEALTH, 30, HabitInterval.DAILY ,DateTime.now()),

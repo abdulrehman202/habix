@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/providers/habits_list.dart';
-import 'package:habix/utilities/constants.dart';
-import 'package:habix/models/Habit.dart';
-import 'package:habix/screens/widgets/habit_list_tile.dart';
+import 'package:habix/presentation/providers/habits_list.dart';
+import 'package:habix/core/utilities/constants.dart';
+import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class HabitDetail extends ConsumerStatefulWidget {

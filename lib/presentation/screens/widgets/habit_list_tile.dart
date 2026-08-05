@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:habix/models/Habit.dart';
+import 'package:habix/domain/models/Habit.dart';
 
 Map<Category, IconData> icons = {
   Category.MORNING: Icons.wb_sunny_sharp,
