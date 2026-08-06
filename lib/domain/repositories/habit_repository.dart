@@ -7,4 +7,5 @@ abstract class HabitRepository {
   void removeHabit(Habit habit);
   void updateHabit(Habit habit);
   List<Habit> getAllHabitsOnDate(DateTime dateTime);
+  void incrementProgress(Habit habit);
 }

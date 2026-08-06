@@ -39,17 +39,18 @@ class HabitsListNotifier extends StateNotifier<List<Habit>>{
   }
 
   bool incrementProgress (Habit habit){
-    return false;
-    // List<Habit> l = state;
-    // int index = l.indexOf(habit);
-    // l[index].progress++;
-    // if(l[index].progress == l[index].quantity)
-    // {
-    //   l[index].dateFinished = DateTime.now();
-    // }
-    // state=[...l];
+    
+    _habitUsecases.incrementProgress(habit);
+    List<Habit> l = state;
+    int index = l.indexOf(habit);
+    l[index].progress++;
+    if(l[index].progress == l[index].quantity)
+    {
+      l[index].dateFinished = DateTime.now();
+    }
+    state=[...l];
 
-    // return state[index].progress == state[index].quantity;
+    return state[index].progress == state[index].quantity;
   }
 
   void decrementProgress (Habit habit){
@@ -76,13 +77,8 @@ return HabitsListNotifier();
 final categorizedlist = Provider((ref)
 {
   final chosenCategory  = ref.watch(habitsCategoryProvider);
-  final allHabitsList = HabitUsecases().getAllHabits();
+  final ll = ref.watch(habitsListProvider);
 
-  if(chosenCategory ==Category.ALL)
-  {
-    return allHabitsList;
-  }
-
-  return allHabitsList.where((h)=>h.category == chosenCategory).toList();
+  return ll.where((h)=> chosenCategory==Category.ALL?true: h.category == chosenCategory).toList();
 });
 

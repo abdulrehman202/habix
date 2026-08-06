@@ -23,4 +23,8 @@ class HabitUsecases {
   void updateHabit(Habit habit) {
     _habitRepositoryImpl.updateHabit(habit);
   }
+
+  void incrementProgress(Habit habit) {
+    _habitRepositoryImpl.incrementProgress(habit);
+  }
 }

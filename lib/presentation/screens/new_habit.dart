@@ -322,7 +322,16 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                 );}
                 else{
                   //update habit code here
-                
+                ref.read(habitsListProvider.notifier).updateHabit(
+                  Habit(
+                    id: widget.habit!.id,
+                    name: _name,
+                    category:  _category,
+                    quantity:  int.parse(_description),
+                    interval:  _interval,
+                    dateCreated:  widget.habit!.dateCreated,
+                  ),
+                );
                 }
             _resetStates();
             Navigator.pop(context);
