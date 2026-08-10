@@ -8,4 +8,6 @@ abstract class HabitRepository {
   void updateHabit(Habit habit);
   List<Habit> getAllHabitsOnDate(DateTime dateTime);
   void incrementProgress(Habit habit);
+  void decrementProgress(Habit habit);
+  void markAsComplete(Habit habit);
 }

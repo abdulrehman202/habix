@@ -84,5 +84,25 @@ class HabitRepositoryImpl implements HabitRepository{
   
   }
 
+  @override
+  void decrementProgress(Habit habit) {
+   HabitModel habitModel = toHabitModel(habit);
+    List<HabitModel> l = _habitsListDummySource.getAllHabits();
+    int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
+    l[index].progress--;
+    
+    _habitsListDummySource.updateList(l); 
+  }
+
+  @override
+  void markAsComplete(Habit habit) {    
+   HabitModel habitModel = toHabitModel(habit);
+    List<HabitModel> l = _habitsListDummySource.getAllHabits();
+    int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
+    l[index].progress = l[index].quantity;
+    
+    _habitsListDummySource.updateList(l); 
+  }
+
   
 }
