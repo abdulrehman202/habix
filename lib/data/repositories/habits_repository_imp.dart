@@ -1,3 +1,7 @@
+import 'package:dio/dio.dart';
+import 'package:habix/core/Error/ErrorInfo.dart';
+import 'package:habix/core/Error/Failures.dart';
+import 'package:habix/core/Error/Result.dart';
 import 'package:habix/data/Mappers/mapper.dart';
 import 'package:habix/data/datasource/habit/local_datasource.dart';
 import 'package:habix/data/datasource/habit/remote_datasource.dart';
@@ -17,7 +21,7 @@ class HabitRepositoryImpl implements HabitRepository {
   }
 
   @override
-  Future<List<Habit>> getAllHabits() async {
+  Future<Result<List<Habit>>> getAllHabits() async {
     try {
       late Map<String, dynamic> resData;
       try {
@@ -38,9 +42,18 @@ class HabitRepositoryImpl implements HabitRepository {
         list.add(habitModel);
       }
 
-      return list.map((item) => toHabit(item)).toList();
+      return Result.ok( list.map((item) => toHabit(item)).toList());
+    } 
+    on DioException catch (e) {
+      // Safely map raw HTTP / SDK exceptions to your Domain Failures
+      final statusCode = e.response?.statusCode;
+      return Error(
+        ServerFailure(
+         statusCode: statusCode,
+        ),
+      );
     } catch (e) {
-      return [];
+      return Error(ServerFailure());
     }
   }
 

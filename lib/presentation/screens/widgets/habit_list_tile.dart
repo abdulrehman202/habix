@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:habix/core/utilities/enums.dart';
+import 'package:habix/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
 
 Map<Category, IconData> icons = {

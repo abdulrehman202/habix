@@ -1,7 +1,7 @@
 // import 'package:flutter/material.dart';
 import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:habix/core/utilities/enums.dart';
+import 'package:habix/utilities/enums.dart';
 
 class NewHabitInterval extends StateNotifier<HabitInterval>{
 

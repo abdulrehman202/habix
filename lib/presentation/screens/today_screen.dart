@@ -5,12 +5,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/screens/widgets/animated_progress_bar.dart';
 import 'package:habix/presentation/screens/widgets/epmty_list_widget.dart';
-import 'package:habix/core/utilities/constants.dart';
+import 'package:habix/utilities/constants.dart';
 import 'package:habix/presentation/providers/habits_list.dart';
 import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/presentation/screens/habit_detail.dart';
 import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
-import 'package:habix/core/utilities/extensions.dart';
+import 'package:habix/utilities/extensions.dart';
 import 'package:horizontal_week_calendar/horizontal_week_calendar.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 

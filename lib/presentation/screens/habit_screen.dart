@@ -1,7 +1,7 @@
 import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/core/utilities/enums.dart';
+import 'package:habix/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
 import 'package:habix/presentation/providers/habits_list.dart';
@@ -9,8 +9,8 @@ import 'package:habix/presentation/providers/new_habit.dart';
 import 'package:habix/presentation/screens/new_habit.dart';
 import 'package:habix/presentation/screens/widgets/epmty_list_widget.dart';
 import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
-import 'package:habix/core/utilities/image_paths.dart';
-import 'package:habix/core/utilities/extensions.dart';
+import 'package:habix/utilities/image_paths.dart';
+import 'package:habix/utilities/extensions.dart';
 
 class AllHabits extends ConsumerStatefulWidget {
   const AllHabits({super.key});

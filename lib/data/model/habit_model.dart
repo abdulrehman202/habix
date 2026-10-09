@@ -1,4 +1,4 @@
-import 'package:habix/core/utilities/enums.dart';
+import 'package:habix/utilities/enums.dart';
 import 'package:habix/data/datasource/habit/remote_datasource.dart';
 
 class HabitModel{

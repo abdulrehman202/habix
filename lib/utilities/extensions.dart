@@ -1,4 +1,5 @@
 
+import 'package:habix/core/Error/Failures.dart';
 import 'package:uuid/uuid.dart';
 
 extension abc on String{
@@ -78,4 +79,32 @@ String getNewHabitId()
   
 var uuid = Uuid();
 return uuid.v4();
+}
+
+
+extension FailureLocalization on Failure {
+  /// Converts a domain Failure into a user-friendly UI string
+  String toUserMessage() {
+    // Assuming you have localization setup. If not, use fallback strings.
+    // final l10n = AppLocalizations.of(context)!;
+
+    return switch (this) {
+      NetworkFailure() => 'No internet connection. Please check your network and try again.',
+      CacheFailure() => 'Local storage error. Could not retrieve your data.',
+      ServerFailure(statusCode: final code) => _mapServerCodeToMessage(code),
+      _ => 'An unexpected error occurred. Please try again later.',
+    };
+  }
+
+  String _mapServerCodeToMessage(int? statusCode) {
+    if (statusCode == null) return 'Unable to connect to the server.';
+    
+    return switch (statusCode) {
+      401 => 'Incorrect email or password.',
+      403 => 'You do not have permission to access this resource.',
+      404 => 'The requested resource was not found on the server.',
+      500 || 503 => 'Our servers are experiencing issues. Please try again shortly.',
+      _ => 'Server returned an error code: $statusCode.',
+    };
+  }
 }

@@ -1,8 +1,9 @@
+import 'package:habix/core/Error/Result.dart';
 import 'package:habix/domain/models/Habit.dart';
 
 abstract class HabitRepository {
 
-  Future<List<Habit>> getAllHabits();
+  Future<Result<List<Habit>>> getAllHabits();
   void addHabit(Habit habit);
   void removeHabit(Habit habit);
   void updateHabit(Habit habit);
