@@ -4,16 +4,17 @@ import 'package:habix/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
-
-
-class InitialList{
-  static List<Habit> initialList = [];
-}
-
 class HabitsListNotifier extends StateNotifier<List<Habit>> {
   final HabitUsecases _habitUsecases = HabitUsecases();
 
-  HabitsListNotifier() : super(InitialList.initialList);
+  HabitsListNotifier() : super([]){
+    fetchInitialHabitsList();
+  }
+
+  fetchInitialHabitsList()async
+  {
+    state = await _habitUsecases.getAllHabitsOnDate(DateTime.now());
+  }
 
   void addHabit(Habit habit) {
     _habitUsecases.addHabit(habit);

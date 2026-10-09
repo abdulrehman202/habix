@@ -146,9 +146,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
   }
 
   Widget _progressBar() {
-    final habitsListToday = habitsListOnDate;
 
-    final completedHabitsList = habitsListToday
+    final completedHabitsList = habitsListOnDate
         .where(
           (h) =>
           
@@ -159,8 +158,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
         .toList();
 
     double percentageOfCompletedTasks =
-        completedHabitsList.length / habitsListToday.length;
-    return habitsListToday.isEmpty
+        completedHabitsList.length / habitsListOnDate.length;
+    return habitsListOnDate.isEmpty
         ? Container()
         : Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -224,7 +223,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                       MaterialPageRoute(
                         builder: (context) =>
                             HabitDetail(habit: habitsListOnDate[index],
-                            ),
+                            ), 
                       ),
                     ),
                     child: CircularPercentIndicator(
@@ -387,9 +386,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   Widget _landscapeProgressBar() {
 
-    final habitsListToday = habitsListOnDate;
 
-    final completedHabitsList = habitsListToday
+    final completedHabitsList = habitsListOnDate
         .where(
           (h) =>
              
@@ -400,8 +398,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
         .toList();
 
     double percentageOfCompletedTasks =
-        completedHabitsList.length / habitsListToday.length;
-    return habitsListToday.isEmpty
+        completedHabitsList.length / habitsListOnDate.length;
+    return habitsListOnDate.isEmpty
         ? Container()
         : Row(
             mainAxisAlignment: MainAxisAlignment.end,
