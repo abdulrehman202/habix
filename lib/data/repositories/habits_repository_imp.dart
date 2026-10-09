@@ -1,57 +1,47 @@
-import 'package:habix/core/utilities/enums.dart';
 import 'package:habix/data/Mappers/mapper.dart';
-import 'package:habix/data/datasource/habits_list_dummy_source.dart';
+import 'package:habix/data/datasource/habit/local_datasource.dart';
+import 'package:habix/data/datasource/habit/remote_datasource.dart';
 import 'package:habix/data/model/habit_model.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/domain/repositories/habit_repository.dart';
 
-class HabitRepositoryImpl implements HabitRepository{
+class HabitRepositoryImpl implements HabitRepository {
+  final HabitLocalDataSource _habitsListLocalSource = HabitLocalDataSource();
+  final HabitRemoteDataSource _habitsListRemoteSource = HabitRemoteDataSource();
 
-  final HabitsListDummySource _habitsListDummySource = HabitsListDummySource();
   @override
   void addHabit(Habit habit) {
-    // TODO: implement addHabit
-    HabitModel habitModel = toHabitModel(habit);
-    _habitsListDummySource.getAllHabits().add(habitModel);
+    // add to database and then cache
+    // HabitModel habitModel = toHabitModel(habit);
+    // _habitsListLocalSource.getAllHabits().add(habitModel);
   }
 
   @override
-  List<Habit> getAllHabits() {
-    // TODO: implement getAllHabits
-    List<HabitModel> list = _habitsListDummySource.getAllHabits();
-    return  list.map((item)=> toHabit(item) ).toList();
-  }
+  Future<List<Habit>> getAllHabits() async {
+    try {
+      late Map<String, dynamic> resData;
+      try {
+        resData = await _habitsListLocalSource.getAllHabits();
+      } catch (_) {
+        final response = await _habitsListRemoteSource.getAllHabits();
+        if (response.statusCode == 200) {
+          resData = response.data;
+          _habitsListLocalSource.addToCache('allHabitsList', resData);
+        }
+      }
 
-  @override
-  List<Habit> getAllHabitsOnDate(DateTime dateTime) {
+      final decodedJson = resData['allHabitsList'] as List;
+      List<HabitModel> list = [];
 
-    List<HabitModel> allList = _habitsListDummySource.getAllHabits();
-    // TODO: implement getAllHabitsForToday
+      for (var listItem in decodedJson) {
+        HabitModel habitModel = HabitModel.fromJson(listItem);
+        list.add(habitModel);
+      }
 
-    List<HabitModel> todaysHabit = allList.where(
-      
-          (h) {
-            if( h.interval== HabitInterval.DAILY)
-            {
-              return true;
-            }
-            
-            else if( h.interval== HabitInterval.WEEKDAYS && dateTime.weekday<=5 )
-            {
-              return true;
-            }
-
-            else if( h.interval== HabitInterval.WEEKEND && dateTime.weekday>5 )
-            {
-              return true;
-            }
-
-            return false;
-            
-          }
-    ).toList();
-
-    return todaysHabit.map((item) => toHabit(item)).toList();
+      return list.map((item) => toHabit(item)).toList();
+    } catch (e) {
+      return [];
+    }
   }
 
   @override
@@ -62,47 +52,44 @@ class HabitRepositoryImpl implements HabitRepository{
   @override
   void updateHabit(Habit habit) {
     // TODO: implement updateHabit
-    HabitModel habitModel = toHabitModel(habit);
-    final l = _habitsListDummySource.getAllHabits();
-    final index = l.indexWhere((h)=>h.id==habitModel.id);
-    l[index] = habitModel;
-    _habitsListDummySource.updateList(l);
+    // HabitModel habitModel = toHabitModel(habit);
+    // final l = _habitsListLocalSource.getAllHabits();
+    // final index = l.indexWhere((h)=>h.id==habitModel.id);
+    // l[index] = habitModel;
+    // _habitsListLocalSource.updateList(l);
   }
 
   @override
   void incrementProgress(Habit habit) {
     // TODO: implement incrementProgress
-    HabitModel habitModel = toHabitModel(habit);
-    List<HabitModel> l = _habitsListDummySource.getAllHabits();
-    int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
-    l[index].progress++;
-    if(l[index].progress == l[index].quantity)
-    {
-      l[index].dateFinished = DateTime.now();
-    }
-    _habitsListDummySource.updateList(l);
-  
+    // HabitModel habitModel = toHabitModel(habit);
+    // List<HabitModel> l = _habitsListLocalSource.getAllHabits();
+    // int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
+    // l[index].progress++;
+    // if(l[index].progress == l[index].quantity)
+    // {
+    //   l[index].dateFinished = DateTime.now();
+    // }
+    // _habitsListLocalSource.updateList(l);
   }
 
   @override
   void decrementProgress(Habit habit) {
-   HabitModel habitModel = toHabitModel(habit);
-    List<HabitModel> l = _habitsListDummySource.getAllHabits();
-    int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
-    l[index].progress--;
-    
-    _habitsListDummySource.updateList(l); 
+    //  HabitModel habitModel = toHabitModel(habit);
+    //   List<HabitModel> l = _habitsListLocalSource.getAllHabits();
+    //   int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
+    //   l[index].progress--;
+
+    //   _habitsListLocalSource.updateList(l);
   }
 
   @override
-  void markAsComplete(Habit habit) {    
-   HabitModel habitModel = toHabitModel(habit);
-    List<HabitModel> l = _habitsListDummySource.getAllHabits();
-    int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
-    l[index].progress = l[index].quantity;
-    
-    _habitsListDummySource.updateList(l); 
-  }
+  void markAsComplete(Habit habit) {
+    //  HabitModel habitModel = toHabitModel(habit);
+    //   List<HabitModel> l = _habitsListLocalSource.getAllHabits();
+    //   int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
+    //   l[index].progress = l[index].quantity;
 
-  
+    //   _habitsListLocalSource.updateList(l);
+  }
 }

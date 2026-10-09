@@ -30,3 +30,19 @@ return DateNotifier();
 
 });
 
+class ProgressLoaderToggleNotifier extends StateNotifier<bool>{
+
+  ProgressLoaderToggleNotifier():super(false);
+  
+  void toggle (){
+    bool currentState = state;
+    state = !currentState;
+  }
+}
+
+final toggleProvider = StateNotifierProvider<ProgressLoaderToggleNotifier, bool>((ref){
+
+return ProgressLoaderToggleNotifier();
+
+});
+

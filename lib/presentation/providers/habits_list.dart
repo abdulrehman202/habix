@@ -5,24 +5,23 @@ import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
 
-int days = 0;
 
-final initialList = HabitUsecases().getAllHabitsOnDate(
-  DateTime.now().add(Duration(days: days)),
-);
+class InitialList{
+  static List<Habit> initialList = [];
+}
 
 class HabitsListNotifier extends StateNotifier<List<Habit>> {
   final HabitUsecases _habitUsecases = HabitUsecases();
 
-  HabitsListNotifier() : super(initialList);
+  HabitsListNotifier() : super(InitialList.initialList);
 
   void addHabit(Habit habit) {
     _habitUsecases.addHabit(habit);
     state = [...state, habit];
   }
 
-  void updateList(DateTime dateTime) {
-    final list = _habitUsecases.getAllHabitsOnDate(dateTime);
+  Future<void> updateList(DateTime dateTime) async{
+    final list = await _habitUsecases.getAllHabitsOnDate(dateTime);
     state = [...list];
   }
 
