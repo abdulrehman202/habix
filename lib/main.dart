@@ -1,35 +1,10 @@
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:habix/presentation/providers/habits_list.dart';
 import 'package:habix/presentation/screens/tabs.dart';
-import 'domain/usecase/habit_usecases.dart';
 
 void main() async{
   runApp( ProviderScope(child: MyApp()));
-
-  // connect();
-
-}
-
-connect()async{
-  try{
-  final dio = Dio(BaseOptions(
-  baseUrl: 'http://localhost:8000',
-  connectTimeout: Duration(seconds: 60),
-));
-
-final response = await dio.get(
-    '/getAllHabits',
-    // options: Options(headers: {'Authorization': 'Bearer $token'}),
-  );  
-
-  print(response.toString());}
-  catch(  e)
-  {
-    print( 'errorrrrr ${e.toString()}');
-  }
 }
 
 class MyApp extends StatelessWidget {
