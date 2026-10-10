@@ -9,6 +9,7 @@ import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/presentation/screens/habit_detail.dart';
 import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
 import 'package:habix/utilities/extensions.dart';
+import 'package:habix/utilities/shimmer_animation.dart';
 import 'package:horizontal_week_calendar/horizontal_week_calendar.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -129,7 +130,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
         SizedBox(height: 20),
         _dayRow(),
         SizedBox(height: 10),
-        Expanded(child: _params['data_loading']? Center(child: CircularProgressIndicator()): _habitsList()),
+        Expanded(child: _params['data_loading']? ShimmerAnimation.listPlaceholder(): _habitsList()),
       ],
     );
   }
@@ -195,11 +196,6 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   Widget _habitsList() {
     _controller.forward();
-
-    if(_params['data_loading'])
-    {
-      return CircularProgressIndicator();
-    }
     
     return _params['habits_list'].isEmpty
         ? EmptyListWidget()
@@ -366,7 +362,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                 ],
               ),
               SizedBox(height: 10),
-              Expanded(child:_params['data_loading']? Center(child: CircularProgressIndicator()): _habitsList()),
+              Expanded(child:_params['data_loading']? ShimmerAnimation.listPlaceholder(): _habitsList()),
             ],
           ),
         ),

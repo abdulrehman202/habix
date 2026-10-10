@@ -50,6 +50,7 @@ dependencies:
   audioplayers: ^6.6.0
   dio: ^5.11.1
   flutter_cache_manager: ^3.4.5
+  shimmer_animation: ^2.2.2+1
 
 dev_dependencies:
   flutter_test:
