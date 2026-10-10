@@ -62,6 +62,7 @@ class HabitsListNotifier extends StateNotifier<List<Habit>> {
     List<Habit> l = state;
     int index = l.indexOf(habit);
     l[index].progress = l[index].quantity;
+    l[index].dateFinished = DateTime.now();
     state=[...l];
   }
 }

@@ -132,7 +132,7 @@ class _HabitDetailState extends ConsumerState<HabitDetail> {
                                         .markAsComplete(
                                           widget.habit
                                         );
-                              Navigator.pop(context);
+                              Navigator.pop(context, true);
 
         },
         child: Text(

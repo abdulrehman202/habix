@@ -218,14 +218,20 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                 child: ListTile(
                   minTileHeight: 75,
                   leading: GestureDetector(
-                    onTap: () => Navigator.push(
+                    onTap: () async{
+                      final completed = await Navigator.push(
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
                             HabitDetail(habit: habitsListOnDate[index],
                             ), 
                       ),
-                    ),
+                    );
+                    if(completed??false)
+                    {
+                      ref.read(habitsListProvider.notifier).markAsComplete(habitsListOnDate[index]);
+                    }
+                    },
                     child: CircularPercentIndicator(
                       radius: 20,
                       lineWidth: 3.0,
@@ -385,7 +391,6 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
   }
 
   Widget _landscapeProgressBar() {
-
 
     final completedHabitsList = habitsListOnDate
         .where(
