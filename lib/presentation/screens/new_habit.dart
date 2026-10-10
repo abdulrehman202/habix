@@ -21,9 +21,7 @@ class NewHabit extends ConsumerStatefulWidget {
 class _NewHabitState extends ConsumerState<NewHabit> {
   final TextEditingController _nameController = TextEditingController(),
       _descriptionController = TextEditingController();
-  Category _category = Category.OTHER;
-  HabitInterval _interval = HabitInterval.DAILY;
-
+  late Map<String,dynamic> _params;
   final _formKey = GlobalKey<FormState>();
 
   late String _name, _description;
@@ -50,10 +48,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   }
 
   _resetStates() {
-    ref.invalidate(newHabitIntervalProvider);
-    ref.invalidate(newHabitCategoryProvider);
-    ref.invalidate(newHabitReminderTime);
-    ref.invalidate(newHabitButtonText);
+    ref.invalidate(newHabitProvider);
   }
 
   @override
@@ -66,8 +61,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
 
   @override
   Widget build(BuildContext context) {
-    _category = ref.watch(newHabitCategoryProvider);
-    _interval = ref.watch(newHabitIntervalProvider);
+    _params = ref.watch(newHabitProvider);
 
     return Scaffold(
       appBar: AppBar(
@@ -166,7 +160,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             onSaved: (value) => _name = value!,
             controller: _nameController,
             onChanged: (txt) =>
-                ref.read(newHabitButtonText.notifier).updateHabitName(txt),
+                ref.read(newHabitProvider.notifier).changebuttonText(txt),
             decoration: InputDecoration(
               hint: Text('Walk, Drink Water, Yoga'),
               label: Text('Name'),
@@ -262,13 +256,13 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           (i) => Expanded(
             child: GestureDetector(
               onTap: () => ref
-                  .read(newHabitIntervalProvider.notifier)
+                  .read(newHabitProvider.notifier)
                   .changeIntervalSelection(i),
               child: Container(
                 alignment: Alignment.center,
                 padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
                 margin: EdgeInsets.only(right: i.index == 2 ? 0 : 5),
-                decoration: _interval == i
+                decoration: _params['interval'] == i
                     ? BoxDecoration(
                         border: Border.all(width: 1, color: Colors.green),
                         borderRadius: BorderRadius.circular(10),
@@ -285,7 +279,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   i.name.capitalize,
                   maxLines: 1,
                   style: TextStyle(
-                    fontWeight: _interval == i
+                    fontWeight: _params['interval'] == i
                         ? FontWeight.bold
                         : FontWeight.normal,
                   ),
@@ -299,7 +293,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   }
 
   Widget _button() {
-    final hName = ref.watch(newHabitButtonText);
+    
     return SizedBox(
       width: double.infinity,
       height: 60,
@@ -314,9 +308,9 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   Habit(
                     id: getNewHabitId(),
                     name: _name,
-                    category:  _category,
+                    category:  _params['category'],
                     quantity:  int.parse(_description),
-                    interval:  _interval,
+                    interval:  _params['interval'],
                     dateCreated:  DateTime.now(),
                   ),
                 );}
@@ -326,9 +320,9 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   Habit(
                     id: widget.habit!.id,
                     name: _name,
-                    category:  _category,
+                    category:  _params['category'],
                     quantity:  int.parse(_description),
-                    interval:  _interval,
+                    interval:  _params['interval'],
                     dateCreated:  widget.habit!.dateCreated,
                   ),
                 );
@@ -338,7 +332,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           }
         },
         child: Text(
-          widget.habit == null ? 'Add $hName as my new Hobby' : 'Update Habit',
+          widget.habit == null ? 'Add ${_params['button_text']} as my new Hobby' : 'Update Habit',
         ),
       ),
     );
@@ -363,7 +357,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                       children: [
                         GestureDetector(
                           onTap: () => ref
-                              .read(newHabitCategoryProvider.notifier)
+                              .read(newHabitProvider.notifier)
                               .changeCategorySelection(c),
                           child: Container(
                             width: w / Category.values.length,
@@ -372,7 +366,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                               vertical: 15,
                             ),
                             margin: EdgeInsets.only(bottom: 10),
-                            decoration: _category == c
+                            decoration: _params['category'] == c
                                 ? BoxDecoration(
                                     border: Border.all(
                                       width: 2,
@@ -410,7 +404,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   }
 
   Widget _reminderTimeSet() {
-    final time = ref.watch(newHabitReminderTime);
     return ListTile(
       onTap: () async {
         final selectedTime = await showTimePicker(
@@ -419,8 +412,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           initialTime: TimeOfDay.now(),
         );
         ref
-            .read(newHabitReminderTime.notifier)
-            .updateHabitReminder(selectedTime ?? time);
+            .read(newHabitProvider.notifier).changeTime(selectedTime ?? _params['time']);
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -431,7 +423,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(time.format(context).toString(), style: TextStyle(fontSize: 15)),
+          Text(_params['time'].format(context).toString(), style: TextStyle(fontSize: 15)),
           Icon(Icons.keyboard_arrow_right_rounded),
         ],
       ),

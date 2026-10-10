@@ -86,8 +86,8 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
                     animation: _animationController,
                     child: HabitTile(
                           onHabitSelected: (){
-                            ref.read(newHabitCategoryProvider.notifier).changeCategorySelection(habits[index].category);
-                            ref.read(newHabitIntervalProvider.notifier).changeIntervalSelection(habits[index].interval);
+                            ref.read(newHabitProvider.notifier).changeCategorySelection(habits[index].category);
+                            ref.read(newHabitProvider.notifier).changeIntervalSelection(habits[index].interval);
                             Navigator.push( context, MaterialPageRoute(builder: (ctx)=>NewHabit(habit: habits[index],)));},
                           habit: habits[index]),
                     builder: (context, child) {

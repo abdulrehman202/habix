@@ -3,38 +3,31 @@ import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/utilities/enums.dart';
 
-class NewHabitInterval extends StateNotifier<HabitInterval>{
 
-  NewHabitInterval():super(HabitInterval.DAILY);
+class NewHabitProvider extends StateNotifier<Map<String, dynamic>>{
 
-  void changeIntervalSelection(HabitInterval interval)=>state = interval;
+  NewHabitProvider():super({
+    'interval': HabitInterval.DAILY,
+    'category':Category.MORNING,
+    'button_text': '',
+    'time':TimeOfDay.now()
+
+
+    
+    });
+
+  void changeIntervalSelection(HabitInterval interval)=>changeState('interval', interval);
+  void changeCategorySelection(Category category)=>changeState('category', category);
+  void changebuttonText(String text)=>changeState('button_text', text);
+  void changeTime(TimeOfDay time)=>changeState('time', time);
+
+  void changeState(String key, dynamic value)
+  {
+    state = {
+      ...state,
+      key:value
+    };
+  }
 }
 
-final newHabitIntervalProvider = StateNotifierProvider<NewHabitInterval, HabitInterval>((ref)=>NewHabitInterval());
-
-class NewHabitCategory extends StateNotifier<Category>{
-
-  NewHabitCategory():super(Category.MORNING);
-
-  void changeCategorySelection(Category category)=>state = category;
-}
-
-final newHabitCategoryProvider = StateNotifierProvider<NewHabitCategory, Category>((ref)=>NewHabitCategory());
-
-class NewHabitButtonText extends StateNotifier<String>{
-
-  NewHabitButtonText():super('');
-
-  void updateHabitName(String txt)=>state = txt;
-}
-
-final newHabitButtonText = StateNotifierProvider<NewHabitButtonText, String>((ref)=>NewHabitButtonText());
-
-class NewHabitReminderTime extends StateNotifier<TimeOfDay>{
-
-  NewHabitReminderTime():super(TimeOfDay.now());
-
-  void updateHabitReminder(TimeOfDay time)=>state = time;
-}
-
-final newHabitReminderTime = StateNotifierProvider<NewHabitReminderTime, TimeOfDay>((ref)=>NewHabitReminderTime());
+final newHabitProvider = StateNotifierProvider<NewHabitProvider, Map<String, dynamic>>((ref)=>NewHabitProvider());
