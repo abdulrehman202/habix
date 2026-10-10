@@ -2,11 +2,9 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/screens/widgets/animated_progress_bar.dart';
 import 'package:habix/presentation/screens/widgets/epmty_list_widget.dart';
 import 'package:habix/utilities/constants.dart';
-import 'package:habix/presentation/providers/habits_list.dart';
 import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/presentation/screens/habit_detail.dart';
 import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
@@ -23,12 +21,11 @@ class TodayScreen extends ConsumerStatefulWidget {
 
 class _TodayScreenState extends ConsumerState<TodayScreen>
     with SingleTickerProviderStateMixin {
-  late DateTime _selectedDate;
+  late Map<String, dynamic> _params;
 
   late ConfettiController _controllerCenter;
 
   final AudioPlayer _audioPlayer = AudioPlayer();
-  late List<Habit> habitsListOnDate;
 
   late final AnimationController _controller = AnimationController(
     duration: const Duration(milliseconds: 500),
@@ -71,8 +68,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   @override
   Widget build(BuildContext context) {
-    _selectedDate = ref.watch(dateProvider);
-    habitsListOnDate = ref.watch(habitsListProvider);
+    _params = ref.watch(todaysScreenProvider);
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Good Afternoon Flex,'),
@@ -132,22 +129,22 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
         SizedBox(height: 20),
         _dayRow(),
         SizedBox(height: 10),
-
-        Expanded(child: _habitsList()),
+        Expanded(child: _params['data_loading']? Center(child: CircularProgressIndicator()): _habitsList()),
       ],
     );
   }
 
   Widget _dayRow() {
+    DateTime _date = _params['selected_date'];
     return Text(
-      '${_selectedDate.day} ${_selectedDate.month.monthInAlphabets} ${_selectedDate.year} ( ${_selectedDate.weekday.dayInAlphabets} )',
+      '${_date.day} ${_date.month.monthInAlphabets} ${_date.year} ( ${_date.weekday.dayInAlphabets} )',
       style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
     );
   }
 
   Widget _progressBar() {
 
-    final completedHabitsList = habitsListOnDate
+    final completedHabitsList = _params['habits_list']
         .where(
           (h) =>
           
@@ -158,8 +155,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
         .toList();
 
     double percentageOfCompletedTasks =
-        completedHabitsList.length / habitsListOnDate.length;
-    return habitsListOnDate.isEmpty
+        completedHabitsList.length / _params['habits_list'].length;
+    return _params['habits_list'].isEmpty
         ? Container()
         : Column(
             crossAxisAlignment: CrossAxisAlignment.end,
@@ -184,27 +181,32 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
       inactiveBackgroundColor: Colors.transparent,
       inactiveTextColor: Colors.black,
       activeTextColor: Colors.black,
-      initialDate: _selectedDate,
+      initialDate: _params['selected_date'],
       borderRadius: BorderRadius.circular(15),
       monthColor: Colors.green,
       minDate: DateTime.now().subtract(Duration(days: 720)),
       maxDate: DateTime.now().add(Duration(days: 720)),
       onDateChange: (date) {
-        ref.read(dateProvider.notifier).changeDate(date);
-        ref.read(habitsListProvider.notifier).updateList(date);
+        ref.read( todaysScreenProvider.notifier).changeDate(date);
+        ref.read(todaysScreenProvider.notifier).updateList(date);
       },
     );
   }
 
   Widget _habitsList() {
     _controller.forward();
+
+    if(_params['data_loading'])
+    {
+      return CircularProgressIndicator();
+    }
     
-    return habitsListOnDate.isEmpty
+    return _params['habits_list'].isEmpty
         ? EmptyListWidget()
         : ListView.builder(
             padding: EdgeInsets.zero,
             physics: ScrollPhysics(),
-            itemCount: habitsListOnDate.length,
+            itemCount: _params['habits_list'].length,
             shrinkWrap: true,
             itemBuilder: (context, index) {
               return 
@@ -223,40 +225,40 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                       context,
                       MaterialPageRoute(
                         builder: (context) =>
-                            HabitDetail(habit: habitsListOnDate[index],
+                            HabitDetail(habit: _params['habits_list'][index],
                             ), 
                       ),
                     );
                     if(completed??false)
                     {
-                      ref.read(habitsListProvider.notifier).markAsComplete(habitsListOnDate[index]);
+                      ref.read(todaysScreenProvider.notifier).markAsComplete(_params['habits_list'][index]);
                     }
                     },
                     child: CircularPercentIndicator(
                       radius: 20,
                       lineWidth: 3.0,
                       percent:
-                          habitsListOnDate[index].progress /
-                          habitsListOnDate[index].quantity,
+                          _params['habits_list'][index].progress /
+                          _params['habits_list'][index].quantity,
                       progressColor:
-                          iconsColor[habitsListOnDate[index].category]!,
+                          iconsColor[_params['habits_list'][index].category]!,
                       center: ClipOval(
                         child: ColoredBox(
-                          color: iconsColor[habitsListOnDate[index].category]!.withValues(alpha: 0.3),
+                          color: iconsColor[_params['habits_list'][index].category]!.withValues(alpha: 0.3),
                           child: Padding(
                             padding: const EdgeInsets.all(8.0),
-                            child: Icon(icons[habitsListOnDate[index].category],size: 20,),
+                            child: Icon(icons[_params['habits_list'][index].category],size: 20,),
                           )),
                       ),
                     ),
                   ),
                   title: Text(
-                    habitsListOnDate[index].name,
+                    _params['habits_list'][index].name,
                     maxLines: 1,
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
                   subtitle: Text(
-                    habitsListOnDate[index].descriptionDetail(),
+                    _params['habits_list'][index].descriptionDetail(),
                     maxLines: 1,
                   ),
                   trailing: 
@@ -266,10 +268,10 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                               return FadeTransition(opacity: animation, child: child);
                             },
                             child: Container(
-                              key: ValueKey<bool>(habitsListOnDate[index].progress ==
-                          habitsListOnDate[index].quantity),
-                          child: habitsListOnDate[index].progress ==
-                          habitsListOnDate[index].quantity
+                              key: ValueKey<bool>(_params['habits_list'][index].progress ==
+                          _params['habits_list'][index].quantity),
+                          child: _params['habits_list'][index].progress ==
+                          _params['habits_list'][index].quantity
                       ? Icon(Icons.check,color: Colors.green,)
                       // Container(
                       //     padding: EdgeInsets.all(8),
@@ -287,11 +289,11 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                           children: [
                             IconButton(
                               onPressed: () {
-                                if (habitsListOnDate[index].progress > 0) {
+                                if (_params['habits_list'][index].progress > 0) {
                                   ref
-                                      .read(habitsListProvider.notifier)
+                                      .read(todaysScreenProvider.notifier)
                                       .decrementProgress(
-                                        habitsListOnDate[index],
+                                        _params['habits_list'][index],
                                       );
                                 }
                               },
@@ -300,18 +302,18 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                             SizedBox(
                               width: 30,
                               child: Text(
-                                habitsListOnDate[index].progress.toString(),
+                                _params['habits_list'][index].progress.toString(),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             IconButton(
                               onPressed: () async {
-                                if (habitsListOnDate[index].progress <
-                                    habitsListOnDate[index].quantity) {
+                                if (_params['habits_list'][index].progress <
+                                    _params['habits_list'][index].quantity) {
                                     bool habitCompleted = ref
-                                      .read(habitsListProvider.notifier)
+                                      .read(todaysScreenProvider.notifier)
                                       .incrementProgress(
-                                        habitsListOnDate[index],
+                                        _params['habits_list'][index],
                                       );
                                   if (habitCompleted) {
                                        await _audioPlayer.play(AssetSource('sounds/celebration.mp3')); 
@@ -364,7 +366,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                 ],
               ),
               SizedBox(height: 10),
-              Expanded(child: _habitsList()),
+              Expanded(child:_params['data_loading']? Center(child: CircularProgressIndicator()): _habitsList()),
             ],
           ),
         ),
@@ -377,12 +379,12 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
       child: Column(
         children: [
           CalendarDatePicker(
-            initialDate: _selectedDate,
+            initialDate: _params['selected_date'],
             firstDate: DateTime.now().subtract(Duration(days: 720)),
             lastDate: DateTime.now().add(Duration(days: 720)),
             onDateChanged: (date) {
-              ref.read(dateProvider.notifier).changeDate(date);
-              ref.read(habitsListProvider.notifier).updateList(date);
+              ref.read(todaysScreenProvider.notifier).changeDate(date);
+              ref.read(todaysScreenProvider.notifier).updateList(date);
             },
           ),
         ],
@@ -392,7 +394,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   Widget _landscapeProgressBar() {
 
-    final completedHabitsList = habitsListOnDate
+    final completedHabitsList = _params['habits_list']
         .where(
           (h) =>
              
@@ -403,8 +405,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
         .toList();
 
     double percentageOfCompletedTasks =
-        completedHabitsList.length / habitsListOnDate.length;
-    return habitsListOnDate.isEmpty
+        completedHabitsList.length / _params['habits_list'].length;
+    return _params['habits_list'].isEmpty
         ? Container()
         : Row(
             mainAxisAlignment: MainAxisAlignment.end,

@@ -128,10 +128,6 @@ class _HabitDetailState extends ConsumerState<HabitDetail> {
           backgroundColor: iconsColor[widget.habit.category]!.withValues(alpha: 0.4)
         ),
         onPressed:(){
-          ref.read(habitsListProvider.notifier)
-                                        .markAsComplete(
-                                          widget.habit
-                                        );
                               Navigator.pop(context, true);
 
         },

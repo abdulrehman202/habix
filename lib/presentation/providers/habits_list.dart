@@ -34,37 +34,6 @@ class HabitsListNotifier extends StateNotifier<List<Habit>> {
     l[index] = habit;
     state = l;
   }
-
-  bool incrementProgress(Habit habit) {
-    _habitUsecases.incrementProgress(habit);
-    List<Habit> l = state;
-    int index = l.indexOf(habit);
-    l[index].progress++;
-    if (l[index].progress == l[index].quantity) {
-      l[index].dateFinished = DateTime.now();
-    }
-    state = [...l];
-
-    return state[index].progress == state[index].quantity;
-  }
-
-  void decrementProgress(Habit habit) {
-    
-    _habitUsecases.decrementProgress(habit);
-    List<Habit> l = state;
-    int index = l.indexOf(habit);
-    l[index].progress--;
-    state=[...l];
-  }
-
-  void markAsComplete(Habit habit) {
-    _habitUsecases.markAsComplete(habit);
-    List<Habit> l = state;
-    int index = l.indexOf(habit);
-    l[index].progress = l[index].quantity;
-    l[index].dateFinished = DateTime.now();
-    state=[...l];
-  }
 }
 
 final habitsListProvider =
