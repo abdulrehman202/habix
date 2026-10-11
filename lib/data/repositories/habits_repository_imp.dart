@@ -32,23 +32,13 @@ class HabitRepositoryImpl implements HabitRepository {
   @override
   Future<Result<List<Habit>>> getAllHabits() async {
     try {
-      late Map<String, dynamic> resData;
-      try {
-        resData = await _habitsListLocalSource.getAllHabits();
-      } catch (_) {
-        final response = await _habitsListRemoteSource.getAllHabits();
-        if (response.statusCode == 200) {
-          resData = response.data;
-          _habitsListLocalSource.addToCache('allHabitsList', resData);
-        }
-      }
-
-      final decodedJson = resData['allHabitsList'] as List;
       List<HabitModel> list = [];
-
-      for (var listItem in decodedJson) {
-        HabitModel habitModel = HabitModel.fromJson(listItem);
-        list.add(habitModel);
+      try {
+        Map<String, dynamic> cacheData = await _habitsListLocalSource.getAllHabits();
+        list = cacheData['allHabitsList']['list'];
+      } catch (_) {
+        list = await _habitsListRemoteSource.getAllHabits();
+      _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
       }
 
       return Result.ok( list.map((item) => toHabit(item)).toList());

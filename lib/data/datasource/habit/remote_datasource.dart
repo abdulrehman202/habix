@@ -23,13 +23,23 @@ final Map<String, HabitInterval> intervalMap = {
 };
 
 class HabitRemoteDataSource {
-  Future<Response> getAllHabits() async {
+  Future<List<HabitModel>> getAllHabits() async {
     try {
+      List<HabitModel> list = [];
       final dio = DioClient.getDioObj();
       Response response = await dio.get('/habits/');
-      return response;
+      if (response.statusCode == 200) {
+        final resData = response.data;
+        final decodedJson = resData['allHabitsList'] as List;
+
+        for (var listItem in decodedJson) {
+          HabitModel habitModel = HabitModel.fromJson(listItem);
+          list.add(habitModel);
+        }
+      }
+      return list;
     } catch (e) {
-    rethrow;  
+      rethrow;
     }
   }
 
@@ -37,15 +47,20 @@ class HabitRemoteDataSource {
     try {
       Dio dio = DioClient.getDioObj();
       final json = habit.toJson();
-      
-      Response response = await dio.post('/habits/add',data: json,options: Options(
-        headers: {
-          'Content-Type': 'application/json', // Let the server know it is JSON
-        },
-      ),);
+
+      Response response = await dio.post(
+        '/habits/add',
+        data: json,
+        options: Options(
+          headers: {
+            'Content-Type':
+                'application/json', // Let the server know it is JSON
+          },
+        ),
+      );
       return response;
     } catch (e) {
-    rethrow;  
+      rethrow;
     }
   }
 }
