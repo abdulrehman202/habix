@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:habix/core/Error/ErrorInfo.dart';
 import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/core/Error/Result.dart';
 import 'package:habix/data/Mappers/mapper.dart';
@@ -19,9 +18,10 @@ class HabitRepositoryImpl implements HabitRepository {
     Response response = await _habitsListRemoteSource.addHabit(habitModel);
     if(response.statusCode==200)
     {
-      Map<String, dynamic> resData = await _habitsListLocalSource.getAllHabits();
-      resData['allHabitsList'].add(habitModel);
-      _habitsListLocalSource.addToCache('allHabitsList', resData);
+      Map<String, dynamic> cacheData = await _habitsListLocalSource.getAllHabits();
+      List<HabitModel>  list = cacheData['allHabitsList']['list'];
+      list.add(habitModel);
+      _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
     }}
     catch(e)
     {
