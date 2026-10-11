@@ -16,8 +16,8 @@ class HabitsListNotifier extends StateNotifier<List<Habit>> {
     state = await _habitUsecases.getAllHabitsOnDate(DateTime.now());
   }
 
-  void addHabit(Habit habit) {
-    _habitUsecases.addHabit(habit);
+  void addHabit(Habit habit)async {
+    await _habitUsecases.addHabit(habit);
     state = [...state, habit];
   }
 

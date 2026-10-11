@@ -302,7 +302,8 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
 
-            if(widget.habit == null ) {ref
+            if(widget.habit == null ) {
+              ref
                 .read(habitsListProvider.notifier)
                 .addHabit(
                   Habit(

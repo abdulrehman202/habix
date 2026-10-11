@@ -17,14 +17,26 @@ HabitModel({required this.id, required this.name, required this.category, requir
 
 factory HabitModel.fromJson(Map<String, dynamic> json) {
     return HabitModel(
-      id:json["id"],
+      id: json["id"],
       name: json["name"], 
       category: catMap[json["category"]] as Category,
       quantity: json["quantity"],
       progress: json["progress"],
       interval: intervalMap[json["interval"]] as HabitInterval,
-      dateCreated: DateTime.fromMillisecondsSinceEpoch(1791445698546),
+      dateCreated: DateTime.fromMillisecondsSinceEpoch(json['dateCreated']),
       streaks: json["streaks"]
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return{
+    "id":id,
+    "name":name, 
+     'category': category.name,
+      "quantity": quantity,
+      "progress":progress,
+      "interval":interval.name,
+      'dateCreated': 1791445698546,
+      "streaks":streaks
+  };}
 }

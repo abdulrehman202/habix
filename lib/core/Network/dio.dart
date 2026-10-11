@@ -9,7 +9,7 @@ class DioClient {
     _dioObj ??= Dio(
       BaseOptions(
         baseUrl: 'http://localhost:8000',
-        connectTimeout: Duration(seconds: 5),
+        connectTimeout: Duration(seconds: 60),
       ),
     );
 

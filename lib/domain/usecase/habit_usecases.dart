@@ -29,8 +29,8 @@ class HabitUsecases {
     return result is Ok ? result.value:[];
   }
 
-  void addHabit(Habit habit) {
-    return _habitRepositoryImpl.addHabit(habit);
+  Future<void> addHabit(Habit habit) async{
+     await _habitRepositoryImpl.addHabit(habit);
   }
 
   void updateHabit(Habit habit) {

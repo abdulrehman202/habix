@@ -14,10 +14,19 @@ class HabitRepositoryImpl implements HabitRepository {
   final HabitRemoteDataSource _habitsListRemoteSource = HabitRemoteDataSource();
 
   @override
-  void addHabit(Habit habit) {
-    // add to database and then cache
-    // HabitModel habitModel = toHabitModel(habit);
-    // _habitsListLocalSource.getAllHabits().add(habitModel);
+  Future<void> addHabit(Habit habit) async{
+    try{HabitModel habitModel = toHabitModel(habit);
+    Response response = await _habitsListRemoteSource.addHabit(habitModel);
+    if(response.statusCode==200)
+    {
+      Map<String, dynamic> resData = await _habitsListLocalSource.getAllHabits();
+      resData['allHabitsList'].add(habitModel);
+      _habitsListLocalSource.addToCache('allHabitsList', resData);
+    }}
+    catch(e)
+    {
+      print(e.toString());
+    }
   }
 
   @override
