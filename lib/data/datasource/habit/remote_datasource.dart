@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:dio/dio.dart';
 import 'package:habix/core/Error/ErrorInfo.dart';
+import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/core/Error/Result.dart';
 import 'package:habix/core/Network/dio.dart';
 import 'package:habix/data/model/habit_model.dart';
@@ -38,7 +39,27 @@ class HabitRemoteDataSource {
         }
       }
       return list;
-    } catch (e) {
+    } on DioException catch (e) {
+  switch (e.type) {
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
+      throw const NetworkFailure();
+
+    case DioExceptionType.connectionError:
+      throw const NetworkFailure();
+
+    case DioExceptionType.badResponse:
+      final status = e.response?.statusCode;
+      if (status == 404) throw const ServerFailure();
+      throw ServerFailure();
+
+    case DioExceptionType.cancel:
+      throw const ServerFailure();
+
+    default:
+      throw ServerFailure();
+  }} catch (e) {
       rethrow;
     }
   }

@@ -11,16 +11,16 @@ class HabitLocalDataSource{
   final _cache = DefaultCacheManager();
 
 
-Future<Map<String, dynamic>> getAllHabits() async
+Future<List<HabitModel>> getAllHabits() async
 {
   try{
-  final cachedData = _cache.getFileFromMemory('allHabitsList');
-  final fileInfo = await cachedData;
+  final fileInfo = await _cache.getFileFromMemory('allHabitsList');
   final File? file = fileInfo?.file;
   final decodedJson = jsonDecode(file!.readAsStringSync());
-  return decodedJson;
+  return (decodedJson['list'] as List).map((e) => HabitModel.fromJson(Map<String, dynamic>.from(e)))
+    .toList();
   }
-  catch(_)
+  catch(e)
   {
     rethrow;
   }

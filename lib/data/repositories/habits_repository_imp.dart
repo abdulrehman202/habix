@@ -18,8 +18,7 @@ class HabitRepositoryImpl implements HabitRepository {
     Response response = await _habitsListRemoteSource.addHabit(habitModel);
     if(response.statusCode==200)
     {
-      Map<String, dynamic> cacheData = await _habitsListLocalSource.getAllHabits();
-      List<HabitModel>  list = cacheData['allHabitsList']['list'];
+      List<HabitModel>  list = await _habitsListLocalSource.getAllHabits();
       list.add(habitModel);
       _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
     }}
@@ -34,25 +33,16 @@ class HabitRepositoryImpl implements HabitRepository {
     try {
       List<HabitModel> list = [];
       try {
-        Map<String, dynamic> cacheData = await _habitsListLocalSource.getAllHabits();
-        list = cacheData['allHabitsList']['list'];
+        list = await _habitsListLocalSource.getAllHabits();
+        
       } catch (_) {
         list = await _habitsListRemoteSource.getAllHabits();
       _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
       }
 
       return Result.ok( list.map((item) => toHabit(item)).toList());
-    } 
-    on DioException catch (e) {
-      // Safely map raw HTTP / SDK exceptions to your Domain Failures
-      final statusCode = e.response?.statusCode;
-      return Error(
-        ServerFailure(
-         statusCode: statusCode,
-        ),
-      );
-    } catch (e) {
-      return Error(ServerFailure());
+    }catch (e) {
+      return Result.error(e as Failure);
     }
   }
 
