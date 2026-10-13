@@ -86,6 +86,9 @@ class HabitRemoteDataSource {
           list.add(habitModel);
         }
     }
+    else {
+        throw ServerFailure(statusCode: response.statusCode??404);
+      }
       return list;
     } on DioException catch (e) {
       final status = e.response?.statusCode;
