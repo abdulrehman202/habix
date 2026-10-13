@@ -1,9 +1,5 @@
-import 'dart:convert';
-
 import 'package:dio/dio.dart';
-import 'package:habix/core/Error/ErrorInfo.dart';
 import 'package:habix/core/Error/Failures.dart';
-import 'package:habix/core/Error/Result.dart';
 import 'package:habix/core/Network/dio.dart';
 import 'package:habix/data/model/habit_model.dart';
 import 'package:habix/utilities/enums.dart';
@@ -40,6 +36,7 @@ class HabitRemoteDataSource {
       }
       return list;
     } on DioException catch (e) {
+      final status = e.response?.statusCode;
   switch (e.type) {
     case DioExceptionType.connectionTimeout:
     case DioExceptionType.sendTimeout:
@@ -50,15 +47,14 @@ class HabitRemoteDataSource {
       throw const NetworkFailure();
 
     case DioExceptionType.badResponse:
-      final status = e.response?.statusCode;
-      if (status == 404) throw const ServerFailure();
-      throw ServerFailure();
+      if (status == 404) throw  ServerFailure(statusCode: status??404);
+      throw ServerFailure(statusCode: status??404);
 
     case DioExceptionType.cancel:
-      throw const ServerFailure();
+      throw ServerFailure(statusCode: status??404);
 
     default:
-      throw ServerFailure();
+      throw ServerFailure(statusCode: status??404);
   }} catch (e) {
       throw UnknownError();
     }

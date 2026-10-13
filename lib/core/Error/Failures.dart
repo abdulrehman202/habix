@@ -1,12 +1,13 @@
-// lib/core/errors/failures.dart
+import 'package:habix/core/Error/ErrorInfo.dart';
+
 abstract class Failure {
   final String message;
   const Failure(this.message);
 }
 
 class ServerFailure extends Failure {
-  final int? statusCode;
-  const ServerFailure({this.statusCode}) : super('A server error occurred.');
+  int statusCode;
+  ServerFailure({required this.statusCode}) : super(statusCode!.statusCodeErrorMessage);
 }
 
 class NetworkFailure extends Failure {

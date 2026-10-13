@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/core/Error/Result.dart';
 import 'package:habix/data/Mappers/mapper.dart';
