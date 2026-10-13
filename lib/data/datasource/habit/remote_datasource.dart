@@ -60,11 +60,11 @@ class HabitRemoteDataSource {
     default:
       throw ServerFailure();
   }} catch (e) {
-      rethrow;
+      throw UnknownError();
     }
   }
 
-  Future<Response> addHabit(HabitModel habit) async {
+  Future<List<HabitModel>> addHabit(HabitModel habit) async {
     try {
       Dio dio = DioClient.getDioObj();
       final json = habit.toJson();
@@ -79,7 +79,18 @@ class HabitRemoteDataSource {
           },
         ),
       );
-      return response;
+      List<HabitModel>  list = [];
+      if(response.statusCode==200)
+    {
+      final resData = response.data;
+        final decodedJson = resData['allHabits'] as List;
+
+        for (var listItem in decodedJson) {
+          HabitModel habitModel = HabitModel.fromJson(listItem);
+          list.add(habitModel);
+        }
+    }
+      return list;
     } catch (e) {
       rethrow;
     }

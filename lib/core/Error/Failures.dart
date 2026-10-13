@@ -16,3 +16,7 @@ class NetworkFailure extends Failure {
 class CacheFailure extends Failure {
   const CacheFailure() : super('Failed to read/write local storage.');
 }
+
+class UnknownError extends Failure {
+  const UnknownError() : super('Unknown Error Occured');
+}

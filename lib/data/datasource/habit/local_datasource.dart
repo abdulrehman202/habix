@@ -1,7 +1,5 @@
 import 'dart:convert';
 import 'dart:io';
-
-import 'package:dio/dio.dart';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:habix/data/model/habit_model.dart';
 
@@ -9,7 +7,6 @@ List<HabitModel> allHabits = [];
 
 class HabitLocalDataSource{
   final _cache = DefaultCacheManager();
-
 
 Future<List<HabitModel>> getAllHabits() async
 {

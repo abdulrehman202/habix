@@ -21,14 +21,8 @@ class ShimmerAnimation{
       ),
     ),
       );
-    return ListView(
+    return Column(
       children: [
-        SizedBox(height: 10,),
-        shimmer,
-        SizedBox(height: 10,),
-        shimmer,
-        SizedBox(height: 10,),
-        shimmer,
         SizedBox(height: 10,),
         shimmer,
         SizedBox(height: 10,),

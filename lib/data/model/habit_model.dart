@@ -24,7 +24,7 @@ factory HabitModel.fromJson(Map<String, dynamic> json) {
       progress: json["progress"],
       interval: intervalMap[json["interval"]] as HabitInterval,
       dateCreated: DateTime.fromMillisecondsSinceEpoch(json['dateCreated']),
-      streaks: json["streaks"]
+      streaks: json["streaks"]??0
     );
   }
 

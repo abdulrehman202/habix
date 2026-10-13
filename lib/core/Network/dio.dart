@@ -13,17 +13,6 @@ class DioClient {
       ),
     );
 
-    _dioObj!.interceptors.add(
-  InterceptorsWrapper(
-    onError: (e, handler) {
-      if (e.response?.statusCode == 401) {
-        // e.g. refresh token or log the user out
-      }
-      handler.next(e); // pass the error along
-    },
-  ),
-);
-
     return _dioObj;
   }
 }

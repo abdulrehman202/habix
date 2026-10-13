@@ -15,13 +15,10 @@ class HabitRepositoryImpl implements HabitRepository {
   @override
   Future<void> addHabit(Habit habit) async{
     try{HabitModel habitModel = toHabitModel(habit);
-    Response response = await _habitsListRemoteSource.addHabit(habitModel);
-    if(response.statusCode==200)
-    {
-      List<HabitModel>  list = await _habitsListLocalSource.getAllHabits();
-      list.add(habitModel);
+    List<HabitModel> list = await _habitsListRemoteSource.addHabit(habitModel);
+   
       _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
-    }}
+    }
     catch(e)
     {
       print(e.toString());
@@ -42,6 +39,7 @@ class HabitRepositoryImpl implements HabitRepository {
 
       return Result.ok( list.map((item) => toHabit(item)).toList());
     }catch (e) {
+      
       return Result.error(e as Failure);
     }
   }
