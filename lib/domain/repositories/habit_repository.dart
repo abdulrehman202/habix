@@ -4,7 +4,7 @@ import 'package:habix/domain/models/Habit.dart';
 abstract class HabitRepository {
 
   Future<Result<List<Habit>>> getAllHabits();
-  Future<void> addHabit(Habit habit);
+  Future<Result<bool>> addHabit(Habit habit);
   void removeHabit(Habit habit);
   void updateHabit(Habit habit);
   void incrementProgress(Habit habit);

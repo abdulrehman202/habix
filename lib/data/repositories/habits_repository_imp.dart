@@ -12,15 +12,16 @@ class HabitRepositoryImpl implements HabitRepository {
   final HabitRemoteDataSource _habitsListRemoteSource = HabitRemoteDataSource();
 
   @override
-  Future<void> addHabit(Habit habit) async{
+  Future<Result<bool>> addHabit(Habit habit) async{
     try{HabitModel habitModel = toHabitModel(habit);
     List<HabitModel> list = await _habitsListRemoteSource.addHabit(habitModel);
    
       _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
+    return Result.ok(true);
     }
     catch(e)
     {
-      print(e.toString());
+      return Result.error(e as Failure);
     }
   }
 

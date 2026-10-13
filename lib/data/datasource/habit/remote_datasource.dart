@@ -87,8 +87,28 @@ class HabitRemoteDataSource {
         }
     }
       return list;
-    } catch (e) {
-      rethrow;
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+  switch (e.type) {
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
+      throw const NetworkFailure();
+
+    case DioExceptionType.connectionError:
+      throw const NetworkFailure();
+
+    case DioExceptionType.badResponse:
+      if (status == 404) throw  ServerFailure(statusCode: status??404);
+      throw ServerFailure(statusCode: status??404);
+
+    case DioExceptionType.cancel:
+      throw ServerFailure(statusCode: status??404);
+
+    default:
+      throw ServerFailure(statusCode: status??404);
+  }} catch (e) {
+      throw UnknownError();
     }
   }
 }

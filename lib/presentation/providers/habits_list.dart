@@ -17,7 +17,6 @@ class HabitsListNotifier extends StateNotifier<List<Habit>> {
   }
 
   void addHabit(Habit habit)async {
-    await _habitUsecases.addHabit(habit);
     state = [...state, habit];
   }
 
