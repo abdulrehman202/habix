@@ -39,7 +39,7 @@ class HabitUsecases {
      return result;
   }
 
-  Future<Result<bool>> remove(int habitId) async{
+  Future<Result<bool>> remove(String habitId) async{
     final result = await _habitRepositoryImpl.removeHabit(habitId);
      return result;
   }

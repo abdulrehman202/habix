@@ -45,7 +45,7 @@ class HabitRepositoryImpl implements HabitRepository {
   }
 
   @override
-  Future<Result<bool>> removeHabit(int habitId) async {
+  Future<Result<bool>> removeHabit(String habitId) async {
     // TODO: implement removeHabit
 
     try{

@@ -170,7 +170,7 @@ class HabitRemoteDataSource {
     }
   }
 
-  Future<List<HabitModel>> removeHabit(int habitId) async {
+  Future<List<HabitModel>> removeHabit(String habitId) async {
     try {
       Dio dio = DioClient.getDioObj();
       

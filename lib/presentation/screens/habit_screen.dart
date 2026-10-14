@@ -1,6 +1,7 @@
 import 'package:chips_choice/chips_choice.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
@@ -84,12 +85,42 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
                   itemCount: habits.length,
                   itemBuilder: (context, index)=> AnimatedBuilder(
                     animation: _animationController,
-                    child: HabitTile(
-                          onHabitSelected: (){
-                            ref.read(newHabitProvider.notifier).changeCategorySelection(habits[index].category);
-                            ref.read(newHabitProvider.notifier).changeIntervalSelection(habits[index].interval);
-                            Navigator.push( context, MaterialPageRoute(builder: (ctx)=>NewHabit(habit: habits[index],)));},
-                          habit: habits[index]),
+                    child: Slidable(
+                      key: Key(habits[index].id),
+                      endActionPane: ActionPane(motion: const ScrollMotion(),
+                       children: [
+                        SlidableAction(
+                    onPressed: (doNothing) async
+                    {
+                      bool success = await ref.watch(habitsCategoryProvider.notifier).deleteHabit(habits[index].id);
+                      if(!success)
+                      {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not delete Habit ${habits[index].name}')));
+                      }
+                    },
+                    backgroundColor: Colors.red,
+                    foregroundColor: Colors.white,
+                    icon: Icons.delete,
+                    label: 'Delete',
+                  ),
+                       ]),
+                        startActionPane: ActionPane(motion: const ScrollMotion(),
+                       children: [
+                        SlidableAction(
+                    onPressed: (doNothing){},
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    icon: Icons.check,
+                    label: 'Mark as complete',
+                  ),
+                       ]),
+                      child: HabitTile(
+                            onHabitSelected: (){
+                              ref.read(newHabitProvider.notifier).changeCategorySelection(habits[index].category);
+                              ref.read(newHabitProvider.notifier).changeIntervalSelection(habits[index].interval);
+                              Navigator.push( context, MaterialPageRoute(builder: (ctx)=>NewHabit(habit: habits[index],)));},
+                            habit: habits[index]),
+                    ),
                     builder: (context, child) {
                       return Padding(
                         padding: EdgeInsetsGeometry.only(top: 100 - _animationController.value*100),
