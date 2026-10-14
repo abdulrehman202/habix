@@ -21,7 +21,7 @@ class AllHabits extends ConsumerStatefulWidget {
 }
 
 class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProviderStateMixin{
-  Category? _selectedCategory = Category.ALL;
+  late Map<String, dynamic> _params;
   late AnimationController _animationController;
   
 
@@ -47,8 +47,9 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
 
   @override
   Widget build(BuildContext context) {
-    _selectedCategory = ref.watch(habitsCategoryProvider);
-    List<Habit> habits = ref.watch(categorizedlist);
+    _params = ref.watch(habitsCategoryProvider);
+    List<Habit> list = _params['category'] == Category.ALL? _params['list']:
+    _params['list'].where((e)=>e.category == _params['category']).toList();
 
     return Scaffold(
       appBar: AppBar(title: Text('All Habits'), automaticallyImplyLeading: false,),
@@ -71,10 +72,10 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
           ),
         ),
             choiceItems: Category.values.map((element)=>C2Choice(value: element, label: element.name.capitalize)).toList(),
-            value: _selectedCategory, onChanged: (category)=>ref.read(habitsCategoryProvider.notifier).changeCategory(category)),
+            value: _params['category'], onChanged: (category)=>ref.read(habitsCategoryProvider.notifier).changeCategory(category)),
       
              Expanded(
-               child: habits.isEmpty?
+               child: list.isEmpty?
                EmptyListWidget()
                : Container(
                 margin: EdgeInsets.symmetric(horizontal: 10),
@@ -82,20 +83,20 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
                   physics: ScrollPhysics(),
                   separatorBuilder: (context, index) => Divider(),
                   shrinkWrap: true,
-                  itemCount: habits.length,
+                  itemCount: list.length,
                   itemBuilder: (context, index)=> AnimatedBuilder(
                     animation: _animationController,
                     child: Slidable(
-                      key: Key(habits[index].id),
+                      key: Key(list[index].id),
                       endActionPane: ActionPane(motion: const ScrollMotion(),
                        children: [
                         SlidableAction(
                     onPressed: (doNothing) async
                     {
-                      bool success = await ref.watch(habitsCategoryProvider.notifier).deleteHabit(habits[index].id);
+                      bool success = await ref.watch(habitsCategoryProvider.notifier).deleteHabit(list[index].id);
                       if(!success)
                       {
-                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not delete Habit ${habits[index].name}')));
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text('Could not delete Habit ${list[index].name}')));
                       }
                     },
                     backgroundColor: Colors.red,
@@ -116,10 +117,10 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
                        ]),
                       child: HabitTile(
                             onHabitSelected: (){
-                              ref.read(newHabitProvider.notifier).changeCategorySelection(habits[index].category);
-                              ref.read(newHabitProvider.notifier).changeIntervalSelection(habits[index].interval);
-                              Navigator.push( context, MaterialPageRoute(builder: (ctx)=>NewHabit(habit: habits[index],)));},
-                            habit: habits[index]),
+                              ref.read(newHabitProvider.notifier).changeCategorySelection(list[index].category);
+                              ref.read(newHabitProvider.notifier).changeIntervalSelection(list[index].interval);
+                              Navigator.push( context, MaterialPageRoute(builder: (ctx)=>NewHabit(habit: list[index],)));},
+                            habit: list[index]),
                     ),
                     builder: (context, child) {
                       return Padding(

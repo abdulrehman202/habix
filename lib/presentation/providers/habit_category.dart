@@ -1,31 +1,69 @@
 
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/core/Error/Result.dart';
+import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
 import 'package:habix/utilities/enums.dart';
 
-class HabitsCategoryNotifier extends StateNotifier<Category>{
-  final HabitUsecases _habitUsecases = HabitUsecases();
 
-  HabitsCategoryNotifier():super(Category.ALL);
+
+class HabitsCategoryNotifier extends StateNotifier<Map<String, dynamic>>{
+  final HabitUsecases _habitUsecases = HabitUsecases();
+  late List<Habit> allHabitsList;
+
+  HabitsCategoryNotifier():super({
+    'category': Category.ALL,
+    'list':[],
+    'error_message':'',
+    }){
+    
+fetchInitialHabitsList();
+  }
+
+fetchInitialHabitsList()async
+  {
+    final allHabitsList = await _habitUsecases.getAllHabits();
+    
+    state={
+      ...state,
+      'list':allHabitsList
+    };
+  }
   
+
   void changeCategory (Category category){
-    state = category;
+    
+    state = {...state, 'category': category,};
+  }
+
+  void changeErrorMessage (String msg){
+    state = {...state, 'error_message': msg};
+  }
+
+  void deleteHabitfromList (String habitId){
+    List<Habit> list = state['list'];
+    int index = list.indexWhere((e)=>e.id == habitId);
+    list.removeAt(index);
+    state = {...state, 'list': list};
   }
 
   Future<bool> deleteHabit(String id)async {
     Result result =  await _habitUsecases.remove(id);
     
-    // if(result is Error)
-    // {
-    //   changeErrorMessage(result.failure.message);
-    // }
+    if(result is Error)
+    {
+      changeErrorMessage(result.failure.message);
+    }
+
+    else{
+      deleteHabitfromList(id);
+    }
     return result is Ok;
   }
 
 }
 
-final habitsCategoryProvider = StateNotifierProvider<HabitsCategoryNotifier, Category>((ref){
+final habitsCategoryProvider = StateNotifierProvider<HabitsCategoryNotifier, Map<String, dynamic>>((ref){
 
 return HabitsCategoryNotifier();
 
