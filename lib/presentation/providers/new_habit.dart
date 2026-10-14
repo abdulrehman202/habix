@@ -34,6 +34,16 @@ class NewHabitProvider extends StateNotifier<Map<String, dynamic>>{
     return result is Ok;
   }
 
+  Future<bool> updateHabit(Habit habit)async {
+    Result result =  await _habitUsecases.updateHabit(habit);
+    
+    if(result is Error)
+    {
+      changeErrorMessage(result.failure.message);
+    }
+    return result is Ok;
+  }
+
   void changeState(String key, dynamic value)
   {
     state = {

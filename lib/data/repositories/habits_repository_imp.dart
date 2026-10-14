@@ -50,13 +50,19 @@ class HabitRepositoryImpl implements HabitRepository {
   }
 
   @override
-  void updateHabit(Habit habit) {
+    Future<Result<bool>> updateHabit(Habit habit)async {
     // TODO: implement updateHabit
-    // HabitModel habitModel = toHabitModel(habit);
-    // final l = _habitsListLocalSource.getAllHabits();
-    // final index = l.indexWhere((h)=>h.id==habitModel.id);
-    // l[index] = habitModel;
-    // _habitsListLocalSource.updateList(l);
+     try{
+      HabitModel habitModel = toHabitModel(habit);
+      List<HabitModel> list = await _habitsListRemoteSource.updateHabit(habitModel);
+   
+      _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
+    return Result.ok(true);
+    }
+    catch(e)
+    {
+      return Result.error(e as Failure);
+    }
   }
 
   @override

@@ -299,11 +299,12 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       height: 60,
       child: FilledButton(
         onPressed: ()  async {
+          bool success = false;
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
 
             if(widget.habit == null ) {
-              bool success = await ref
+               success = await ref
                 .read(newHabitProvider.notifier)
                 .addHabit(
                   Habit(
@@ -315,20 +316,11 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                     dateCreated:  DateTime.now(),
                   ),
                 );
-                if(!success)
-                {
-                  await Future.delayed(Duration(milliseconds: 100));
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_params['error_message'])));
-                }
-                else{
-                  
-            _resetStates();
-            Navigator.pop(context);
-                }
+                
                 }
                 else{
                   //update habit code here
-                ref.read(habitsListProvider.notifier).updateHabit(
+                success = await ref.read(newHabitProvider.notifier).updateHabit(
                   Habit(
                     id: widget.habit!.id,
                     name: _name,
@@ -338,6 +330,17 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                     dateCreated:  widget.habit!.dateCreated,
                   ),
                 );
+                }
+
+                if(!success)
+                {
+                  await Future.delayed(Duration(milliseconds: 100));
+                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_params['error_message'])));
+                }
+                else{
+                  
+            _resetStates();
+            Navigator.pop(context);
                 }
           }
         },

@@ -34,8 +34,9 @@ class HabitUsecases {
      return result;
   }
 
-  void updateHabit(Habit habit) {
-    _habitRepositoryImpl.updateHabit(habit);
+  Future<Result<bool>> updateHabit(Habit habit) async{
+    final result = await _habitRepositoryImpl.updateHabit(habit);
+     return result;
   }
 
   void incrementProgress(Habit habit) {
