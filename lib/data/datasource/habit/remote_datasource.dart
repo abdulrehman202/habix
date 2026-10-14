@@ -120,7 +120,7 @@ class HabitRemoteDataSource {
       Dio dio = DioClient.getDioObj();
       final json = habit.toJson();
 
-      Response response = await dio.post(
+      Response response = await dio.put(
         '/habits/update',
         data: json,
         options: Options(
