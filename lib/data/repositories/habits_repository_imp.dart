@@ -45,8 +45,19 @@ class HabitRepositoryImpl implements HabitRepository {
   }
 
   @override
-  void removeHabit(Habit habit) {
+  Future<Result<bool>> removeHabit(int habitId) async {
     // TODO: implement removeHabit
+
+    try{
+      List<HabitModel> list = await _habitsListRemoteSource.removeHabit(habitId);
+   
+      _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
+    return Result.ok(true);
+    }
+    catch(e)
+    {
+      return Result.error(e as Failure);
+    }
   }
 
   @override
