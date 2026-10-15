@@ -69,8 +69,8 @@ fetchInitialHabitsList()async
 
     else{
       deleteHabitfromList(id);
-    isRemoving(false);
     }
+    isRemoving(false);
     return result is Ok;
   }
 

@@ -1,5 +1,4 @@
-import 'package:flutter/src/widgets/basic.dart';
-import 'package:flutter/widgets.dart';
+import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
 class LottieAnimation{
@@ -32,9 +31,14 @@ class LottieAnimation{
   {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Lottie.asset('assets/animations/error.json')),
-          Expanded(child: Text('Server Error'))
+          SizedBox(
+            height: 100,
+            child: Lottie.asset('assets/animations/error.json')),
+          SizedBox(
+            height: 100,
+            child: Text('Server Error')),
         ],
       ),
     );
