@@ -12,6 +12,9 @@ import 'package:habix/presentation/screens/widgets/epmty_list_widget.dart';
 import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
 import 'package:habix/utilities/image_paths.dart';
 import 'package:habix/utilities/extensions.dart';
+import 'package:habix/utilities/lottie_animation.dart';
+import 'package:habix/utilities/shimmer_animation.dart';
+import 'package:shimmer_animation/shimmer_animation.dart';
 
 class AllHabits extends ConsumerStatefulWidget {
   const AllHabits({super.key});
@@ -48,12 +51,22 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
   @override
   Widget build(BuildContext context) {
     _params = ref.watch(habitsCategoryProvider);
+    if(_params['loading'])
+    {
+      return ShimmerAnimation.listPlaceholder();
+    }
+
+    if(_params['removing'])
+    {
+      return LottieAnimation.erasing();
+    }
+
     List<Habit> list = _params['category'] == Category.ALL? _params['list']:
     _params['list'].where((e)=>e.category == _params['category']).toList();
 
     return Scaffold(
       appBar: AppBar(title: Text('All Habits'), automaticallyImplyLeading: false,),
-      body: Column(
+      body: _params['list'].isEmpty?EmptyListWidget():  Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -90,7 +103,7 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
                       key: Key(list[index].id),
                       endActionPane: ActionPane(motion: const ScrollMotion(),
                        children: [
-                        SlidableAction(
+                        SlidableAction( 
                     onPressed: (doNothing) async
                     {
                       bool success = await ref.watch(habitsCategoryProvider.notifier).deleteHabit(list[index].id);

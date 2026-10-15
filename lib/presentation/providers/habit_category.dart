@@ -9,12 +9,13 @@ import 'package:habix/utilities/enums.dart';
 
 class HabitsCategoryNotifier extends StateNotifier<Map<String, dynamic>>{
   final HabitUsecases _habitUsecases = HabitUsecases();
-  late List<Habit> allHabitsList;
 
   HabitsCategoryNotifier():super({
     'category': Category.ALL,
     'list':[],
     'error_message':'',
+    'loading':false,
+    'removing':false
     }){
     
 fetchInitialHabitsList();
@@ -22,11 +23,13 @@ fetchInitialHabitsList();
 
 fetchInitialHabitsList()async
   {
-    final allHabitsList = await _habitUsecases.getAllHabits();
+    toggleLoader(true);
+    List<Habit> allHabitsList = await _habitUsecases.getAllHabits();
     
     state={
       ...state,
-      'list':allHabitsList
+      'list':allHabitsList,
+      'loading':false
     };
   }
   
@@ -40,6 +43,14 @@ fetchInitialHabitsList()async
     state = {...state, 'error_message': msg};
   }
 
+  void toggleLoader (bool toggle){
+    state = {...state, 'loading': toggle};
+  }
+
+  void isRemoving (bool toggle){
+    state = {...state, 'removing': toggle};
+  }
+
   void deleteHabitfromList (String habitId){
     List<Habit> list = state['list'];
     int index = list.indexWhere((e)=>e.id == habitId);
@@ -48,8 +59,8 @@ fetchInitialHabitsList()async
   }
 
   Future<bool> deleteHabit(String id)async {
+    isRemoving(true);
     Result result =  await _habitUsecases.remove(id);
-    
     if(result is Error)
     {
       changeErrorMessage(result.failure.message);
@@ -57,6 +68,7 @@ fetchInitialHabitsList()async
 
     else{
       deleteHabitfromList(id);
+    isRemoving(false);
     }
     return result is Ok;
   }

@@ -9,6 +9,8 @@ import 'package:habix/presentation/providers/new_habit.dart';
 import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
 import 'package:habix/utilities/image_paths.dart';
 import 'package:habix/utilities/extensions.dart';
+import 'package:habix/utilities/lottie_animation.dart';
+import 'package:lottie/lottie.dart';
 
 class NewHabit extends ConsumerStatefulWidget {
   Habit? habit;
@@ -77,7 +79,8 @@ class _NewHabitState extends ConsumerState<NewHabit> {
         automaticallyImplyLeading: false,
         title: Center(child: Text('New Habit')),
       ),
-      body: Padding(
+      body: 
+      _params['loading']?LottieAnimation.writing(): Padding(
         padding: EdgeInsetsGeometry.symmetric(horizontal: 20, vertical: 10),
         child: SingleChildScrollView(
           child: LayoutBuilder(

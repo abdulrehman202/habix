@@ -15,7 +15,8 @@ class NewHabitProvider extends StateNotifier<Map<String, dynamic>>{
     'category':Category.MORNING,
     'button_text': '',
     'time':TimeOfDay.now(),
-    'error_message':'Something went wrong'
+    'error_message':'Something went wrong',
+    'loading':false,
     });
 
   void changeIntervalSelection(HabitInterval interval)=>changeState('interval', interval);
@@ -24,9 +25,12 @@ class NewHabitProvider extends StateNotifier<Map<String, dynamic>>{
   void changeTime(TimeOfDay time)=>changeState('time', time);
   void changeErrorMessage(String eMsg)=>changeState('error_message', eMsg);
   void resetErrorMessage()=>changeState('error_message', 'Something went wrong');
+  void setLoading(bool toggle)=>changeState('loading', toggle);
   Future<bool> addHabit(Habit habit)async {
+    setLoading(true);
     Result result =  await _habitUsecases.addHabit(habit);
-    
+    setLoading(false);
+
     if(result is Error)
     {
       changeErrorMessage(result.failure.message);
@@ -35,7 +39,9 @@ class NewHabitProvider extends StateNotifier<Map<String, dynamic>>{
   }
 
   Future<bool> updateHabit(Habit habit)async {
+    setLoading(true);
     Result result =  await _habitUsecases.updateHabit(habit);
+    setLoading(false);
     
     if(result is Error)
     {
