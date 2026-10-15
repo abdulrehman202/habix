@@ -73,7 +73,13 @@ class _AllHabitsState extends ConsumerState<AllHabits>
           SizedBox(
             child: FilledButton(onPressed:(){
               ref.read(habitsCategoryProvider.notifier).fetchInitialHabitsList();
-            }, child: Text('Retry')))
+            }, child: Wrap(
+              children: [
+                Icon(Icons.refresh),
+                SizedBox(width: 5,),
+                Text('Retry'),
+              ],
+            )))
         ],
       );
     }
