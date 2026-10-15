@@ -84,6 +84,7 @@ flutter:
     - assets/sounds/celebration.mp3
     - assets/animations/writing.json
     - assets/animations/erasing.json
+    - assets/animations/error.json
 
     
 

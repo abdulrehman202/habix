@@ -28,5 +28,17 @@ class LottieAnimation{
     );
   }
 
+  static serverError()
+  {
+    return Center(
+      child: Column(
+        children: [
+          Expanded(child: Lottie.asset('assets/animations/error.json')),
+          Expanded(child: Text('Server Error'))
+        ],
+      ),
+    );
+  }
+
 
 }

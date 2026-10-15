@@ -5,14 +5,13 @@ import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
 import 'package:habix/utilities/enums.dart';
 
-
-
 class HabitsCategoryNotifier extends StateNotifier<Map<String, dynamic>>{
   final HabitUsecases _habitUsecases = HabitUsecases();
 
   HabitsCategoryNotifier():super({
     'category': Category.ALL,
     'list':[],
+    'error':false,
     'error_message':'',
     'loading':false,
     'removing':false
@@ -24,12 +23,14 @@ fetchInitialHabitsList();
 fetchInitialHabitsList()async
   {
     toggleLoader(true);
-    List<Habit> allHabitsList = await _habitUsecases.getAllHabits();
-    
+    Result result = await _habitUsecases.getAllHabits();
+    List<Habit> allHabitsList = result is Ok? result.value:[];
+
     state={
       ...state,
       'list':allHabitsList,
-      'loading':false
+      'loading':false,
+      'error': result is Error
     };
   }
   

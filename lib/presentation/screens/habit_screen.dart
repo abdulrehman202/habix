@@ -61,6 +61,11 @@ class _AllHabitsState extends ConsumerState<AllHabits> with SingleTickerProvider
       return LottieAnimation.erasing();
     }
 
+    if(_params['error'])
+    {
+      return LottieAnimation.serverError();
+    }
+
     List<Habit> list = _params['category'] == Category.ALL? _params['list']:
     _params['list'].where((e)=>e.category == _params['category']).toList();
 

@@ -7,7 +7,8 @@ class HabitUsecases {
   final HabitRepositoryImpl _habitRepositoryImpl = HabitRepositoryImpl();
 
   Future<List<Habit>> getAllHabitsOnDate(DateTime dateTime) async {
-    List<Habit> list = await getAllHabits();
+    Result result = await getAllHabits();
+    List<Habit> list = result is Ok ? result.value:[];
 
       return list.where((h) {
         if (h.interval == HabitInterval.DAILY) {
@@ -24,9 +25,9 @@ class HabitUsecases {
       }).toList();
   }
 
-  Future<List<Habit>> getAllHabits() async {
-    Result result =  await _habitRepositoryImpl.getAllHabits();
-    return result is Ok ? result.value:[];
+  Future<Result<List<Habit>>> getAllHabits() async {
+    final result =  await _habitRepositoryImpl.getAllHabits();
+    return result;
   }
 
   Future<Result<bool>> addHabit(Habit habit) async{
