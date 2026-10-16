@@ -161,11 +161,13 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             },
             onSaved: (value) => _name = value!,
             controller: _nameController,
+            textCapitalization: TextCapitalization.words,
             onChanged: (txt) =>
                 ref.read(newHabitProvider.notifier).changebuttonText(txt),
             decoration: InputDecoration(
               hint: Text('Walk, Drink Water, Yoga'),
               label: Text('Name'),
+              
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -175,7 +177,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           TextFormField(
             controller: _descriptionController,
             maxLines: 1,
-
+            keyboardType: TextInputType.number,
             onSaved: (value) => _description = value!,
             validator: (value) {
               if (value == null || value.isEmpty || int.parse(value) == 0) {
@@ -184,7 +186,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
               return null;
             },
             decoration: InputDecoration(
-              hint: Text('8 glass of water, 30 minute of exercise'),
+              hint: Text('Reps/Minutes for ${_nameController.text}'),
               label: Text('Decscription'),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
