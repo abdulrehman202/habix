@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/presentation/providers/habit_category.dart';
+import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/utilities/constants.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
@@ -341,7 +343,8 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_params['error_message'])));
                 }
                 else{
-                  
+                   ref.invalidate(todaysScreenProvider);
+                   ref.invalidate(habitsCategoryProvider);
             _resetStates();
             Navigator.pop(context);
                 }
