@@ -1,18 +1,15 @@
 import 'package:flutter/material.dart' hide Interval;
-import 'package:flutter/rendering.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
 import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/utilities/constants.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
-import 'package:habix/presentation/providers/habits_list.dart';
 import 'package:habix/presentation/providers/new_habit.dart';
 import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
 import 'package:habix/utilities/image_paths.dart';
 import 'package:habix/utilities/extensions.dart';
 import 'package:habix/utilities/lottie_animation.dart';
-import 'package:lottie/lottie.dart';
 
 class NewHabit extends ConsumerStatefulWidget {
   Habit? habit;

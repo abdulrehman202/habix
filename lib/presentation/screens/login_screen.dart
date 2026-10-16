@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:habix/presentation/screens/create_account_screen.dart';
 import 'package:habix/presentation/screens/tabs.dart';

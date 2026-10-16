@@ -5,7 +5,6 @@ import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
-import 'package:habix/presentation/providers/habits_list.dart';
 import 'package:habix/presentation/providers/new_habit.dart';
 import 'package:habix/presentation/screens/new_habit.dart';
 import 'package:habix/presentation/screens/widgets/epmty_list_widget.dart';
@@ -14,8 +13,6 @@ import 'package:habix/utilities/image_paths.dart';
 import 'package:habix/utilities/extensions.dart';
 import 'package:habix/utilities/lottie_animation.dart';
 import 'package:habix/utilities/shimmer_animation.dart';
-import 'package:lottie/lottie.dart';
-import 'package:shimmer_animation/shimmer_animation.dart';
 
 class AllHabits extends ConsumerStatefulWidget {
   const AllHabits({super.key});

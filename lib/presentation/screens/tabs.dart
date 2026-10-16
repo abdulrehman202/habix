@@ -50,6 +50,8 @@ class _TabScreenState extends ConsumerState<TabScreen> {
         type: BottomNavigationBarType.fixed,
         currentIndex: _selectedTabIndex,
         onTap: (i) {
+          //new habit can be added regardless of what tab is on the screen
+          //so we need to refresh everytime we switch betweens tabs having lists
           if (_selectedTabIndex != i) {
             if (i == 0) {
               ref.invalidate(todaysScreenProvider);

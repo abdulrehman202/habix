@@ -1,6 +1,19 @@
 import 'package:habix/utilities/enums.dart';
-import 'package:habix/data/datasource/habit/remote_datasource.dart';
 
+final Map<String, Category> catMap = {
+  'ALL': Category.ALL,
+  'MORNING': Category.MORNING,
+  'HEALTH': Category.HEALTH,
+  'MIND': Category.MIND,
+  'PRODUCTIVITY': Category.PRODUCTIVITY,
+  'OTHER': Category.OTHER,
+};
+
+final Map<String, HabitInterval> intervalMap = {
+  'DAILY': HabitInterval.DAILY,
+  'WEEKDAYS': HabitInterval.WEEKDAYS,
+  'WEEKEND': HabitInterval.WEEKEND,
+};
 class HabitModel{
 
 String id;
