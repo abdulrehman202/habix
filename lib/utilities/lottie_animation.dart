@@ -19,9 +19,14 @@ class LottieAnimation{
   {
     return Center(
       child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Expanded(child: Lottie.asset('assets/animations/erasing.json')),
-          Expanded(child: Text('Removing Habit'))
+                    SizedBox(
+                      height: 150,
+                      child: Lottie.asset('assets/animations/erasing.json')),
+          SizedBox(
+            height: 50,
+            child: Text('Removing Habit',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),))
         ],
       ),
     );
