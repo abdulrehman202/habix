@@ -1,6 +1,6 @@
 import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/core/Error/Result.dart';
-import 'package:habix/data/Mappers/mapper.dart';
+import 'package:habix/data/Mappers/habit_mapper.dart';
 import 'package:habix/data/datasource/habit/local_datasource.dart';
 import 'package:habix/data/datasource/habit/remote_datasource.dart';
 import 'package:habix/data/model/habit_model.dart';

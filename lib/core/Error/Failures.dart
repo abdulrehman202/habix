@@ -21,3 +21,7 @@ class CacheFailure extends Failure {
 class UnknownError extends Failure {
   const UnknownError() : super('Unknown Error Occured');
 }
+
+class LoginError extends Failure {
+  const LoginError() : super('Invalid Credentials');
+}
