@@ -1,19 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/domain/models/UserAuth.dart';
+import 'package:habix/presentation/providers/login_screen.dart';
 import 'package:habix/presentation/screens/create_account_screen.dart';
 import 'package:habix/presentation/screens/tabs.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
 
-class LoginScreen extends StatelessWidget {
+class LoginScreen extends ConsumerStatefulWidget {
+  const LoginScreen({super.key});
 
-   LoginScreen({super.key});
+  @override
+  ConsumerState<LoginScreen> createState() => _LoginScreenState();
+}
+
+class _LoginScreenState extends ConsumerState<LoginScreen> {
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 final _passwordController = TextEditingController();
+final _emailController = TextEditingController();
+
+late Map<String, dynamic> _params;
 
   @override
   Widget build(BuildContext context) {
   final clipperHeight = MediaQuery.sizeOf(context).height * 0.3;
+  _params = ref.watch(loginScreenNotifier);
     return Scaffold(
       key: _scaffoldKey,
       body: Stack(
@@ -55,6 +67,7 @@ final _passwordController = TextEditingController();
                 Text('Sign In',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
                 SizedBox(height: 20,),
                 TextField(
+                  controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
                   decoration: InputDecoration(
                     hint: Text('example@abc.com'),
@@ -69,7 +82,7 @@ final _passwordController = TextEditingController();
                 SizedBox(height: 30,),
                 SizedBox(
                   width: double.infinity,
-                  child: FilledButton(onPressed: _login, child: Text('Sign In'))),
+                  child: FilledButton(onPressed: _params['loading']?null: _login, child: _params['loading']?CircularProgressIndicator():Text('Sign In'))),
                   SizedBox(
                     height: 10,
                   ),
@@ -83,8 +96,16 @@ final _passwordController = TextEditingController();
     );
   }
 
-  void _login() {
+  _login()async {
+    UserAuth userAuth = UserAuth(email: _emailController.text, password: _passwordController.text);
+    bool success = await ref.read(loginScreenNotifier.notifier).login(userAuth);
+    if(success){
     Navigator.push( _scaffoldKey.currentContext! , MaterialPageRoute(builder: (ctx)=>TabScreen()));
+    }
+
+    else{
+      
+    }
   }
 
   void _moveToCreateAccountScreen() {

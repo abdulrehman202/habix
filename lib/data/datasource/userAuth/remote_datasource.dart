@@ -10,7 +10,7 @@ class UserAuthRemoteDataSource{
       
       Dio dio = DioClient.getDioObj();
       final json = user.toJson();
-      Response response = await dio.get('/user/login/',
+      Response response = await dio.post('/user/login/',
       data:json,
       options: Options(
           headers: {

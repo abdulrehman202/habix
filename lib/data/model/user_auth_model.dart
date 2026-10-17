@@ -7,7 +7,7 @@ class UserAuthModel {
   Map<String, dynamic> toJson(){
     return
   {
-    email: this.email,
-    password:this.password,
+    'email': this.email,
+    'password':this.password,
   };}
 }

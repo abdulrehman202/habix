@@ -2,13 +2,30 @@ import 'package:dio/dio.dart';
 import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/core/Network/dio.dart';
 import 'package:habix/data/model/habit_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HabitRemoteDataSource {
+
+  Future<String> getTokenFromLocalStorage()async
+  {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString('token')??'';
+  }
+  
   Future<List<HabitModel>> getAllHabits() async {
     try {
       List<HabitModel> list = [];
-      final dio = DioClient.getDioObj();
-      Response response = await dio.get('/habits/');
+      Dio dio = DioClient.getDioObj();
+      String token = await getTokenFromLocalStorage();
+      Response response = await dio.get('/habits/',
+      options: Options(
+          headers: {
+            'Content-Type':
+                'application/json', // Let the server know it is JSON
+                'Authorization':'Bearer $token'
+          },
+        ),
+      );
       if (response.statusCode == 200) {
         final resData = response.data;
         final decodedJson = resData['allHabitsList'] as List;
