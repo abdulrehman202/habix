@@ -23,12 +23,17 @@ class UserAuthRemoteDataSource{
         final token = resData['token'].toString();
       return token;
       }
-
+      
+      
       else{
-        throw LoginError();
+        throw UnknownError();
       }
     } on DioException catch (e) {
       final status = e.response?.statusCode;
+      if(status == 401)
+      {
+        throw AuthError(msg: e.response!.data['message'].toString());
+      }
   switch (e.type) {
     case DioExceptionType.connectionTimeout:
     case DioExceptionType.sendTimeout:

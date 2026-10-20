@@ -25,3 +25,8 @@ class UnknownError extends Failure {
 class LoginError extends Failure {
   const LoginError() : super('Invalid Credentials');
 }
+
+class AuthError extends Failure {
+  String msg;
+  AuthError({required this.msg}) : super(msg);
+}

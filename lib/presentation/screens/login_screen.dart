@@ -104,7 +104,8 @@ late Map<String, dynamic> _params;
     }
 
     else{
-      
+      await Future.delayed(Duration(milliseconds: 300));
+      ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(content: Text(_params['error_message'])));
     }
   }
 
