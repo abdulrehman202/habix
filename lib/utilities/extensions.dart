@@ -2,6 +2,14 @@
 import 'package:habix/core/Error/Failures.dart';
 import 'package:uuid/uuid.dart';
 
+extension EmailValidation on String {
+  bool isValidEmail() {
+    final RegExp emailRegex = RegExp(
+      r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+");
+    return emailRegex.hasMatch(this);
+  }
+}
+
 extension abc on String{
 
   get capitalize {

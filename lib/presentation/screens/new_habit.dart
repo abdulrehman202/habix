@@ -144,7 +144,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           ),
         ),
       ],
-    );
+    ); 
   }
 
   Widget _nameAndDescriptionForm() {

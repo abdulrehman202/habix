@@ -5,22 +5,23 @@ import 'package:habix/domain/models/UserAuth.dart';
 import 'package:habix/presentation/providers/create_account_screen.dart';
 import 'package:habix/presentation/screens/login_screen.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
+import 'package:habix/utilities/extensions.dart';
 
 class CreateAccountScreen extends ConsumerStatefulWidget {
   const CreateAccountScreen({super.key});
 
   @override
-  ConsumerState<CreateAccountScreen> createState() => _CreateAccountScreenState();
+  ConsumerState<CreateAccountScreen> createState() =>
+      _CreateAccountScreenState();
 }
 
 class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
-
-final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-final _passwordController = TextEditingController();
-final _emailController = TextEditingController();
-final _confirmPasswordController = TextEditingController();
-late Map<String, dynamic> _params;
-
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _passwordController = TextEditingController();
+  final _emailController = TextEditingController();
+  final _confirmPasswordController = TextEditingController();
+  late Map<String, dynamic> _params;
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     _params = ref.watch(signupScreenNotifier);
@@ -37,22 +38,23 @@ late Map<String, dynamic> _params;
               color: Theme.of(context).colorScheme.primary,
               alignment: Alignment.center,
               child: Column(
-                
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  SizedBox(height: 10,),
-                  Text('Welcome to Habix',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold
+                  SizedBox(height: 10),
+                  Text(
+                    'Welcome to Habix',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                  ),
-                  Text('Let\'s get started',
-                  style: TextStyle(
-                    color: Theme.of(context).colorScheme.onPrimary,
-                    fontSize: 20,
-                  ),
+                  Text(
+                    'Let\'s get started',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 20,
+                    ),
                   ),
                 ],
               ),
@@ -71,40 +73,86 @@ late Map<String, dynamic> _params;
                     'Create an Account',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                   ),
-                  SizedBox(height: 20),
-                  TextField(
-                    controller: _emailController,
-                    keyboardType: TextInputType.emailAddress,
-                    decoration: InputDecoration(
-                      label: Text('Email'),
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
+                  Form(
+                    key: _formKey,
+                    child: Column(
+                      children: [
+                        SizedBox(height: 20),
+                        TextFormField(
+                          validator: (emailValue) {
+                            if (emailValue!.trim().isEmpty) {
+                              return 'Email field cannot be empty';
+                            }
+                            else if(!emailValue.isValidEmail())
+                            {
+                              return 'Incorrect Email Format';
+                            }
+                            return null;
+                          },
+                          controller: _emailController,
+                          keyboardType: TextInputType.emailAddress,
+                          decoration: InputDecoration(
+                            label: Text('Email'),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                        ),
+                        SizedBox(height: 10),
+                        PasswordTextField(controller: _passwordController),
+                        SizedBox(height: 10),
+                        PasswordTextField(
+                          controller: _confirmPasswordController,
+                          hint: 'Confirm Password',
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(height: 10),
-                  PasswordTextField(controller: _passwordController),
-                  SizedBox(height: 10),
-                  PasswordTextField(controller: _confirmPasswordController, hint: 'Confirm Password',),
+
                   SizedBox(height: 20),
-              
+
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
-                      onPressed: _params['loading']?null: () 
-                      async {
-                        UserAuth userAuth = UserAuth(email: _emailController.text, password: _passwordController.text);
-                        bool success = await ref.read(signupScreenNotifier.notifier).Signup(userAuth);
-                        if(success)
-                        {
-                          _moveToLoginScreen();
-                        }
-                        else{
-                          await Future.delayed(Duration(milliseconds: 300));
-                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_params['error_message'])));
-                        }
-                      },
-                      child: _params['loading']?CircularProgressIndicator(): Text('Create my Account'),
+                      onPressed: _params['loading']
+                          ? null
+                          : () async {
+                              if (_passwordController.text ==
+                                  _confirmPasswordController.text) {
+                                if (_formKey.currentState!.validate()) {
+                                  _formKey.currentState!.save();
+                                  
+                                  UserAuth userAuth = UserAuth(
+                                    email: _emailController.text,
+                                    password: _passwordController.text,
+                                  );
+                                  bool success = await ref
+                                      .read(signupScreenNotifier.notifier)
+                                      .Signup(userAuth);
+                                  if (success) {
+                                    _moveToLoginScreen();
+                                  } else {
+                                    await Future.delayed(
+                                      Duration(milliseconds: 300),
+                                    );
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                      SnackBar(
+                                        content: Text(_params['error_message']),
+                                      ),
+                                    );
+                                  }
+                                }
+                              } else {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text('Passwords not matched'),
+                                  ),
+                                );
+                              }
+                            },
+                      child: _params['loading']
+                          ? CircularProgressIndicator()
+                          : Text('Create my Account'),
                     ),
                   ),
                   SizedBox(height: 10),
@@ -125,6 +173,9 @@ late Map<String, dynamic> _params;
   }
 
   void _moveToLoginScreen() {
-    Navigator.push(_scaffoldKey.currentContext!, MaterialPageRoute(builder: (ctx)=>LoginScreen()));
+    Navigator.push(
+      _scaffoldKey.currentContext!,
+      MaterialPageRoute(builder: (ctx) => LoginScreen()),
+    );
   }
 }
