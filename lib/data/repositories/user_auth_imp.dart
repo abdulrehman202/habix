@@ -12,9 +12,16 @@ class UserAuthRepositoryImp implements UserAuthRepository{
   final UserAuthRemoteDataSource _userAuthRemoteDataSource = UserAuthRemoteDataSource();
   
   @override
-  Future<Result<bool>> createUser(UserAuth user) {
-    // TODO: implement createUser
-    throw UnimplementedError();
+  Future<Result<bool>> createUser(UserAuth user) async {
+    try{
+      UserAuthModel userAuthModel = toUserAuthModel(user);
+      bool userCreated = await _userAuthRemoteDataSource.signUp(userAuthModel);
+      return Result.ok(userCreated);
+    }
+    catch(e)
+    {
+      return Result.error(e as Failure);
+    }
   }
 
   addTokenToLocalStorage(String token)async

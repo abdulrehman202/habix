@@ -1,16 +1,29 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/domain/models/UserAuth.dart';
+import 'package:habix/presentation/providers/create_account_screen.dart';
 import 'package:habix/presentation/screens/login_screen.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
 
-class CreateAccountScreen extends StatelessWidget {
-  CreateAccountScreen({super.key});
+class CreateAccountScreen extends ConsumerStatefulWidget {
+  const CreateAccountScreen({super.key});
+
+  @override
+  ConsumerState<CreateAccountScreen> createState() => _CreateAccountScreenState();
+}
+
+class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
+
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 final _passwordController = TextEditingController();
+final _emailController = TextEditingController();
 final _confirmPasswordController = TextEditingController();
+late Map<String, dynamic> _params;
 
   @override
   Widget build(BuildContext context) {
+    _params = ref.watch(signupScreenNotifier);
     final clipperHeight = MediaQuery.sizeOf(context).height * 0.4;
     return Scaffold(
       key: _scaffoldKey,
@@ -60,6 +73,7 @@ final _confirmPasswordController = TextEditingController();
                   ),
                   SizedBox(height: 20),
                   TextField(
+                    controller: _emailController,
                     keyboardType: TextInputType.emailAddress,
                     decoration: InputDecoration(
                       label: Text('Email'),
@@ -77,8 +91,20 @@ final _confirmPasswordController = TextEditingController();
                   SizedBox(
                     width: double.infinity,
                     child: FilledButton(
-                      onPressed: () {},
-                      child: Text('Create my Account'),
+                      onPressed: _params['loading']?null: () 
+                      async {
+                        UserAuth userAuth = UserAuth(email: _emailController.text, password: _passwordController.text);
+                        bool success = await ref.read(signupScreenNotifier.notifier).Signup(userAuth);
+                        if(success)
+                        {
+                          _moveToLoginScreen();
+                        }
+                        else{
+                          await Future.delayed(Duration(milliseconds: 300));
+                          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_params['error_message'])));
+                        }
+                      },
+                      child: _params['loading']?CircularProgressIndicator(): Text('Create my Account'),
                     ),
                   ),
                   SizedBox(height: 10),

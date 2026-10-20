@@ -38,8 +38,47 @@ class UserAuthRemoteDataSource{
     case DioExceptionType.connectionTimeout:
     case DioExceptionType.sendTimeout:
     case DioExceptionType.receiveTimeout:
+    case DioExceptionType.connectionError:
       throw const NetworkFailure();
 
+    case DioExceptionType.badResponse:
+      if (status == 404) throw  ServerFailure(statusCode: status??404);
+      throw ServerFailure(statusCode: status??404);
+
+    case DioExceptionType.cancel:
+      throw ServerFailure(statusCode: status??404);
+
+    default:
+      throw ServerFailure(statusCode: status??404);
+  }} catch (e) {
+      throw UnknownError();
+    }
+
+  }
+
+  Future<bool> signUp(UserAuthModel user) async{
+    try {
+      Dio dio = DioClient.getDioObj();
+      final json = user.toJson();
+      Response response = await dio.post('/user/signup/',
+      data:json,
+      options: Options(
+          headers: {
+            'Content-Type':
+                'application/json', // Let the server know it is JSON
+          },
+        ),);
+      return response.statusCode == 200;
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+      if(status == 401)
+      {
+        throw AuthError(msg: e.response!.data['message'].toString());
+      }
+  switch (e.type) {
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
     case DioExceptionType.connectionError:
       throw const NetworkFailure();
 
