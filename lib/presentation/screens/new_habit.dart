@@ -363,8 +363,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           : WrapAlignment.start,
       children: Category.values
           .map(
-            (c) => c != Category.ALL
-                ? Container(
+            (c) => Container(
                     height: 90,
                     width: 80,
                     margin: EdgeInsets.only(
@@ -414,8 +413,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                         ),
                       ],
                     ),
-                  )
-                : Container(),
+                  ),
           )
           .toList(),
     );

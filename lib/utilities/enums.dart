@@ -1,6 +1,5 @@
 
 enum Category{
-  ALL,
   MORNING,
   HEALTH,
   MIND,

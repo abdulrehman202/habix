@@ -9,7 +9,7 @@ class HabitsCategoryNotifier extends StateNotifier<Map<String, dynamic>>{
   final HabitUsecases _habitUsecases = HabitUsecases();
 
   HabitsCategoryNotifier():super({
-    'category': Category.ALL,
+    'selected_categories': [Category.HEALTH],
     'list':[],
     'error':false,
     'error_message':'',
@@ -35,9 +35,16 @@ fetchInitialHabitsList()async
   }
   
 
-  void changeCategory (Category category){
-    
-    state = {...state, 'category': category,};
+  void addCategory (Category category){
+    List<Category> currentSelectedCategories = state['selected_categories'];
+    currentSelectedCategories.add(category);
+    state = {...state, 'selected_categories': currentSelectedCategories,};
+  }
+
+    void removeCategory (Category category){
+    List<Category> currentSelectedCategories = state['selected_categories'];
+    currentSelectedCategories.remove(category);
+    state = {...state, 'selected_categories': currentSelectedCategories,};
   }
 
   void changeErrorMessage (String msg){

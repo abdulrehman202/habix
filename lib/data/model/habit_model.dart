@@ -1,7 +1,6 @@
 import 'package:habix/utilities/enums.dart';
 
 final Map<String, Category> catMap = {
-  'ALL': Category.ALL,
   'MORNING': Category.MORNING,
   'HEALTH': Category.HEALTH,
   'MIND': Category.MIND,

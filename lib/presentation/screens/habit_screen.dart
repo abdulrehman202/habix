@@ -60,31 +60,37 @@ class _AllHabitsState extends ConsumerState<AllHabits>
       // return LottieAnimation.serverError(
       //   reload: (){
       //       ref.read(habitsCategoryProvider.notifier).fetchInitialHabitsList();
-          
-      //   }// 
+
+      //   }//
       // );
       return Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           LottieAnimation.serverError(),
           SizedBox(
-            child: FilledButton(onPressed:(){
-              ref.read(habitsCategoryProvider.notifier).fetchInitialHabitsList();
-            }, child: Wrap(
-              children: [
-                Icon(Icons.refresh),
-                SizedBox(width: 5,),
-                Text('Retry'),
-              ],
-            )))
+            child: FilledButton(
+              onPressed: () {
+                ref
+                    .read(habitsCategoryProvider.notifier)
+                    .fetchInitialHabitsList();
+              },
+              child: Wrap(
+                children: [
+                  Icon(Icons.refresh),
+                  SizedBox(width: 5),
+                  Text('Retry'),
+                ],
+              ),
+            ),
+          ),
         ],
       );
     }
 
-    List<Habit> list = _params['category'] == Category.ALL
+    List<Habit> list = (_params['selected_categories'] as List<Category>).isEmpty
         ? _params['list']
         : _params['list']
-              .where((e) => e.category == _params['category'])
+              .where((e) => (_params['selected_categories'] as List<Category>).contains(e.category))
               .toList();
 
     return Scaffold(
@@ -92,37 +98,11 @@ class _AllHabitsState extends ConsumerState<AllHabits>
         title: Text('All Habits'),
         automaticallyImplyLeading: false,
       ),
-      body: _params['list'].isEmpty
-          ? EmptyListWidget()
-          : Column(
+      body: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                ChipsChoice<Category>.single(
-                  scrollToSelectedOnChanged: true,
-                  clipBehavior: Clip.none,
-                  padding: EdgeInsets.zero,
-                  choiceStyle: C2ChipStyle.filled(
-                    color: Colors.white,
-                    selectedStyle: C2ChipStyle(
-                      foregroundColor: Colors.white,
-                      backgroundColor: Theme.of(context).colorScheme.primary,
-                      borderRadius: BorderRadius.all(Radius.circular(10)),
-                    ),
-                  ),
-                  choiceItems: Category.values
-                      .map(
-                        (element) => C2Choice(
-                          value: element,
-                          label: element.name.capitalize,
-                        ),
-                      )
-                      .toList(),
-                  value: _params['category'],
-                  onChanged: (category) => ref
-                      .read(habitsCategoryProvider.notifier)
-                      .changeCategory(category),
-                ),
+                _selectCategory(),
 
                 Expanded(
                   child: list.isEmpty
@@ -219,7 +199,6 @@ class _AllHabitsState extends ConsumerState<AllHabits>
   }
 
   showErrorDialog() {
-
     if (context.mounted) {
       showDialog(
         context: context,
@@ -239,5 +218,52 @@ class _AllHabitsState extends ConsumerState<AllHabits>
         ),
       );
     }
+  }
+
+  _selectCategory() {
+    return ExpansionTile(
+      title: Text('Selected Category: '),
+      children: Category.values
+          .map(
+            (toElement) =>
+                CheckboxMenuButton (
+                  value: (_params['selected_categories'] as List<Category>).contains(toElement), onChanged: (newCheck)
+                  {
+                    if((_params['selected_categories'] as List<Category>).contains(toElement))
+                    {
+                      ref.read(habitsCategoryProvider.notifier).removeCategory(toElement);
+                    }
+                    else{
+                      ref.read(habitsCategoryProvider.notifier).addCategory(toElement);
+                    }                    
+                  }, child: Text(toElement.name.capitalize),)
+          )
+          .toList(),
+    );
+    // return ChipsChoice<Category>.single(
+    //               scrollToSelectedOnChanged: true,
+    //               clipBehavior: Clip.none,
+    //               padding: EdgeInsets.zero,
+    //               choiceStyle: C2ChipStyle.filled(
+    //                 color: Colors.white,
+    //                 selectedStyle: C2ChipStyle(
+    //                   foregroundColor: Colors.white,
+    //                   backgroundColor: Theme.of(context).colorScheme.primary,
+    //                   borderRadius: BorderRadius.all(Radius.circular(10)),
+    //                 ),
+    //               ),
+    //               choiceItems: Category.values
+    //                   .map(
+    //                     (element) => C2Choice(
+    //                       value: element,
+    //                       label: element.name.capitalize,
+    //                     ),
+    //                   )
+    //                   .toList(),
+    //               value: _params['category'],
+    //               onChanged: (category) => ref
+    //                   .read(habitsCategoryProvider.notifier)
+    //                   .changeCategory(category),
+    //             );
   }
 }
