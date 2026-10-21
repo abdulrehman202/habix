@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/utilities/icon_paths.dart';
 
 Map<Category, IconData> icons = {
   Category.MORNING: Icons.wb_sunny_sharp,
@@ -48,11 +49,12 @@ class HabitTile extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.center,
     children: [
-      Column(
+      Row(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Text(habit.streaks.toString()),
-          Text('Streaks',style: TextStyle(fontWeight: FontWeight.bold),)
+          ImageIcon(AssetImage(streakIcon,),size: 20,color: Colors.orange,),
+          SizedBox(width: 5,),
+          Text(habit.streaks.toString(),style: TextStyle(fontWeight: FontWeight.bold),),
         ],
       ),
       SizedBox(width: 3,),

@@ -109,69 +109,64 @@ class _AllHabitsState extends ConsumerState<AllHabits>
                       ? EmptyListWidget()
                       : Container(
                           margin: EdgeInsets.symmetric(horizontal: 10),
-                          child: ListView.separated(
+                          child: ListView.builder(
                             physics: ScrollPhysics(),
-                            separatorBuilder: (context, index) => Divider(),
                             shrinkWrap: true,
                             itemCount: list.length,
                             itemBuilder: (context, index) => AnimatedBuilder(
                               animation: _animationController,
-                              child: Slidable(
-                                key: Key(list[index].id),
-                                endActionPane: ActionPane(
-                                  motion: const ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (doNothing) async {
-                                        bool success = await ref
-                                            .watch(
-                                              habitsCategoryProvider.notifier,
-                                            )
-                                            .deleteHabit(list[index].id);
-                                        if (!success) {
-                                          showErrorDialog();
-                                        }
-                                      },
-                                      backgroundColor: Colors.red,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.delete,
-                                      label: 'Delete',
-                                    ),
-                                  ],
-                                ),
-                                startActionPane: ActionPane(
-                                  motion: const ScrollMotion(),
-                                  children: [
-                                    SlidableAction(
-                                      onPressed: (doNothing) {},
-                                      backgroundColor: Colors.green,
-                                      foregroundColor: Colors.white,
-                                      icon: Icons.check,
-                                      label: 'Mark as complete',
-                                    ),
-                                  ],
-                                ),
-                                child: HabitTile(
-                                  onHabitSelected: () {
-                                    ref
-                                        .read(newHabitProvider.notifier)
-                                        .changeCategorySelection(
-                                          list[index].category,
-                                        );
-                                    ref
-                                        .read(newHabitProvider.notifier)
-                                        .changeIntervalSelection(
-                                          list[index].interval,
-                                        );
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                        builder: (ctx) =>
-                                            NewHabit(habit: list[index]),
+                              child: Card(
+                                elevation: 3,
+                                child: Slidable(
+                                  key: Key(list[index].id),
+                                  endActionPane: ActionPane(
+                                    motion: const ScrollMotion(),
+                                    children: [
+                                      SlidableAction(
+                                        onPressed: (doNothing) async {
+                                          bool success = await ref
+                                              .watch(
+                                                habitsCategoryProvider.notifier,
+                                              )
+                                              .deleteHabit(list[index].id);
+                                          if (!success) {
+                                            showErrorDialog();
+                                          }
+                                        },
+                                        backgroundColor: Colors.red,
+                                        foregroundColor: Colors.white,
+                                        icon: Icons.delete,
+                                        label: 'Delete',
                                       ),
-                                    );
-                                  },
-                                  habit: list[index],
+                                    ],
+                                  ),
+                                  startActionPane: ActionPane(
+                                    motion: const ScrollMotion(),
+                                    children: [
+                                    ],
+                                  ),
+                                  child: HabitTile(
+                                    onHabitSelected: () {
+                                      ref
+                                          .read(newHabitProvider.notifier)
+                                          .changeCategorySelection(
+                                            list[index].category,
+                                          );
+                                      ref
+                                          .read(newHabitProvider.notifier)
+                                          .changeIntervalSelection(
+                                            list[index].interval,
+                                          );
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (ctx) =>
+                                              NewHabit(habit: list[index]),
+                                        ),
+                                      );
+                                    },
+                                    habit: list[index],
+                                  ),
                                 ),
                               ),
                               builder: (context, child) {
@@ -223,8 +218,8 @@ class _AllHabitsState extends ConsumerState<AllHabits>
   _selectCategory() {
     return ExpansionTile(
       
-      title: Text('Selected Category: '),
-      trailing: Text('${ (_params['selected_categories'] as List<Category>).isEmpty? 'All': (_params['selected_categories'] as List<Category>).map((categories)=>'${categories.name.capitalize}' )}'),
+      trailing: Icon(Icons.arrow_drop_down_sharp),
+      title: Text('${ (_params['selected_categories'] as List<Category>).isEmpty? 'Choose Category': (_params['selected_categories'] as List<Category>).map((categories)=>'${categories.name.capitalize}' )}'),
       children: Category.values
           .map(
             (toElement) =>

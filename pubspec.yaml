@@ -86,6 +86,7 @@ flutter:
     - assets/animations/writing.json
     - assets/animations/erasing.json
     - assets/animations/error.json
+    - assets/icons/fire.png
 
     
 

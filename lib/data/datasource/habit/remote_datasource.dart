@@ -63,6 +63,7 @@ class HabitRemoteDataSource {
 
   Future<List<HabitModel>> addHabit(HabitModel habit) async {
     try {
+      String token = await getTokenFromLocalStorage();
       Dio dio = DioClient.getDioObj();
       final json = habit.toJson();
 
@@ -73,6 +74,7 @@ class HabitRemoteDataSource {
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
+                'Authorization':'Bearer $token'
           },
         ),
       );
@@ -119,6 +121,7 @@ class HabitRemoteDataSource {
   Future<List<HabitModel>> updateHabit(HabitModel habit) async {
     try {
       Dio dio = DioClient.getDioObj();
+      String token = await getTokenFromLocalStorage();
       final json = habit.toJson();
 
       Response response = await dio.put(
@@ -128,6 +131,7 @@ class HabitRemoteDataSource {
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
+                'Authorization':'Bearer $token'
           },
         ),
       );
@@ -173,10 +177,18 @@ class HabitRemoteDataSource {
 
   Future<List<HabitModel>> removeHabit(String habitId) async {
     try {
+      String token = await getTokenFromLocalStorage();
       Dio dio = DioClient.getDioObj();
       
       Response response = await dio.delete(
-        '/habits/remove/$habitId'
+        '/habits/remove/$habitId',
+        options: Options(
+          headers: {
+            'Content-Type':
+                'application/json', // Let the server know it is JSON
+                'Authorization':'Bearer $token'
+          },
+        ),
       );
 
       List<HabitModel>  list = [];

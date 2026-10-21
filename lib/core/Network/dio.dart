@@ -8,7 +8,7 @@ class DioClient {
   static getDioObj() {
     _dioObj ??= Dio(
       BaseOptions(
-        baseUrl: 'http://localhost:8000',
+        baseUrl: 'https://habix-backend-igvi.onrender.com/',
         connectTimeout: Duration(seconds: 60),
       ),
     );
