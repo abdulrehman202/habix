@@ -222,7 +222,7 @@ class _AllHabitsState extends ConsumerState<AllHabits>
 
   _selectCategory() {
     return ExpansionTile(
-      title: Text('Selected Category: '),
+      title: Text('Selected Category: ${ (_params['selected_categories'] as List<Category>).isEmpty? 'All': (_params['selected_categories'] as List<Category>).map((categories)=>'${categories.name.capitalize},' )}'),
       children: Category.values
           .map(
             (toElement) =>
@@ -236,7 +236,21 @@ class _AllHabitsState extends ConsumerState<AllHabits>
                     else{
                       ref.read(habitsCategoryProvider.notifier).addCategory(toElement);
                     }                    
-                  }, child: Text(toElement.name.capitalize),)
+                  }, child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ClipOval(
+                        child: ColoredBox(
+                            color: iconsColor[toElement]!.withValues(alpha: 0.3),
+                            child: Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: Icon(icons[toElement],size: 20,),
+                            )),
+                      ),
+                      SizedBox(width: 10,),
+                      Text(toElement.name.capitalize),
+                    ],
+                  ),)
           )
           .toList(),
     );
