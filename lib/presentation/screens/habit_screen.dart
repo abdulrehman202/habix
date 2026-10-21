@@ -222,24 +222,14 @@ class _AllHabitsState extends ConsumerState<AllHabits>
 
   _selectCategory() {
     return ExpansionTile(
-      title: Text('Selected Category: ${ (_params['selected_categories'] as List<Category>).isEmpty? 'All': (_params['selected_categories'] as List<Category>).map((categories)=>'${categories.name.capitalize},' )}'),
+      
+      title: Text('Selected Category: '),
+      trailing: Text('${ (_params['selected_categories'] as List<Category>).isEmpty? 'All': (_params['selected_categories'] as List<Category>).map((categories)=>'${categories.name.capitalize}' )}'),
       children: Category.values
           .map(
             (toElement) =>
-                CheckboxMenuButton (
-                  value: (_params['selected_categories'] as List<Category>).contains(toElement), onChanged: (newCheck)
-                  {
-                    if((_params['selected_categories'] as List<Category>).contains(toElement))
-                    {
-                      ref.read(habitsCategoryProvider.notifier).removeCategory(toElement);
-                    }
-                    else{
-                      ref.read(habitsCategoryProvider.notifier).addCategory(toElement);
-                    }                    
-                  }, child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      ClipOval(
+                ListTile (
+                  leading: ClipOval(
                         child: ColoredBox(
                             color: iconsColor[toElement]!.withValues(alpha: 0.3),
                             child: Padding(
@@ -247,10 +237,17 @@ class _AllHabitsState extends ConsumerState<AllHabits>
                               child: Icon(icons[toElement],size: 20,),
                             )),
                       ),
-                      SizedBox(width: 10,),
-                      Text(toElement.name.capitalize),
-                    ],
-                  ),)
+                      title: 
+                      Text(toElement.name.capitalize+' (${(_params['list'] as List<Habit>).where((e)=> e.category == toElement ).toList().length}) '),
+                  trailing: Checkbox(value: (_params['selected_categories'] as List<Category>).contains(toElement), onChanged: (newCheck)
+                  {
+                    if((_params['selected_categories'] as List<Category>).contains(toElement))
+                    {
+                      ref.read(habitsCategoryProvider.notifier).removeCategory(toElement);
+                    }
+                    else{
+                      ref.read(habitsCategoryProvider.notifier).addCategory(toElement);
+                    } }) )
           )
           .toList(),
     );

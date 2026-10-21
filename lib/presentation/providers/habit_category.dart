@@ -9,7 +9,7 @@ class HabitsCategoryNotifier extends StateNotifier<Map<String, dynamic>>{
   final HabitUsecases _habitUsecases = HabitUsecases();
 
   HabitsCategoryNotifier():super({
-    'selected_categories': [Category.HEALTH],
+    'selected_categories': Category.values.toList(),
     'list':[],
     'error':false,
     'error_message':'',
