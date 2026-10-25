@@ -23,20 +23,20 @@ extension newExt on int{
   {
     switch(this){
       case DateTime.monday:
-      return 'Monday';
+      return 'Mon';
       case DateTime.tuesday:
-      return 'Tuesday';
+      return 'Tue';
       case DateTime.wednesday:
-      return 'Wednesday';
+      return 'Wed';
       case DateTime.thursday:
-      return 'Thursday';
+      return 'Thurs';
       case DateTime.friday:
-      return 'Friday';
+      return 'Fri';
       case DateTime.saturday:
-      return 'Saturday';
+      return 'Sat';
 
       case DateTime.sunday:
-      return 'Sunday';
+      return 'Sun';
 
       default:
       return '';

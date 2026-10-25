@@ -5,13 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/screens/widgets/animated_progress_bar.dart';
 import 'package:habix/presentation/screens/widgets/epmty_list_widget.dart';
+import 'package:habix/presentation/screens/widgets/week_strip.dart';
 import 'package:habix/utilities/constants.dart';
 import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/presentation/screens/habit_detail.dart';
 import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
 import 'package:habix/utilities/extensions.dart';
 import 'package:habix/utilities/shimmer_animation.dart';
-import 'package:horizontal_week_calendar/horizontal_week_calendar.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
 class TodayScreen extends ConsumerStatefulWidget {
@@ -146,11 +146,12 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   Widget _progressBar() {
 
-    final completedHabitsQuantity = _params['habits_list']
+    final completedHabitsQuantity = (_params['habits_list'] as List)
+    .cast<Habit>()
         .fold<int>(0,
           (int s,Habit h) =>
           
-              s += (h.progress == h.quantity?1:0)
+              s + (h.progress == h.quantity?1:0)
         );
 
     double percentageOfCompletedTasks =
@@ -174,22 +175,11 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
   }
 
   Widget _horizontaCalendar() {
-    return HorizontalWeekCalendar(
-      showTopNavbar: false,
-      activeBackgroundColor: Colors.blueAccent.withValues(alpha: 0.3),
-      inactiveBackgroundColor: Colors.transparent,
-      inactiveTextColor: Colors.black,
-      activeTextColor: Colors.black,
-      initialDate: _params['selected_date'],
-      borderRadius: BorderRadius.circular(15),
-      monthColor: Colors.green,
-      minDate: DateTime.now().subtract(Duration(days: 720)),
-      maxDate: DateTime.now().add(Duration(days: 720)),
-      onDateChange: (date) {
+    return WeekStrip(selected: _params['selected_date'], onSelect:  (date) {
         ref.read( todaysScreenProvider.notifier).changeDate(date);
         ref.read(todaysScreenProvider.notifier).updateList(date);
-      },
-    );
+      },); 
+      
   }
 
   Widget _habitsList() {
@@ -388,9 +378,10 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   Widget _landscapeProgressBar() {
 
-    final completedHabitsQuantity = _params['habits_list']
+    final completedHabitsQuantity = (_params['habits_list'] as List)
+    .cast<Habit>()
         .fold<int>(0,
-          (int s,Habit h) =>
+          (int s, h) =>
              
               s += (h.progress == h.quantity?1:0)
               ,
