@@ -5,6 +5,7 @@ import 'package:habix/domain/models/UserAuth.dart';
 import 'package:habix/presentation/providers/login_screen.dart';
 import 'package:habix/presentation/screens/create_account_screen.dart';
 import 'package:habix/presentation/screens/tabs.dart';
+import 'package:habix/presentation/screens/widgets/email_text_box.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
@@ -19,6 +20,7 @@ class _LoginScreenState extends ConsumerState<LoginScreen> {
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 final _passwordController = TextEditingController();
 final _emailController = TextEditingController();
+final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
 late Map<String, dynamic> _params;
 
@@ -61,35 +63,28 @@ late Map<String, dynamic> _params;
           Container(
             margin:EdgeInsets.only(top: clipperHeight - 30 , right: 10,left: 10),
             child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                Text('Sign In',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
-                SizedBox(height: 20,),
-                TextField(
-                  controller: _emailController,
-                  keyboardType: TextInputType.emailAddress,
-                  decoration: InputDecoration(
-                    hint: Text('example@abc.com'),
-                    label: Text('Email'),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                  Text('Sign In',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
+                  SizedBox(height: 20,),
+                  EmailTextField(controller: _emailController, ),
+                  SizedBox(height: 10,),
+                  PasswordTextField(controller: _passwordController,),
+                  SizedBox(height: 30,),
+                  SizedBox(
+                    width: double.infinity,
+                    child: FilledButton(onPressed: _params['loading']?null: _login, child: _params['loading']?CircularProgressIndicator():Text('Sign In'))),
+                    SizedBox(
+                      height: 10,
                     ),
-                  ),
-                ),
-                SizedBox(height: 10,),
-                PasswordTextField(controller: _passwordController),
-                SizedBox(height: 30,),
-                SizedBox(
-                  width: double.infinity,
-                  child: FilledButton(onPressed: _params['loading']?null: _login, child: _params['loading']?CircularProgressIndicator():Text('Sign In'))),
-                  SizedBox(
-                    height: 10,
-                  ),
-                  SizedBox(
-                  width: double.infinity,
-                  child: TextButton(onPressed: _moveToCreateAccountScreen, child: Text('Create Account')))
-              ],),
+                    SizedBox(
+                    width: double.infinity,
+                    child: TextButton(onPressed: _moveToCreateAccountScreen, child: Text('Create Account')))
+                ],),
+              ),
             ))
         ],
       )
@@ -97,6 +92,8 @@ late Map<String, dynamic> _params;
   }
 
   _login()async {
+    if(_formKey.currentState!.validate()){
+    _formKey.currentState!.save();
     UserAuth userAuth = UserAuth(email: _emailController.text, password: _passwordController.text);
     bool success = await ref.read(loginScreenNotifier.notifier).login(userAuth);
     if(success){
@@ -107,6 +104,8 @@ late Map<String, dynamic> _params;
       await Future.delayed(Duration(milliseconds: 300));
       ScaffoldMessenger.of(_scaffoldKey.currentContext!).showSnackBar(SnackBar(content: Text(_params['error_message'])));
     }
+    }
+    
   }
 
   void _moveToCreateAccountScreen() {

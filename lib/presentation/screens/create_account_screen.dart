@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/domain/models/UserAuth.dart';
 import 'package:habix/presentation/providers/create_account_screen.dart';
 import 'package:habix/presentation/screens/login_screen.dart';
+import 'package:habix/presentation/screens/widgets/email_text_box.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
 import 'package:habix/utilities/extensions.dart';
 
@@ -78,30 +79,14 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                     child: Column(
                       children: [
                         SizedBox(height: 20),
-                        TextFormField(
-                          validator: (emailValue) {
-                            if (emailValue!.trim().isEmpty) {
-                              return 'Email field cannot be empty';
-                            }
-                            else if(!emailValue.isValidEmail())
-                            {
-                              return 'Incorrect Email Format';
-                            }
-                            return null;
-                          },
-                          controller: _emailController,
-                          keyboardType: TextInputType.emailAddress,
-                          decoration: InputDecoration(
-                            label: Text('Email'),
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(10),
-                            ),
-                          ),
-                        ),
-                        SizedBox(height: 10),
-                        PasswordTextField(controller: _passwordController),
+                        EmailTextField(controller: _emailController,),
                         SizedBox(height: 10),
                         PasswordTextField(
+                          
+                          controller: _passwordController),
+                        SizedBox(height: 10),
+                        PasswordTextField(
+                          
                           controller: _confirmPasswordController,
                           hint: 'Confirm Password',
                         ),

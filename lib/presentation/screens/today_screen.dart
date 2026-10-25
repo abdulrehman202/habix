@@ -2,6 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/domain/models/Habit.dart';
 import 'package:habix/presentation/screens/widgets/animated_progress_bar.dart';
 import 'package:habix/presentation/screens/widgets/epmty_list_widget.dart';
 import 'package:habix/utilities/constants.dart';
@@ -145,18 +146,15 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   Widget _progressBar() {
 
-    final completedHabitsList = _params['habits_list']
-        .where(
-          (h) =>
+    final completedHabitsQuantity = _params['habits_list']
+        .fold<int>(0,
+          (int s,Habit h) =>
           
-              h.progress == h.quantity  &&
-              h.dateFinished !=null
-              ,
-        )
-        .toList();
+              s += (h.progress == h.quantity?1:0)
+        );
 
     double percentageOfCompletedTasks =
-        completedHabitsList.length / _params['habits_list'].length;
+        completedHabitsQuantity / _params['habits_list'].length;
     return _params['habits_list'].isEmpty
         ? Container()
         : Column(
@@ -390,18 +388,16 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   Widget _landscapeProgressBar() {
 
-    final completedHabitsList = _params['habits_list']
-        .where(
-          (h) =>
+    final completedHabitsQuantity = _params['habits_list']
+        .fold<int>(0,
+          (int s,Habit h) =>
              
-              h.progress == h.quantity &&
-              h.dateFinished!=null
+              s += (h.progress == h.quantity?1:0)
               ,
-        )
-        .toList();
+        );
 
     double percentageOfCompletedTasks =
-        completedHabitsList.length / _params['habits_list'].length;
+        completedHabitsQuantity / _params['habits_list'].length;
     return _params['habits_list'].isEmpty
         ? Container()
         : Row(

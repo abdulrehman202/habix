@@ -1,9 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class PasswordTextField extends StatefulWidget {
 TextEditingController controller;
   String hint;
-  PasswordTextField({super.key,required this.controller,this.hint = 'Password'});
+  
+  PasswordTextField({super.key,required this.controller,this.hint = 'Password',});
   @override
   State<PasswordTextField> createState() => _PasswordTextFieldState();
 
@@ -23,10 +25,32 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
 
   @override
   Widget build(BuildContext context) {
-    return TextField(
+    return TextFormField(
       controller: widget.controller,
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: hidePass,
+                  onChanged: (newVal)
+      {
+        if(newVal[newVal.length-1]==' ')
+        {
+          widget.controller.text = newVal.trim();
+        }
+        
+      },
+      selectAllOnFocus: false,
+                  validator: (val){
+                    if(val!.trim().isEmpty)
+                    {
+                      return 'Field cannot be empty';
+                    }
+
+                    else if(val.trim().length<6)
+                    {
+                      return 'Password must be atleast 6 characters long';
+                    }
+
+                    return null;
+                  },
                   
                   maxLines: 1,
                   decoration: InputDecoration(
