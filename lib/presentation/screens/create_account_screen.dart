@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/domain/models/UserAuth.dart';
 import 'package:habix/presentation/providers/create_account_screen.dart';
 import 'package:habix/presentation/screens/login_screen.dart';
+import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/email_text_box.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
 import 'package:habix/utilities/extensions.dart';
@@ -98,10 +99,10 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
 
                   SizedBox(
                     width: double.infinity,
-                    child: FilledButton(
-                      onPressed: _params['loading']
-                          ? null
-                          : () async {
+                    child: CustomButton(
+                      isLoading: _params['loading'],
+                      buttonText: 'Create Account',
+                      onButtonTapped: () async {
                               if (_passwordController.text ==
                                   _confirmPasswordController.text) {
                                 if (_formKey.currentState!.validate()) {
@@ -135,9 +136,6 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                                 );
                               }
                             },
-                      child: _params['loading']
-                          ? CircularProgressIndicator()
-                          : Text('Create my Account'),
                     ),
                   ),
                   SizedBox(height: 10),

@@ -5,6 +5,7 @@ import 'package:habix/domain/models/UserAuth.dart';
 import 'package:habix/presentation/providers/login_screen.dart';
 import 'package:habix/presentation/screens/create_account_screen.dart';
 import 'package:habix/presentation/screens/tabs.dart';
+import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/email_text_box.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
 
@@ -77,9 +78,7 @@ late Map<String, dynamic> _params;
                   SizedBox(height: 10,),
                   PasswordTextField(controller: _passwordController,),
                   SizedBox(height: 30,),
-                  SizedBox(
-                    width: double.infinity,
-                    child: FilledButton(onPressed: _params['loading']?null: _login, child: _params['loading']?CircularProgressIndicator():Text('Sign In'))),
+                  CustomButton(onButtonTapped: _login, isLoading: _params['loading'],buttonText:  'Sign In'),
                     SizedBox(
                       height: 10,
                     ),
