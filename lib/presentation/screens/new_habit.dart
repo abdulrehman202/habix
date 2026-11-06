@@ -2,6 +2,7 @@ import 'package:flutter/material.dart' hide Interval;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
 import 'package:habix/presentation/providers/today_screen.dart';
+import 'package:habix/presentation/screens/widgets/selectable_box.dart';
 import 'package:habix/utilities/constants.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/domain/models/Habit.dart';
@@ -22,7 +23,7 @@ class NewHabit extends ConsumerStatefulWidget {
 class _NewHabitState extends ConsumerState<NewHabit> {
   final TextEditingController _nameController = TextEditingController(),
       _descriptionController = TextEditingController();
-  late Map<String,dynamic> _params;
+  late Map<String, dynamic> _params;
   final _formKey = GlobalKey<FormState>();
 
   late String _name, _description;
@@ -78,19 +79,23 @@ class _NewHabitState extends ConsumerState<NewHabit> {
         automaticallyImplyLeading: false,
         title: Center(child: Text('New Habit')),
       ),
-      body: 
-      _params['loading']?LottieAnimation.writing(): Padding(
-        padding: EdgeInsetsGeometry.symmetric(horizontal: 20, vertical: 10),
-        child: SingleChildScrollView(
-          child: LayoutBuilder(
-            builder: (context, constraints) {
-              return constraints.maxWidth > maxScreenSizeInPortraitMode
-                  ? _landscape(constraints)
-                  : _portrait(constraints);
-            },
-          ),
-        ),
-      ),
+      body: _params['loading']
+          ? LottieAnimation.writing()
+          : Padding(
+              padding: EdgeInsetsGeometry.symmetric(
+                horizontal: 20,
+                vertical: 10,
+              ),
+              child: SingleChildScrollView(
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    return constraints.maxWidth > maxScreenSizeInPortraitMode
+                        ? _landscape(constraints)
+                        : _portrait(constraints);
+                  },
+                ),
+              ),
+            ),
     );
   }
 
@@ -144,7 +149,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           ),
         ),
       ],
-    ); 
+    );
   }
 
   Widget _nameAndDescriptionForm() {
@@ -167,7 +172,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
             decoration: InputDecoration(
               hint: Text('Walk, Drink Water, Yoga'),
               label: Text('Name'),
-              
+
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -258,37 +263,23 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       children: [
         ...HabitInterval.values.map(
           (i) => Expanded(
-            child: GestureDetector(
-              onTap: () => ref
+            child: SelectableBox(
+              onOptionSelected: () => ref
                   .read(newHabitProvider.notifier)
                   .changeIntervalSelection(i),
-              child: Container(
-                alignment: Alignment.center,
-                padding: EdgeInsets.symmetric(horizontal: 10, vertical: 15),
-                margin: EdgeInsets.only(right: i.index == 2 ? 0 : 5),
-                decoration: _params['interval'] == i
-                    ? BoxDecoration(
-                        border: Border.all(width: 1, color: Colors.green),
-                        borderRadius: BorderRadius.circular(10),
-                        shape: BoxShape.rectangle,
-                        color: Colors.green.withValues(alpha: 0.2),
-                      )
-                    : BoxDecoration(
-                        border: Border.all(width: 1, color: Colors.grey),
-                        borderRadius: BorderRadius.circular(10),
-                        shape: BoxShape.rectangle,
-                        // color: const Color.fromARGB(255, 225, 225, 225),
-                      ),
-                child: Text(
-                  i.name.capitalize,
-                  maxLines: 1,
-                  style: TextStyle(
-                    fontWeight: _params['interval'] == i
-                        ? FontWeight.bold
-                        : FontWeight.normal,
-                  ),
+
+              option: Text(
+                i.name.capitalize,
+                maxLines: 1,
+                style: TextStyle(
+                  fontWeight: _params['interval'] == i
+                      ? FontWeight.bold
+                      : FontWeight.normal,
                 ),
               ),
+              selectedColor: Colors.green,
+              isSelected: _params['interval'] == i,
+              isEndBox: i.index == 2,
             ),
           ),
         ),
@@ -297,60 +288,61 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   }
 
   Widget _button() {
-    
     return SizedBox(
       width: double.infinity,
       height: 60,
       child: FilledButton(
-        onPressed: ()  async {
+        onPressed: () async {
           bool success = false;
           if (_formKey.currentState!.validate()) {
             _formKey.currentState!.save();
 
-            if(widget.habit == null ) {
-               success = await ref
-                .read(newHabitProvider.notifier)
-                .addHabit(
-                  Habit(
-                    id: getNewHabitId(),
-                    name: _name,
-                    category:  _params['category'],
-                    quantity:  int.parse(_description),
-                    interval:  _params['interval'],
-                    dateCreated:  DateTime.now(),
-                  ),
-                );
-                
-                }
-                else{
-                  //update habit code here
-                success = await ref.read(newHabitProvider.notifier).updateHabit(
-                  Habit(
-                    id: widget.habit!.id,
-                    name: _name,
-                    category:  _params['category'],
-                    quantity:  int.parse(_description),
-                    interval:  _params['interval'],
-                    dateCreated:  widget.habit!.dateCreated,
-                  ),
-                );
-                }
+            if (widget.habit == null) {
+              success = await ref
+                  .read(newHabitProvider.notifier)
+                  .addHabit(
+                    Habit(
+                      id: getNewHabitId(),
+                      name: _name,
+                      category: _params['category'],
+                      quantity: int.parse(_description),
+                      interval: _params['interval'],
+                      dateCreated: DateTime.now(),
+                    ),
+                  );
+            } else {
+              //update habit code here
+              success = await ref
+                  .read(newHabitProvider.notifier)
+                  .updateHabit(
+                    Habit(
+                      id: widget.habit!.id,
+                      name: _name,
+                      category: _params['category'],
+                      quantity: int.parse(_description),
+                      interval: _params['interval'],
+                      dateCreated: widget.habit!.dateCreated,
+                    ),
+                  );
+            }
 
-                if(!success)
-                {
-                  await Future.delayed(Duration(milliseconds: 100));
-                  ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(_params['error_message'])));
-                }
-                else{
-                   ref.invalidate(todaysScreenProvider);
-                   ref.invalidate(habitsCategoryProvider);
-            _resetStates();
-            Navigator.pop(context);
-                }
+            if (!success) {
+              await Future.delayed(Duration(milliseconds: 100));
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(_params['error_message'])));
+            } else {
+              ref.invalidate(todaysScreenProvider);
+              ref.invalidate(habitsCategoryProvider);
+              _resetStates();
+              Navigator.pop(context);
+            }
           }
         },
         child: Text(
-          widget.habit == null ? 'Add ${_params['button_text']} as my new Hobby' : 'Update Habit',
+          widget.habit == null
+              ? 'Add ${_params['button_text']} as my new Hobby'
+              : 'Update Habit',
         ),
       ),
     );
@@ -364,56 +356,52 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       children: Category.values
           .map(
             (c) => Container(
-                    height: 90,
-                    width: 80,
-                    margin: EdgeInsets.only(
-                      bottom: 5,
-                      right: w > maxScreenSizeInPortraitMode ? 10 : 0,
-                    ),
-                    child: Column(
-                      children: [
-                        GestureDetector(
-                          onTap: () => ref
-                              .read(newHabitProvider.notifier)
-                              .changeCategorySelection(c),
-                          child: Container(
-                            width: w / Category.values.length,
-                            padding: EdgeInsets.symmetric(
-                              horizontal: 10,
-                              vertical: 15,
+              height: 90,
+              width: 80,
+              margin: EdgeInsets.only(
+                bottom: 5,
+                right: w > maxScreenSizeInPortraitMode ? 10 : 0,
+              ),
+              child: Column(
+                children: [
+                  GestureDetector(
+                    onTap: () => ref
+                        .read(newHabitProvider.notifier)
+                        .changeCategorySelection(c),
+                    child: Container(
+                      width: w / Category.values.length,
+                      padding: EdgeInsets.symmetric(
+                        horizontal: 10,
+                        vertical: 15,
+                      ),
+                      margin: EdgeInsets.only(bottom: 10),
+                      decoration: _params['category'] == c
+                          ? BoxDecoration(
+                              border: Border.all(
+                                width: 2,
+                                color: iconsColor[c]!,
+                              ),
+                              borderRadius: BorderRadius.circular(15),
+                              shape: BoxShape.rectangle,
+                              color: iconsColor[c]!.withValues(alpha: 0.2),
+                            )
+                          : BoxDecoration(
+                              borderRadius: BorderRadius.circular(15),
+                              shape: BoxShape.rectangle,
+                              color: iconsColor[c]!.withValues(alpha: 0.2),
                             ),
-                            margin: EdgeInsets.only(bottom: 10),
-                            decoration: _params['category'] == c
-                                ? BoxDecoration(
-                                    border: Border.all(
-                                      width: 2,
-                                      color: iconsColor[c]!,
-                                    ),
-                                    borderRadius: BorderRadius.circular(15),
-                                    shape: BoxShape.rectangle,
-                                    color: iconsColor[c]!.withValues(
-                                      alpha: 0.2,
-                                    ),
-                                  )
-                                : BoxDecoration(
-                                    borderRadius: BorderRadius.circular(15),
-                                    shape: BoxShape.rectangle,
-                                    color: iconsColor[c]!.withValues(
-                                      alpha: 0.2,
-                                    ),
-                                  ),
-                            child: Icon(icons[c]),
-                          ),
-                        ),
-                        Text(
-                          c.name,
-                          style: TextStyle(fontSize: 10),
-                          textAlign: TextAlign.center,
-                          overflow: TextOverflow.ellipsis,
-                        ),
-                      ],
+                      child: Icon(icons[c]),
                     ),
                   ),
+                  Text(
+                    c.name,
+                    style: TextStyle(fontSize: 10),
+                    textAlign: TextAlign.center,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ],
+              ),
+            ),
           )
           .toList(),
     );
@@ -428,7 +416,8 @@ class _NewHabitState extends ConsumerState<NewHabit> {
           initialTime: TimeOfDay.now(),
         );
         ref
-            .read(newHabitProvider.notifier).changeTime(selectedTime ?? _params['time']);
+            .read(newHabitProvider.notifier)
+            .changeTime(selectedTime ?? _params['time']);
       },
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(8),
@@ -439,7 +428,10 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       trailing: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Text(_params['time'].format(context).toString(), style: TextStyle(fontSize: 15)),
+          Text(
+            _params['time'].format(context).toString(),
+            style: TextStyle(fontSize: 15),
+          ),
           Icon(Icons.keyboard_arrow_right_rounded),
         ],
       ),
