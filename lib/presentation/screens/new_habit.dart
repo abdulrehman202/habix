@@ -244,12 +244,9 @@ class _NewHabitState extends ConsumerState<NewHabit> {
         SizedBox(height: 10),
         Text('Category', style: TextStyle(fontWeight: FontWeight.bold)),
         SizedBox(height: 10),
-        Card(
-          elevation: 5,
-          child: Container(
-            margin: EdgeInsets.only(top: 10),
-            child: categoryOption(constraints.maxWidth),
-          ),
+        Container(
+          padding: EdgeInsets.all(15),
+          child: categoryOption(constraints.maxWidth),
         ),
         SizedBox(height: 10),
         _button(),
@@ -263,23 +260,25 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       children: [
         ...HabitInterval.values.map(
           (i) => Expanded(
-            child: SelectableBox(
-              onOptionSelected: () => ref
-                  .read(newHabitProvider.notifier)
-                  .changeIntervalSelection(i),
-
-              option: Text(
-                i.name.capitalize,
-                maxLines: 1,
-                style: TextStyle(
-                  fontWeight: _params['interval'] == i
-                      ? FontWeight.bold
-                      : FontWeight.normal,
+            child: Container(
+              margin: EdgeInsets.only(right: i.index ==2?0:5),
+              child: SelectableBox(
+                onOptionSelected: () => ref
+                    .read(newHabitProvider.notifier)
+                    .changeIntervalSelection(i),
+              
+                option: Text(
+                  i.name.capitalize,
+                  maxLines: 1,
+                  style: TextStyle(
+                    fontWeight: _params['interval'] == i
+                        ? FontWeight.bold
+                        : FontWeight.normal,
+                  ),
                 ),
+                selectedColor: Colors.green,
+                isSelected: _params['interval'] == i,
               ),
-              selectedColor: Colors.green,
-              isSelected: _params['interval'] == i,
-              isEndBox: i.index == 2,
             ),
           ),
         ),
@@ -349,59 +348,64 @@ class _NewHabitState extends ConsumerState<NewHabit> {
   }
 
   Widget categoryOption(double w) {
-    return Wrap(
-      alignment: w > maxScreenSizeInPortraitMode
-          ? WrapAlignment.center
-          : WrapAlignment.start,
+    return Row(
       children: Category.values
           .map(
-            (c) => Container(
-              height: 90,
-              width: 80,
-              margin: EdgeInsets.only(
-                bottom: 5,
-                right: w > maxScreenSizeInPortraitMode ? 10 : 0,
-              ),
-              child: Column(
-                children: [
-                  GestureDetector(
-                    onTap: () => ref
-                        .read(newHabitProvider.notifier)
-                        .changeCategorySelection(c),
-                    child: Container(
-                      width: w / Category.values.length,
-                      padding: EdgeInsets.symmetric(
-                        horizontal: 10,
-                        vertical: 15,
-                      ),
-                      margin: EdgeInsets.only(bottom: 10),
-                      decoration: _params['category'] == c
-                          ? BoxDecoration(
-                              border: Border.all(
-                                width: 2,
-                                color: iconsColor[c]!,
-                              ),
-                              borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
-                              color: iconsColor[c]!.withValues(alpha: 0.2),
-                            )
-                          : BoxDecoration(
-                              borderRadius: BorderRadius.circular(15),
-                              shape: BoxShape.rectangle,
-                              color: iconsColor[c]!.withValues(alpha: 0.2),
-                            ),
-                      child: Icon(icons[c]),
-                    ),
-                  ),
-                  Text(
-                    c.name,
-                    style: TextStyle(fontSize: 10),
-                    textAlign: TextAlign.center,
-                    overflow: TextOverflow.ellipsis,
-                  ),
-                ],
-              ),
-            ),
+            (c) => 
+             Expanded(
+               child: Container(
+                margin: EdgeInsets.only(right: c.index == 4 ?0:5),
+                 child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                   children: [
+                     SelectableBox(
+                     onOptionSelected: () => ref
+                           .read(newHabitProvider.notifier)
+                           .changeCategorySelection(c), 
+                       filledBox: true,
+                       
+                     option: Icon(icons[c]), 
+                     selectedColor: iconsColor[c]!, isSelected: _params['category'] == c, unSelectedColor: iconsColor[c]!,)
+                     ,
+                     // GestureDetector(
+                     //   onTap: () => ref
+                     //       .read(newHabitProvider.notifier)
+                     //       .changeCategorySelection(c),
+                     //   child: Container(
+                     //     width: w / Category.values.length,
+                     //     padding: EdgeInsets.symmetric(
+                     //       horizontal: 10,
+                     //       vertical: 15,
+                     //     ),
+                     //     margin: EdgeInsets.only(bottom: 10),
+                     //     decoration: _params['category'] == c
+                     //         ? BoxDecoration(
+                     //             border: Border.all(
+                     //               width: 2,
+                     //               color: iconsColor[c]!,
+                     //             ),
+                     //             borderRadius: BorderRadius.circular(15),
+                     //             shape: BoxShape.rectangle,
+                     //             color: iconsColor[c]!.withValues(alpha: 0.2),
+                     //           )
+                     //         : BoxDecoration(
+                     //             borderRadius: BorderRadius.circular(15),
+                     //             shape: BoxShape.rectangle,
+                     //             color: iconsColor[c]!.withValues(alpha: 0.2),
+                     //           ),
+                     //     child: Icon(icons[c]),
+                     //   ),
+                     // ),
+                     Text(
+                       c.name,
+                       style: TextStyle(fontSize: 10),
+                       textAlign: TextAlign.center,
+                       overflow: TextOverflow.ellipsis,
+                     ),
+                   ],
+                 ),
+               ),
+             ),
           )
           .toList(),
     );
