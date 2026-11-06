@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habix/presentation/screens/login_screen.dart';
 import 'package:habix/presentation/screens/tabs.dart';
+import 'package:habix/presentation/screens/user_profile.dart';
 
 void main() async{
   runApp( ProviderScope(child: MyApp()));
@@ -60,7 +61,7 @@ class MyApp extends StatelessWidget {
         )
       ),
       
-      home: LoginScreen(),
+      home: UserProfile(),
     );
   }
 }
