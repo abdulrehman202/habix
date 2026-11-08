@@ -82,6 +82,33 @@ extension newExt on int{
   }
 }
 
+extension conversion on int{
+
+  int get toLbs
+  {
+    int v = (this*2.20462).floor();
+    return v;
+  }
+
+  int get toKg
+  {
+    int v = (this*0.453592).floor();
+    return v;
+  }
+
+  int get toCm
+  {
+    int v = (this*2.54).floor();
+    return v;
+  }
+
+  int get toInch
+  {
+    int v = (this*0.393701).floor();
+    return v;
+  }
+}
+
 String getNewHabitId()
 {
   

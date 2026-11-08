@@ -1,17 +1,32 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/presentation/providers/user_profile.dart';
 import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/name_text_box.dart';
 import 'package:habix/presentation/screens/widgets/selectable_box.dart';
+import 'package:habix/utilities/extensions.dart';
 import 'package:habix/utilities/icon_paths.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 
-class UserProfile extends StatelessWidget {
+class UserProfile extends ConsumerStatefulWidget {
+  const UserProfile({super.key});
+
+  @override
+  ConsumerState<UserProfile> createState() => _UserProfileState();
+}
+
+class _UserProfileState extends ConsumerState<UserProfile> {
+ 
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
-  UserProfile({super.key});
+  final _weightController = TextEditingController();
+  final _heightController = TextEditingController();
+  late Map<String, dynamic> _params;
+   int _weight = 0;
 
   @override
   Widget build(BuildContext context) {
+    _params = ref.watch(userProfileScreenNotifier);
     return Scaffold(
       bottomNavigationBar: Wrap(
         children: [
@@ -53,7 +68,7 @@ class UserProfile extends StatelessWidget {
                     130,
                     child: Text('Date of Birth: ')),
                   Expanded(
-                    child: Container(
+                    child: Container( 
                             height: 80,
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(10)
@@ -78,19 +93,24 @@ class UserProfile extends StatelessWidget {
                     child: Container(
                       margin: EdgeInsets.only(right: 5),
                       child: SelectableBox(
-                        onOptionSelected: () {},
+                        onOptionSelected: () {
+                        ref.read(userProfileScreenNotifier.notifier).changeGender(Gender.MALE);
+                        },
                         option: Text('Male'),
                         selectedColor: Colors.blue,
-                        isSelected: true,
+                        isSelected: _params['gender'] == Gender.MALE,
                       ),
                     ),
                   ),
-                  Expanded(
+                  Expanded( 
                     child: SelectableBox(
-                      onOptionSelected: () {},
+                      onOptionSelected: () 
+                      {
+                        ref.read(userProfileScreenNotifier.notifier).changeGender(Gender.FEMALE);
+                      },
                       option: Text('Female'),
                       selectedColor: Colors.pinkAccent,
-                      isSelected: true,
+                      isSelected: _params['gender'] == Gender.FEMALE,
                     ),
                   ),
                 ],
@@ -104,17 +124,49 @@ class UserProfile extends StatelessWidget {
                       ),
                     Expanded(
                       child: TextField(
-                      
+                      controller: _weightController,
+                      onChanged: (value)
+                      {
+                        _weight = int.parse(value);
+                      },
                       decoration: InputDecoration(
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       
-                      suffixText: 'kg',
                       ),
                       keyboardType: TextInputType.number,
                       
                     )),
-                    RadioMenuButton(value: 'kgs', groupValue: 'kgs', onChanged: (q){}, child: Text('kgs')),
-                    RadioMenuButton(value: 'lbs', groupValue: 'kgs', onChanged: (q){}, child: Text('lbs')),
+                    SizedBox(
+                      width: 150,
+                      child: RadioGroup<WeightUnit>(
+                        groupValue: _params['unit_weight'],
+                        onChanged: (wu)
+                      {
+                        ref.read(userProfileScreenNotifier.notifier).changeWeightUnit(
+                          wu!
+                        );
+
+                        if(wu == WeightUnit.KG){
+                          _weightController.text = _weight.toKg.toString();
+                        }
+                        else{
+                          _weightController.text = _weight.toLbs.toString();
+                        }
+                      }, child: 
+                      Row(
+                        children: [
+                          Radio<WeightUnit>(
+                        value: WeightUnit.KG,),
+                        SizedBox(
+                          width: 50,
+                          child: Text('kg')),
+                          Radio<WeightUnit>(
+                        value: WeightUnit.LBS,),
+                        Text('lbs'),
+                        ],
+                      )),
+                    ),
+                    
           ],
               ),
               SizedBox(height: 20),
@@ -130,15 +182,33 @@ class UserProfile extends StatelessWidget {
                       decoration: InputDecoration(
                         border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                       
-                      suffixText: 'inch',
                       ),
                       keyboardType: TextInputType.number,
                       
                     )),
-                    RadioMenuButton(
-                      
-                      value: 'inch', groupValue: 'cm', onChanged: (q){}, child: Text('inch')),
-                    RadioMenuButton(value: 'cm', groupValue: 'cm', onChanged: (q){}, child: Text('cm')),
+                    SizedBox(
+                      width: 150,
+                      child: RadioGroup<HeightUnit>(
+                        groupValue: _params['unit_height'],
+                        onChanged: (hu)
+                      {
+                        ref.read(userProfileScreenNotifier.notifier).changeHeightUnit(
+                          hu!
+                        );
+                      }, child: 
+                      Row(
+                        children: [
+                          Radio<HeightUnit>(
+                        value: HeightUnit.INCH,),
+                        SizedBox(
+                          
+                          width: 50, child: Text('inch')),
+                          Radio<HeightUnit>(
+                        value: HeightUnit.CM,),
+                        Text('cm'),
+                        ],
+                      )),
+                    ),
           ],
               ),
             ],
