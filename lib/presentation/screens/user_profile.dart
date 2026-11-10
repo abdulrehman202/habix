@@ -31,6 +31,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
   Widget build(BuildContext context) {
     _params = ref.watch(userProfileScreenNotifier);
     return Scaffold(
+      backgroundColor: Colors.lightGreenAccent.withValues(alpha: 0.1),
       bottomNavigationBar: Wrap(
         children: [
           Container(
@@ -79,8 +80,14 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                         height: 80,
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
+                          color: Colors.white.withValues(alpha: 0)
                         ),
                         child: ScrollDatePicker(
+                          options: DatePickerOptions(
+                            diameterRatio: 6,
+                            isLoop: false,
+                            backgroundColor: Colors.white.withValues(alpha: 0)
+                          ),
                           selectedDate: _params['dob']!,
                           locale: Locale('en'),
                           onDateTimeChanged: (DateTime value) 
