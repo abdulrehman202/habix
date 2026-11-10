@@ -1,23 +1,6 @@
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:habix/core/Error/Result.dart';
-import 'package:habix/domain/models/UserAuth.dart';
-import 'package:habix/domain/usecase/user_auth_usecases.dart';
-import 'package:state_notifier/state_notifier.dart';
+import 'package:habix/utilities/enums.dart';
 
-enum Gender{
-  MALE,
-  FEMALE
-}
-
-enum WeightUnit{
-  KG,
-  LBS
-}
-
-enum HeightUnit{ 
-  INCH,
-  CM
-}
 
 class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
 

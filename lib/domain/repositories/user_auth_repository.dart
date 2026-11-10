@@ -1,5 +1,5 @@
 import 'package:habix/core/Error/Result.dart';
-import 'package:habix/domain/models/UserAuth.dart';
+import 'package:habix/domain/entity/UserAuth.dart';
 
 abstract class UserAuthRepository 
 {

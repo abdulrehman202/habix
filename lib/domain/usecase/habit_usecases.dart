@@ -1,7 +1,7 @@
 import 'package:habix/core/Error/Result.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/data/repositories/habits_repository_imp.dart';
-import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/domain/entity/Habit.dart';
 
 class HabitUsecases {
   final HabitRepositoryImpl _habitRepositoryImpl = HabitRepositoryImpl();

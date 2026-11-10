@@ -4,7 +4,7 @@ import 'package:habix/data/Mappers/habit_mapper.dart';
 import 'package:habix/data/datasource/habit/local_datasource.dart';
 import 'package:habix/data/datasource/habit/remote_datasource.dart';
 import 'package:habix/data/model/habit_model.dart';
-import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/domain/repositories/habit_repository.dart';
 
 class HabitRepositoryImpl implements HabitRepository {

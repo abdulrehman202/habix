@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/domain/models/UserAuth.dart';
+import 'package:habix/domain/entity/UserAuth.dart';
 import 'package:habix/presentation/providers/login_screen.dart';
 import 'package:habix/presentation/screens/create_account_screen.dart';
 import 'package:habix/presentation/screens/tabs.dart';

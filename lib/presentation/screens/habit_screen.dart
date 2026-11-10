@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:habix/utilities/enums.dart';
-import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
 import 'package:habix/presentation/providers/new_habit.dart';
 import 'package:habix/presentation/screens/new_habit.dart';

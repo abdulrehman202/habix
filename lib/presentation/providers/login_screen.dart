@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/core/Error/Result.dart';
-import 'package:habix/domain/models/UserAuth.dart';
+import 'package:habix/domain/entity/UserAuth.dart';
 import 'package:habix/domain/usecase/user_auth_usecases.dart';
 import 'package:state_notifier/state_notifier.dart';
 

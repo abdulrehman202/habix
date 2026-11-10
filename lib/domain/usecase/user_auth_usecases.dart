@@ -1,6 +1,6 @@
 import 'package:habix/core/Error/Result.dart';
 import 'package:habix/data/repositories/user_auth_imp.dart';
-import 'package:habix/domain/models/UserAuth.dart';
+import 'package:habix/domain/entity/UserAuth.dart';
 
 class UserAuthUsecases {
   final UserAuthRepositoryImp _userAuthRepositoryImp = UserAuthRepositoryImp();

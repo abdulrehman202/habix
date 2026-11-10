@@ -1,5 +1,5 @@
 import 'package:habix/data/model/habit_model.dart';
-import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/domain/entity/Habit.dart';
 
 HabitModel toHabitModel(Habit habit)
 {

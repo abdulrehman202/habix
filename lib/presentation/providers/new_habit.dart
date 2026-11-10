@@ -2,7 +2,7 @@
 import 'package:flutter/material.dart' show TimeOfDay;
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/core/Error/Result.dart';
-import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
 import 'package:habix/utilities/enums.dart';
 

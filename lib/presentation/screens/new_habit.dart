@@ -5,7 +5,7 @@ import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/presentation/screens/widgets/selectable_box.dart';
 import 'package:habix/utilities/constants.dart';
 import 'package:habix/utilities/enums.dart';
-import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/presentation/providers/new_habit.dart';
 import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
 import 'package:habix/utilities/image_paths.dart';

@@ -12,3 +12,19 @@ enum HabitInterval{
   WEEKDAYS,
   WEEKEND,
 }
+
+
+enum Gender{
+  MALE,
+  FEMALE
+}
+
+enum WeightUnit{
+  KG,
+  LBS
+}
+
+enum HeightUnit{ 
+  INCH,
+  CM
+}

@@ -1,5 +1,5 @@
 import 'package:flutter_riverpod/legacy.dart';
-import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
 
 Map<String, dynamic> todaysScreenVariables = {

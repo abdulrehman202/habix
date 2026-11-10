@@ -4,6 +4,7 @@ import 'package:habix/presentation/providers/user_profile.dart';
 import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/name_text_box.dart';
 import 'package:habix/presentation/screens/widgets/selectable_box.dart';
+import 'package:habix/utilities/enums.dart';
 import 'package:habix/utilities/extensions.dart';
 import 'package:habix/utilities/icon_paths.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';

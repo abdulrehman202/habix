@@ -1,5 +1,5 @@
 import 'package:habix/core/Error/Result.dart';
-import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/domain/entity/Habit.dart';
 
 abstract class HabitRepository {
 

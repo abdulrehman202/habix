@@ -3,7 +3,7 @@ import 'package:habix/core/Error/Result.dart';
 import 'package:habix/data/Mappers/user_auth_mapper.dart';
 import 'package:habix/data/datasource/userAuth/remote_datasource.dart';
 import 'package:habix/data/model/user_auth_model.dart';
-import 'package:habix/domain/models/UserAuth.dart';
+import 'package:habix/domain/entity/UserAuth.dart';
 import 'package:habix/domain/repositories/user_auth_repository.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 

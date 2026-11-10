@@ -2,7 +2,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/domain/models/Habit.dart';
+import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/presentation/screens/widgets/animated_progress_bar.dart';
 import 'package:habix/presentation/screens/widgets/epmty_list_widget.dart';
 import 'package:habix/presentation/screens/widgets/week_strip.dart';
