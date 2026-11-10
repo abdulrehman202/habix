@@ -25,8 +25,9 @@ class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
     'loading':false,
     'error_message':'',
     'gender': Gender.MALE,
-    'unit_height': HeightUnit.CM,
+    'unit_height': HeightUnit.INCH,
     'unit_weight': WeightUnit.KG,
+    'dob': DateTime.now(),
     });
 
     change(String key, value)
@@ -44,12 +45,17 @@ class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
 
     changeWeightUnit(WeightUnit unit)
     {
-      change('unit_weight', unit);
+      change('unit_weight', unit); 
     }
 
     changeGender(Gender gender)
     {
       change('gender', gender); 
+    }
+
+    changeDOB(DateTime dob)
+    {
+      change('dob', dob); 
     }
 }
     final userProfileScreenNotifier = StateNotifierProvider<UserProfileNotifier, Map<String, dynamic>>((ref){
