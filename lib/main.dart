@@ -61,7 +61,7 @@ class MyApp extends StatelessWidget {
         )
       ),
       
-      home: UserProfile(),
+      home: LoginScreen(),
     );
   }
 }
