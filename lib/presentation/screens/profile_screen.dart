@@ -2,6 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/presentation/UIModels/userProfileUI.dart';
 import 'package:habix/presentation/providers/profile_screen.dart';
+import 'package:habix/presentation/providers/user_profile.dart';
+import 'package:habix/presentation/screens/user_profile.dart';
+import 'package:habix/utilities/enums.dart';
 import 'package:habix/utilities/extensions.dart';
 import 'package:habix/utilities/shimmer_animation.dart';
 
@@ -28,7 +31,19 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('ProfileScreen'),
-        actions: [TextButton(onPressed: () {}, child: Text('Edit'))],
+        actions: [TextButton(onPressed: () 
+        {
+          
+          
+    ref.read(userProfileScreenNotifier.notifier).changeGender(_params['profile']?.gender ?? Gender.MALE);
+    ref.read(userProfileScreenNotifier.notifier).changeDOB(_params['profile']?.dob ?? DateTime.now());
+
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => UserProfile(userProfileUIModel: _params['profile'] as UserProfileUIModel,)),
+          );
+          
+        }, child: Text('Edit'))],
       ),
       body: _params['loading']
           ? ShimmerAnimation.listPlaceholder()
@@ -142,7 +157,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             ),
                           ),
                           Text(
-                            '18th March 1998',
+                            '${_userProfileUI.dob.day} ${_userProfileUI.dob.month.monthInAlphabets} ${_userProfileUI.dob.year}',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white),
                           ),

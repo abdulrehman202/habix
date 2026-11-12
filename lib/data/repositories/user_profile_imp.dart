@@ -10,11 +10,11 @@ class UserProfileRepositoryImp implements UserProfileRespository {
 
   final UserProfileRemoteDataSource _userProfileRemoteDataSource = UserProfileRemoteDataSource();
   @override
-  Future<Result<bool>> setProfile(UserProfile user) async{
+  Future<Result<UserProfile>> updateProfile(UserProfile user) async{
     try{
       UserProfileModel userProfileModel = user.toModel;
-      UserProfileModel userCreated = await _userProfileRemoteDataSource.setProfile(userProfileModel);
-      return Result.ok(true);
+      UserProfileModel userCreated = await _userProfileRemoteDataSource.updateProfile(userProfileModel);
+      return Result.ok(userCreated.toEntity);
     }
     catch(e)
     {
@@ -35,4 +35,5 @@ class UserProfileRepositoryImp implements UserProfileRespository {
     }
 
   }
+
  }

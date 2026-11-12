@@ -11,7 +11,9 @@ import 'package:habix/utilities/icon_paths.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class UserProfile extends ConsumerStatefulWidget {
-  const UserProfile({super.key});
+  UserProfileUIModel? userProfileUIModel;
+
+  UserProfile({super.key, this.userProfileUIModel});
 
   @override
   ConsumerState<UserProfile> createState() => _UserProfileState();
@@ -29,9 +31,26 @@ class _UserProfileState extends ConsumerState<UserProfile> {
   int _heightInInch = 0; //in inches (by default)
   int _heightInCM = 0;
 
+  initState() {
+    super.initState();
+    _firstNameController.text = widget.userProfileUIModel?.firstName ?? '';
+    _lastNameController.text = widget.userProfileUIModel?.lastName ?? '';
+    
+    _weightInKgs = widget.userProfileUIModel?.weight ?? 0;
+    _weightInLbs = _weightInKgs.toLbs;
+
+
+    _heightInCM = widget.userProfileUIModel?.height ?? 0;
+    _heightInInch = _heightInCM.toInch;
+    
+    _weightController.text = _weightInKgs.toString();
+    _heightController.text = _heightInCM.toString();
+  }
+
   @override
   Widget build(BuildContext context) {
     _params = ref.watch(userProfileScreenNotifier);
+   
     return Scaffold(
       backgroundColor: Colors.lightGreenAccent.withValues(alpha: 0.1),
       bottomNavigationBar: Wrap(
@@ -51,16 +70,17 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                     _heightInCM,
                   );
 
-                  bool success = await ref.read(userProfileScreenNotifier.notifier).setProfile(userUI);
+                  bool success = await ref.read(userProfileScreenNotifier.notifier).updateProfile(userUI);
                   if(success)
                   {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Profile set successfully!')),
+                      SnackBar(content: Text('Profile updated successfully!')),
                     );
+                    Navigator.pop(context);
                   }
                   else
                   {
-                    Future.delayed(Duration(milliseconds: 300));
+                    await Future.delayed(Duration(milliseconds: 500));
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(_params['error_message'])),
                     );
@@ -68,7 +88,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                 
                 }
               },
-              buttonText: 'Set Profile',
+              buttonText: widget.userProfileUIModel == null? 'Set Profile':'Update Profile',
               isLoading: _params['loading'],
             ),
           ),

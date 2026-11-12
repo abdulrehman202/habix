@@ -61,14 +61,14 @@ class UserProfileRemoteDataSource {
     }
   }
 
-  Future<UserProfileModel> setProfile(UserProfileModel userProfile) async {
+  Future<UserProfileModel> updateProfile(UserProfileModel userProfile) async {
     try {
       String token = await getTokenFromLocalStorage();
       Dio dio = DioClient.getDioObj();
       final json = userProfile.toJson();
 
-      Response response = await dio.post(
-        '/userProfile/set',
+      Response response = await dio.put(
+        '/userProfile/update',
         data: json,
         options: Options(
           headers: {
@@ -78,7 +78,7 @@ class UserProfileRemoteDataSource {
           },
         ),
       );
-      List<HabitModel>  list = [];
+      
       if(response.statusCode==200)
     {
       final resData = response.data;
@@ -116,116 +116,4 @@ class UserProfileRemoteDataSource {
     }
   }
 
-  Future<List<HabitModel>> updateHabit(HabitModel habit) async {
-    try {
-      Dio dio = DioClient.getDioObj();
-      String token = await getTokenFromLocalStorage();
-      final json = habit.toJson();
-
-      Response response = await dio.put(
-        '/habits/update',
-        data: json,
-        options: Options(
-          headers: {
-            'Content-Type':
-                'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
-          },
-        ),
-      );
-      List<HabitModel>  list = [];
-      if(response.statusCode==200)
-    {
-      final resData = response.data;
-        final decodedJson = resData['updatedHabits'] as List;
-
-        for (var listItem in decodedJson) {
-          HabitModel habitModel = HabitModel.fromJson(listItem);
-          list.add(habitModel);
-        }
-    }
-    else {
-        throw ServerFailure(statusCode: response.statusCode??404);
-      }
-      return list;
-    } on DioException catch (e) {
-      final status = e.response?.statusCode;
-  switch (e.type) {
-    case DioExceptionType.connectionTimeout:
-    case DioExceptionType.sendTimeout:
-    case DioExceptionType.receiveTimeout:
-      throw const NetworkFailure();
-
-    case DioExceptionType.connectionError:
-      throw const NetworkFailure();
-
-    case DioExceptionType.badResponse:
-      if (status == 404) throw  ServerFailure(statusCode: status??404);
-      throw ServerFailure(statusCode: status??404);
-
-    case DioExceptionType.cancel:
-      throw ServerFailure(statusCode: status??404);
-
-    default:
-      throw ServerFailure(statusCode: status??404);
-  }} catch (e) {
-      throw UnknownError();
-    }
-  }
-
-  Future<List<HabitModel>> removeHabit(String habitId) async {
-    try {
-      String token = await getTokenFromLocalStorage();
-      Dio dio = DioClient.getDioObj();
-      
-      Response response = await dio.delete(
-        '/habits/remove/$habitId',
-        options: Options(
-          headers: {
-            'Content-Type':
-                'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
-          },
-        ),
-      );
-
-      List<HabitModel>  list = [];
-      if(response.statusCode==200)
-    {
-      final resData = response.data;
-        final decodedJson = resData['updatedHabits'] as List;
-
-        for (var listItem in decodedJson) {
-          HabitModel habitModel = HabitModel.fromJson(listItem);
-          list.add(habitModel);
-        }
-    }
-    else {
-        throw ServerFailure(statusCode: response.statusCode??404);
-      }
-      return list;
-    } on DioException catch (e) {
-      final status = e.response?.statusCode;
-  switch (e.type) {
-    case DioExceptionType.connectionTimeout:
-    case DioExceptionType.sendTimeout:
-    case DioExceptionType.receiveTimeout:
-      throw const NetworkFailure();
-
-    case DioExceptionType.connectionError:
-      throw const NetworkFailure();
-
-    case DioExceptionType.badResponse:
-      if (status == 404) throw  ServerFailure(statusCode: status??404);
-      throw ServerFailure(statusCode: status??404);
-
-    case DioExceptionType.cancel:
-      throw ServerFailure(statusCode: status??404);
-
-    default:
-      throw ServerFailure(statusCode: status??404);
-  }} catch (e) {
-      throw UnknownError();
-    }
-  }
 }

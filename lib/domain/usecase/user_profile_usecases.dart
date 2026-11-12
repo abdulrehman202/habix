@@ -5,10 +5,11 @@ import 'package:habix/domain/entity/UserProfile.dart';
 class UserProfileUsecases {
   final UserProfileRepositoryImp _userProfileRepositoryImp = UserProfileRepositoryImp();
   
-  Future<Result<bool>> setProfile(UserProfile user)async{
-    return _userProfileRepositoryImp.setProfile(user);
+  Future<Result<UserProfile>> updateProfile(UserProfile user)async{
+    return _userProfileRepositoryImp.updateProfile(user);
   }
   Future<Result<UserProfile>> fetchUserDetails(){
     return _userProfileRepositoryImp.fethUserDetails();
   }
+
 }

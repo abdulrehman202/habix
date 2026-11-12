@@ -46,10 +46,10 @@ class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
       change('dob', dob);
     }
 
-    Future<bool> setProfile(UserProfileUIModel userUI) async
+    Future<bool> updateProfile(UserProfileUIModel userUI) async
     {
       state = {...state,'loading':true};
-      Result result = await _userProfileUsecase.setProfile( userUI.toEntity);
+      Result result = await _userProfileUsecase.updateProfile( userUI.toEntity);
       state = {...state,'loading':false};
 
       if(result is Error)
@@ -60,6 +60,7 @@ class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
       return result is Ok;
     
     }
+
 }
     final userProfileScreenNotifier = StateNotifierProvider<UserProfileNotifier, Map<String, dynamic>>((ref){
 
