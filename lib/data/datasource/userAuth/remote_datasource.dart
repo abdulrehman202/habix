@@ -2,8 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/core/Network/dio.dart';
 import 'package:habix/data/model/user_auth_model.dart';
+import 'package:injectable/injectable.dart';
 
-class UserAuthRemoteDataSource{
+abstract class UserAuthRemoteDataSource{
+  Future<String> login(UserAuthModel user);
+  Future<bool> signUp(UserAuthModel user);
+}
+
+@LazySingleton(as: UserAuthRemoteDataSource)
+class UserAuthRemoteDataSourceImp implements UserAuthRemoteDataSource{
 
   Future<String> login(UserAuthModel user) async{
     try {

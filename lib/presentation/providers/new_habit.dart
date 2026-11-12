@@ -4,13 +4,14 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/core/Error/Result.dart';
 import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
+import 'package:habix/main.dart';
 import 'package:habix/utilities/enums.dart';
 
 
 class NewHabitProvider extends StateNotifier<Map<String, dynamic>>{
-  final HabitUsecases _habitUsecases = HabitUsecases();
+  final HabitUsecases _habitUsecases;
 
-  NewHabitProvider():super({
+  NewHabitProvider(this._habitUsecases):super({
     'interval': HabitInterval.DAILY,
     'category':Category.MORNING,
     'button_text': '',
@@ -59,4 +60,4 @@ class NewHabitProvider extends StateNotifier<Map<String, dynamic>>{
   }
 }
 
-final newHabitProvider = StateNotifierProvider<NewHabitProvider, Map<String, dynamic>>((ref)=>NewHabitProvider());
+final newHabitProvider = StateNotifierProvider<NewHabitProvider, Map<String, dynamic>>((ref)=>NewHabitProvider(getIt<HabitUsecases>()));

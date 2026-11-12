@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/core/Error/Result.dart';
 import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
+import 'package:habix/main.dart';
 import 'package:habix/utilities/enums.dart';
 
 class HabitsCategoryNotifier extends StateNotifier<Map<String, dynamic>>{
-  final HabitUsecases _habitUsecases = HabitUsecases();
+  final HabitUsecases _habitUsecases;
 
-  HabitsCategoryNotifier():super({
+  HabitsCategoryNotifier(this._habitUsecases):super({
     'selected_categories': Category.values.toList(),
     'list':[],
     'error':false,
@@ -85,6 +86,6 @@ fetchInitialHabitsList()async
 
 final habitsCategoryProvider = StateNotifierProvider<HabitsCategoryNotifier, Map<String, dynamic>>((ref){
 
-return HabitsCategoryNotifier();
+return HabitsCategoryNotifier(getIt<HabitUsecases>());
 
 });

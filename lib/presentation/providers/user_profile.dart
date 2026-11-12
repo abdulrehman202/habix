@@ -1,15 +1,16 @@
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/core/Error/Result.dart';
 import 'package:habix/domain/usecase/user_profile_usecases.dart';
+import 'package:habix/injection.dart';
 import 'package:habix/presentation/Mappers/user_profile_mapper.dart';
 import 'package:habix/presentation/UIModels/userProfileUI.dart';
 import 'package:habix/utilities/enums.dart';
 
 
 class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
-  final UserProfileUsecases _userProfileUsecase = UserProfileUsecases();
+  final UserProfileUsecases _userProfileUsecase;
 
-  UserProfileNotifier():super({
+  UserProfileNotifier(this._userProfileUsecase):super({
     'loading':false,
     'error_message':'',
     'gender': Gender.MALE,
@@ -64,6 +65,6 @@ class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
 }
     final userProfileScreenNotifier = StateNotifierProvider<UserProfileNotifier, Map<String, dynamic>>((ref){
 
-return UserProfileNotifier();
+return UserProfileNotifier(getIt<UserProfileUsecases>() );
 
 });

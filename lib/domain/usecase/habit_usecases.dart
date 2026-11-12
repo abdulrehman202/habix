@@ -1,10 +1,14 @@
 import 'package:habix/core/Error/Result.dart';
+import 'package:habix/domain/repositories/habit_repository.dart';
 import 'package:habix/utilities/enums.dart';
-import 'package:habix/data/repositories/habits_repository_imp.dart';
 import 'package:habix/domain/entity/Habit.dart';
+import 'package:injectable/injectable.dart';
 
+@injectable
 class HabitUsecases {
-  final HabitRepositoryImpl _habitRepositoryImpl = HabitRepositoryImpl();
+  final HabitRepository _habitRepositoryImpl;
+
+  HabitUsecases(this._habitRepositoryImpl);
 
   Future<List<Habit>> getAllHabitsOnDate(DateTime dateTime) async {
     Result result = await getAllHabits();

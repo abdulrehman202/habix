@@ -5,11 +5,14 @@ import 'package:habix/data/datasource/userAuth/remote_datasource.dart';
 import 'package:habix/data/model/user_auth_model.dart';
 import 'package:habix/domain/entity/UserAuth.dart';
 import 'package:habix/domain/repositories/user_auth_repository.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+@LazySingleton(as: UserAuthRepository)
 class UserAuthRepositoryImp implements UserAuthRepository{
   
-  final UserAuthRemoteDataSource _userAuthRemoteDataSource = UserAuthRemoteDataSource();
+  final UserAuthRemoteDataSource _userAuthRemoteDataSource;
+  UserAuthRepositoryImp(this._userAuthRemoteDataSource);
   
   @override
   Future<Result<bool>> createUser(UserAuth user) async {

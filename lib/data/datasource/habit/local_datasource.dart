@@ -2,9 +2,15 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:habix/data/model/habit_model.dart';
+import 'package:injectable/injectable.dart';
 
+abstract class HabitLocalDataSource{
+  Future<List<HabitModel>> getAllHabits();
+  void addToCache(String key, Map<String, dynamic> resData);
+}
 
-class HabitLocalDataSource{
+@LazySingleton(as: HabitLocalDataSource)
+class HabitLocalDataSourceImp implements HabitLocalDataSource{
   final _cache = DefaultCacheManager();
 
 Future<List<HabitModel>> getAllHabits() async

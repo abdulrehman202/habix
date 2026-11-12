@@ -3,8 +3,17 @@ import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/core/Network/dio.dart';
 import 'package:habix/data/model/habit_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:injectable/injectable.dart';
 
-class HabitRemoteDataSource {
+abstract class HabitRemoteDataSource{
+  Future<List<HabitModel>> getAllHabits();
+  Future<List<HabitModel>> addHabit(HabitModel habit);
+  Future<List<HabitModel>> updateHabit(HabitModel habit);
+  Future<List<HabitModel>> removeHabit(String habitId);
+}
+
+@LazySingleton(as: HabitRemoteDataSource)
+class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
 
   Future<String> getTokenFromLocalStorage()async
   {

@@ -2,12 +2,13 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/core/Error/Result.dart';
 import 'package:habix/domain/entity/UserProfile.dart';
 import 'package:habix/domain/usecase/user_profile_usecases.dart';
+import 'package:habix/injection.dart';
 import 'package:habix/presentation/Mappers/user_profile_mapper.dart';
 import 'package:state_notifier/state_notifier.dart';
 
 class ProfileScreenNotifier extends StateNotifier<Map<String, dynamic>> {
-  final UserProfileUsecases _userProfileUsecase = UserProfileUsecases();
-  ProfileScreenNotifier() : super({'error_message':'','loading': false,'profile':null}){
+  final UserProfileUsecases _userProfileUsecase;
+  ProfileScreenNotifier(this._userProfileUsecase) : super({'error_message':'','loading': false,'profile':null}){
     fetchUserProfile();
   }
 
@@ -30,6 +31,6 @@ class ProfileScreenNotifier extends StateNotifier<Map<String, dynamic>> {
 
 final profileScreenNotifier = StateNotifierProvider<ProfileScreenNotifier, Map<String, dynamic>>((ref){
 
-return ProfileScreenNotifier();
+return ProfileScreenNotifier(getIt<UserProfileUsecases>() );
 
 });

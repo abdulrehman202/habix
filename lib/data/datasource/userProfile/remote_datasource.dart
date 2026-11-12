@@ -1,11 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/core/Network/dio.dart';
-import 'package:habix/data/model/habit_model.dart';
 import 'package:habix/data/model/user_profile_model.dart';
+import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class UserProfileRemoteDataSource {
+abstract class UserProfileRemoteDataSource{
+  Future<UserProfileModel> getUserProfile();
+  Future<UserProfileModel> updateProfile(UserProfileModel userProfile);
+}
+
+@LazySingleton(as: UserProfileRemoteDataSource)
+class UserProfileRemoteDataSourceImp implements UserProfileRemoteDataSource{
 
   Future<String> getTokenFromLocalStorage()async
   {

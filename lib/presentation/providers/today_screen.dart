@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
+import 'package:habix/main.dart';
 
 Map<String, dynamic> todaysScreenVariables = {
   'habits_list':[],
@@ -10,9 +11,9 @@ Map<String, dynamic> todaysScreenVariables = {
 };
 
 class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>>{
-  final HabitUsecases _habitUsecases = HabitUsecases();
+  final HabitUsecases _habitUsecases;
 
-  TodayScreenNotifier():super(
+  TodayScreenNotifier(this._habitUsecases):super(
     {
   'habits_list':[],
   'selected_date': DateTime.now(),
@@ -102,6 +103,6 @@ void toggle (){
 
 final todaysScreenProvider = StateNotifierProvider<TodayScreenNotifier, Map<String, dynamic>>((ref){
 
-return TodayScreenNotifier();
+return TodayScreenNotifier(getIt<HabitUsecases>());
 
 });

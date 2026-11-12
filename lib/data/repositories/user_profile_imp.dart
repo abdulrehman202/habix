@@ -6,11 +6,14 @@ import 'package:habix/data/datasource/userProfile/remote_datasource.dart';
 import 'package:habix/data/model/user_profile_model.dart';
 import 'package:habix/domain/entity/UserProfile.dart';
 import 'package:habix/domain/repositories/user_profile_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: UserProfileRespository)
 class UserProfileRepositoryImp implements UserProfileRespository {
 
-  final UserProfileRemoteDataSource _userProfileRemoteDataSource = UserProfileRemoteDataSource();
-  final UserProfileLocalDataSource _userProfileLocalDataSource = UserProfileLocalDataSource();
+  final UserProfileRemoteDataSource _userProfileRemoteDataSource;
+  final UserProfileLocalDataSource _userProfileLocalDataSource;
+  UserProfileRepositoryImp(this._userProfileRemoteDataSource, this._userProfileLocalDataSource);
   @override
   Future<Result<UserProfile>> updateProfile(UserProfile user) async{
     try{

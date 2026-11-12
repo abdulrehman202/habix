@@ -2,12 +2,12 @@ import 'package:flutter_riverpod/legacy.dart';
 import 'package:habix/core/Error/Result.dart';
 import 'package:habix/domain/entity/UserAuth.dart';
 import 'package:habix/domain/usecase/user_auth_usecases.dart';
-import 'package:state_notifier/state_notifier.dart';
+import 'package:habix/injection.dart';
 
 class SignupScreenNotifier extends StateNotifier<Map<String, dynamic>>{
-  final UserAuthUsecases _userAuthUsecase = UserAuthUsecases();
+  final UserAuthUsecases _userAuthUsecase;
 
-  SignupScreenNotifier():super({
+  SignupScreenNotifier(this._userAuthUsecase):super({
     'loading':false,
     'error_message':'',
     });
@@ -30,6 +30,6 @@ class SignupScreenNotifier extends StateNotifier<Map<String, dynamic>>{
 
     final signupScreenNotifier = StateNotifierProvider<SignupScreenNotifier, Map<String, dynamic>>((ref){
 
-return SignupScreenNotifier();
+return SignupScreenNotifier(getIt<UserAuthUsecases>() );
 
 });

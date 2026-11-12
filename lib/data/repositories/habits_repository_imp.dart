@@ -6,11 +6,13 @@ import 'package:habix/data/datasource/habit/remote_datasource.dart';
 import 'package:habix/data/model/habit_model.dart';
 import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/domain/repositories/habit_repository.dart';
+import 'package:injectable/injectable.dart';
 
+@LazySingleton(as: HabitRepository)
 class HabitRepositoryImpl implements HabitRepository {
-  final HabitLocalDataSource _habitsListLocalSource = HabitLocalDataSource();
-  final HabitRemoteDataSource _habitsListRemoteSource = HabitRemoteDataSource();
-
+  final HabitLocalDataSource _habitsListLocalSource;
+  final HabitRemoteDataSource _habitsListRemoteSource;
+  HabitRepositoryImpl(this._habitsListLocalSource, this._habitsListRemoteSource);
   @override
   Future<Result<bool>> addHabit(Habit habit) async{
     try{HabitModel habitModel = toHabitModel(habit);
