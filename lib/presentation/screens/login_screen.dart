@@ -82,7 +82,7 @@ late Map<String, dynamic> _params;
                     SizedBox(
                       height: 10,
                     ),
-                    SizedBox(
+                   _params['loading']?Container(): SizedBox(
                     width: double.infinity,
                     child: TextButton(onPressed: _moveToCreateAccountScreen, child: Text('Create Account')))
                 ],),
