@@ -148,7 +148,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text(
-                            'DOB',
+                            'Date Of Birth',
                             textAlign: TextAlign.center,
                             style: TextStyle(
                               fontSize: 20,

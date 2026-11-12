@@ -18,6 +18,9 @@ extension userProfile on UserProfile{
 
    UserProfileUIModel get toUIModel{
     int age = DateTime.now().year - dateOfBirth.year;
+    if(dateOfBirth.isAfter( DateTime.now().subtract(Duration(days: age * 365)))) {
+      age--;
+    }
     return UserProfileUIModel(
       name.split(' ').first,
       name.split(' ').last,

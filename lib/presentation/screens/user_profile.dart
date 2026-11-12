@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/presentation/UIModels/userProfileUI.dart';
+import 'package:habix/presentation/providers/profile_screen.dart';
 import 'package:habix/presentation/providers/user_profile.dart';
 import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/name_text_box.dart';
@@ -76,6 +77,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Profile updated successfully!')),
                     );
+              ref.invalidate(profileScreenNotifier);
                     Navigator.pop(context);
                   }
                   else
