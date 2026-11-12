@@ -5,7 +5,6 @@ extension userProfileMapper on UserProfile{
 
    UserProfileModel get toModel{
     return UserProfileModel(
-      email,
       name,
       dateOfBirth,
       weight,
@@ -19,7 +18,6 @@ extension userProfile on UserProfileModel{
 
    UserProfile get toEntity{
     return UserProfile(
-      email,
       name,
       dateOfBirth,
       weight,

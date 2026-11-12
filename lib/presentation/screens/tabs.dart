@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
+import 'package:habix/presentation/providers/profile_screen.dart';
 import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/presentation/screens/habit_screen.dart';
 import 'package:habix/presentation/screens/new_habit.dart';
@@ -29,7 +30,7 @@ class _TabScreenState extends ConsumerState<TabScreen> {
     } else if (_selectedTabIndex == 3) {
       activeScreen = Statistics();
     } else if (_selectedTabIndex == 4) {
-      activeScreen = Profile();
+      activeScreen = ProfileScreen();
     }
 
     return Scaffold(
@@ -57,6 +58,9 @@ class _TabScreenState extends ConsumerState<TabScreen> {
               ref.invalidate(todaysScreenProvider);
             } else if (i == 1) {
               ref.invalidate(habitsCategoryProvider);
+            }
+            else if (i == 4) {
+              ref.invalidate(profileScreenNotifier);
             }
             setState(() {
               _selectedTabIndex = i;

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:habix/presentation/UIModels/userProfileUI.dart';
 import 'package:habix/presentation/providers/user_profile.dart';
 import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/name_text_box.dart';
@@ -38,11 +39,37 @@ class _UserProfileState extends ConsumerState<UserProfile> {
           Container(
             margin: EdgeInsets.all(8.0),
             child: CustomButton(
-              onButtonTapped: () {
-                if (_formKey.currentState!.validate()) {}
+              onButtonTapped: () async{
+                if (_formKey.currentState!.validate()) 
+                {
+                  UserProfileUIModel userUI = UserProfileUIModel(
+                    _firstNameController.text.trim(),
+                    _lastNameController.text.trim(),
+                    _params['dob'],
+                    _params['gender'],
+                    _weightInKgs,
+                    _heightInCM,
+                  );
+
+                  bool success = await ref.read(userProfileScreenNotifier.notifier).setProfile(userUI);
+                  if(success)
+                  {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Profile set successfully!')),
+                    );
+                  }
+                  else
+                  {
+                    Future.delayed(Duration(milliseconds: 300));
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text(_params['error_message'])),
+                    );
+                  }
+                
+                }
               },
               buttonText: 'Set Profile',
-              isLoading: false,
+              isLoading: _params['loading'],
             ),
           ),
         ],

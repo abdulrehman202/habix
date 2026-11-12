@@ -1,0 +1,231 @@
+import 'package:dio/dio.dart';
+import 'package:habix/core/Error/Failures.dart';
+import 'package:habix/core/Network/dio.dart';
+import 'package:habix/data/model/habit_model.dart';
+import 'package:habix/data/model/user_profile_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+class UserProfileRemoteDataSource {
+
+  Future<String> getTokenFromLocalStorage()async
+  {
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    return sharedPreferences.getString('token')??'';
+  }
+  
+  Future<UserProfileModel> getUserProfile() async {
+    try {
+      Dio dio = DioClient.getDioObj();
+      String token = await getTokenFromLocalStorage();
+      Response response = await dio.get('/userProfile/',
+      options: Options(
+          headers: {
+            'Content-Type':
+                'application/json', // Let the server know it is JSON
+                'Authorization':'Bearer $token'
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        final resData = response.data;
+        final decodedJson = resData['userProfile'];
+
+          UserProfileModel userProfileModel = UserProfileModel.fromJson(decodedJson);
+          return userProfileModel;
+      }
+      else {
+        throw ServerFailure(statusCode: response.statusCode??404);
+      }
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+  switch (e.type) {
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
+      throw const NetworkFailure();
+
+    case DioExceptionType.connectionError:
+      throw const NetworkFailure();
+
+    case DioExceptionType.badResponse:
+      if (status == 404) throw  ServerFailure(statusCode: status??404);
+      throw ServerFailure(statusCode: status??404);
+
+    case DioExceptionType.cancel:
+      throw ServerFailure(statusCode: status??404);
+
+    default:
+      throw ServerFailure(statusCode: status??404);
+  }} catch (e) {
+      throw UnknownError();
+    }
+  }
+
+  Future<UserProfileModel> setProfile(UserProfileModel userProfile) async {
+    try {
+      String token = await getTokenFromLocalStorage();
+      Dio dio = DioClient.getDioObj();
+      final json = userProfile.toJson();
+
+      Response response = await dio.post(
+        '/userProfile/set',
+        data: json,
+        options: Options(
+          headers: {
+            'Content-Type':
+                'application/json', // Let the server know it is JSON
+                'Authorization':'Bearer $token'
+          },
+        ),
+      );
+      List<HabitModel>  list = [];
+      if(response.statusCode==200)
+    {
+      final resData = response.data;
+        final decodedJson = resData['userProfile'];
+
+         UserProfileModel userProfileModel = UserProfileModel.fromJson(decodedJson);
+          return userProfileModel;
+        
+    }
+    else {
+        throw ServerFailure(statusCode: response.statusCode??404);
+      }
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+  switch (e.type) {
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
+      throw const NetworkFailure();
+
+    case DioExceptionType.connectionError:
+      throw const NetworkFailure();
+
+    case DioExceptionType.badResponse:
+      if (status == 404) throw  ServerFailure(statusCode: status??404);
+      throw ServerFailure(statusCode: status??404);
+
+    case DioExceptionType.cancel:
+      throw ServerFailure(statusCode: status??404);
+
+    default:
+      throw ServerFailure(statusCode: status??404);
+  }} catch (e) {
+      throw UnknownError();
+    }
+  }
+
+  Future<List<HabitModel>> updateHabit(HabitModel habit) async {
+    try {
+      Dio dio = DioClient.getDioObj();
+      String token = await getTokenFromLocalStorage();
+      final json = habit.toJson();
+
+      Response response = await dio.put(
+        '/habits/update',
+        data: json,
+        options: Options(
+          headers: {
+            'Content-Type':
+                'application/json', // Let the server know it is JSON
+                'Authorization':'Bearer $token'
+          },
+        ),
+      );
+      List<HabitModel>  list = [];
+      if(response.statusCode==200)
+    {
+      final resData = response.data;
+        final decodedJson = resData['updatedHabits'] as List;
+
+        for (var listItem in decodedJson) {
+          HabitModel habitModel = HabitModel.fromJson(listItem);
+          list.add(habitModel);
+        }
+    }
+    else {
+        throw ServerFailure(statusCode: response.statusCode??404);
+      }
+      return list;
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+  switch (e.type) {
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
+      throw const NetworkFailure();
+
+    case DioExceptionType.connectionError:
+      throw const NetworkFailure();
+
+    case DioExceptionType.badResponse:
+      if (status == 404) throw  ServerFailure(statusCode: status??404);
+      throw ServerFailure(statusCode: status??404);
+
+    case DioExceptionType.cancel:
+      throw ServerFailure(statusCode: status??404);
+
+    default:
+      throw ServerFailure(statusCode: status??404);
+  }} catch (e) {
+      throw UnknownError();
+    }
+  }
+
+  Future<List<HabitModel>> removeHabit(String habitId) async {
+    try {
+      String token = await getTokenFromLocalStorage();
+      Dio dio = DioClient.getDioObj();
+      
+      Response response = await dio.delete(
+        '/habits/remove/$habitId',
+        options: Options(
+          headers: {
+            'Content-Type':
+                'application/json', // Let the server know it is JSON
+                'Authorization':'Bearer $token'
+          },
+        ),
+      );
+
+      List<HabitModel>  list = [];
+      if(response.statusCode==200)
+    {
+      final resData = response.data;
+        final decodedJson = resData['updatedHabits'] as List;
+
+        for (var listItem in decodedJson) {
+          HabitModel habitModel = HabitModel.fromJson(listItem);
+          list.add(habitModel);
+        }
+    }
+    else {
+        throw ServerFailure(statusCode: response.statusCode??404);
+      }
+      return list;
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+  switch (e.type) {
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
+      throw const NetworkFailure();
+
+    case DioExceptionType.connectionError:
+      throw const NetworkFailure();
+
+    case DioExceptionType.badResponse:
+      if (status == 404) throw  ServerFailure(statusCode: status??404);
+      throw ServerFailure(statusCode: status??404);
+
+    case DioExceptionType.cancel:
+      throw ServerFailure(statusCode: status??404);
+
+    default:
+      throw ServerFailure(statusCode: status??404);
+  }} catch (e) {
+      throw UnknownError();
+    }
+  }
+}

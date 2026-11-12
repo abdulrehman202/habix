@@ -1,8 +1,13 @@
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:habix/core/Error/Result.dart';
+import 'package:habix/domain/usecase/user_profile_usecases.dart';
+import 'package:habix/presentation/Mappers/user_profile_mapper.dart';
+import 'package:habix/presentation/UIModels/userProfileUI.dart';
 import 'package:habix/utilities/enums.dart';
 
 
 class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
+  final UserProfileUsecases _userProfileUsecase = UserProfileUsecases();
 
   UserProfileNotifier():super({
     'loading':false,
@@ -38,7 +43,22 @@ class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
 
     changeDOB(DateTime dob)
     {
-      change('dob', dob); 
+      change('dob', dob);
+    }
+
+    Future<bool> setProfile(UserProfileUIModel userUI) async
+    {
+      state = {...state,'loading':true};
+      Result result = await _userProfileUsecase.setProfile( userUI.toEntity);
+      state = {...state,'loading':false};
+
+      if(result is Error)
+      {
+        state = {...state,'error_message':result.failure.message};
+      }
+
+      return result is Ok;
+    
     }
 }
     final userProfileScreenNotifier = StateNotifierProvider<UserProfileNotifier, Map<String, dynamic>>((ref){
