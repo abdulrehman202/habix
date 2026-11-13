@@ -8,6 +8,7 @@ import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/email_text_box.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
 import 'package:habix/utilities/extensions.dart';
+import 'package:habix/utilities/navigator.dart';
 
 class CreateAccountScreen extends ConsumerStatefulWidget {
   const CreateAccountScreen({super.key});
@@ -156,9 +157,9 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
   }
 
   void _moveToLoginScreen() {
-    Navigator.push(
+    navigateTo(
       _scaffoldKey.currentContext!,
-      MaterialPageRoute(builder: (ctx) => LoginScreen()),
+      LoginScreen(),
     );
   }
 }

@@ -8,6 +8,7 @@ import 'package:habix/presentation/screens/tabs.dart';
 import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/email_text_box.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
+import 'package:habix/utilities/navigator.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -99,7 +100,8 @@ late Map<String, dynamic> _params;
     UserAuth userAuth = UserAuth(email: _emailController.text, password: _passwordController.text);
     bool success = await ref.read(loginScreenNotifier.notifier).login(userAuth);
     if(success){
-    Navigator.push( _scaffoldKey.currentContext! , MaterialPageRoute(builder: (ctx)=>TabScreen()));
+      navigateTo( _scaffoldKey.currentContext! , TabScreen());
+    // Navigator.push( _scaffoldKey.currentContext! , MaterialPageRoute(builder: (ctx)=>TabScreen()));
     }
 
     else{

@@ -28,14 +28,24 @@ class _TabScreenState extends ConsumerState<TabScreen> {
       ref.invalidate(habitsCategoryProvider);
       activeScreen = AllHabits();
     } else if (_selectedTabIndex == 3) {
-      activeScreen = Statistics();
+      // activeScreen =  Statistics();
+      activeScreen = Container();
     } else if (_selectedTabIndex == 4) {
       activeScreen = ProfileScreen();
     }
 
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: activeScreen,
+      body: PopScope(
+        canPop: false,
+        onPopInvokedWithResult: (val, x) {
+          if (_selectedTabIndex != 0) {
+            setState(() {
+              _selectedTabIndex = 0;
+            });
+          }
+        },
+        child: activeScreen),
       floatingActionButton: FloatingActionButton(
         elevation: 9,
         shape: CircleBorder(),
