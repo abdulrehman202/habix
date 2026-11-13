@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:habix/core/Error/Failures.dart';
-import 'package:habix/core/Network/dio.dart';
 import 'package:habix/data/model/user_profile_model.dart';
 import 'package:injectable/injectable.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -12,6 +11,9 @@ abstract class UserProfileRemoteDataSource{
 
 @LazySingleton(as: UserProfileRemoteDataSource)
 class UserProfileRemoteDataSourceImp implements UserProfileRemoteDataSource{
+  Dio dio;
+
+UserProfileRemoteDataSourceImp(this.dio);
 
   Future<String> getTokenFromLocalStorage()async
   {
@@ -21,7 +23,6 @@ class UserProfileRemoteDataSourceImp implements UserProfileRemoteDataSource{
   
   Future<UserProfileModel> getUserProfile() async {
     try {
-      Dio dio = DioClient.getDioObj();
       String token = await getTokenFromLocalStorage();
       Response response = await dio.get('/userProfile/',
       options: Options(
@@ -70,7 +71,6 @@ class UserProfileRemoteDataSourceImp implements UserProfileRemoteDataSource{
   Future<UserProfileModel> updateProfile(UserProfileModel userProfile) async {
     try {
       String token = await getTokenFromLocalStorage();
-      Dio dio = DioClient.getDioObj();
       final json = userProfile.toJson();
 
       Response response = await dio.put(

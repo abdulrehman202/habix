@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:habix/core/Error/Failures.dart';
-import 'package:habix/core/Network/dio.dart';
 import 'package:habix/data/model/user_auth_model.dart';
 import 'package:injectable/injectable.dart';
 
@@ -12,10 +11,13 @@ abstract class UserAuthRemoteDataSource{
 @LazySingleton(as: UserAuthRemoteDataSource)
 class UserAuthRemoteDataSourceImp implements UserAuthRemoteDataSource{
 
+  Dio dio;
+
+  UserAuthRemoteDataSourceImp(this.dio);
+
   Future<String> login(UserAuthModel user) async{
     try {
       
-      Dio dio = DioClient.getDioObj();
       final json = user.toJson();
       Response response = await dio.post('/user/login/',
       data:json,
@@ -65,7 +67,6 @@ class UserAuthRemoteDataSourceImp implements UserAuthRemoteDataSource{
 
   Future<bool> signUp(UserAuthModel user) async{
     try {
-      Dio dio = DioClient.getDioObj();
       final json = user.toJson();
       Response response = await dio.post('/user/signup/',
       data:json,

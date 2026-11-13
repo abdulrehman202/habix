@@ -10,9 +10,11 @@
 
 // ignore_for_file: no_leading_underscores_for_library_prefixes
 
+import 'package:dio/dio.dart' as _i361;
 import 'package:get_it/get_it.dart' as _i174;
 import 'package:injectable/injectable.dart' as _i526;
 
+import 'core/Network/env_config.dart' as _i574;
 import 'data/datasource/habit/local_datasource.dart' as _i1059;
 import 'data/datasource/habit/remote_datasource.dart' as _i1063;
 import 'data/datasource/userAuth/remote_datasource.dart' as _i262;
@@ -28,6 +30,9 @@ import 'domain/usecase/habit_usecases.dart' as _i389;
 import 'domain/usecase/user_auth_usecases.dart' as _i358;
 import 'domain/usecase/user_profile_usecases.dart' as _i43;
 
+const String _dev = 'dev';
+const String _prod = 'prod';
+
 extension GetItInjectableX on _i174.GetIt {
   // initializes the registration of main-scope dependencies inside of GetIt
   _i174.GetIt init({
@@ -35,20 +40,30 @@ extension GetItInjectableX on _i174.GetIt {
     _i526.EnvironmentFilter? environmentFilter,
   }) {
     final gh = _i526.GetItHelper(this, environment, environmentFilter);
+    final networkModule = _$NetworkModule();
     gh.lazySingleton<_i1059.HabitLocalDataSource>(
       () => _i1059.HabitLocalDataSourceImp(),
     );
     gh.lazySingleton<_i450.UserProfileLocalDataSource>(
       () => _i450.UserProfileLocalDataSourceImp(),
     );
-    gh.lazySingleton<_i368.UserProfileRemoteDataSource>(
-      () => _i368.UserProfileRemoteDataSourceImp(),
+    gh.lazySingleton<_i574.EnvConfig>(
+      () => _i574.DevEnvConfig(),
+      registerFor: {_dev},
     );
+    gh.lazySingleton<_i574.EnvConfig>(
+      () => _i574.ProdEnvConfig(),
+      registerFor: {_prod},
+    );
+    gh.lazySingleton<_i361.Dio>(() => networkModule.dio(gh<_i574.EnvConfig>()));
     gh.lazySingleton<_i262.UserAuthRemoteDataSource>(
-      () => _i262.UserAuthRemoteDataSourceImp(),
+      () => _i262.UserAuthRemoteDataSourceImp(gh<_i361.Dio>()),
+    );
+    gh.lazySingleton<_i368.UserProfileRemoteDataSource>(
+      () => _i368.UserProfileRemoteDataSourceImp(gh<_i361.Dio>()),
     );
     gh.lazySingleton<_i1063.HabitRemoteDataSource>(
-      () => _i1063.HabitRemoteDataSourceImp(),
+      () => _i1063.HabitRemoteDataSourceImp(gh<_i361.Dio>()),
     );
     gh.lazySingleton<_i689.UserProfileRespository>(
       () => _i684.UserProfileRepositoryImp(
@@ -77,3 +92,5 @@ extension GetItInjectableX on _i174.GetIt {
     return this;
   }
 }
+
+class _$NetworkModule extends _i574.NetworkModule {}

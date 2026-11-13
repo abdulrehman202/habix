@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:habix/core/Error/Failures.dart';
-import 'package:habix/core/Network/dio.dart';
 import 'package:habix/data/model/habit_model.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:injectable/injectable.dart';
@@ -14,7 +13,9 @@ abstract class HabitRemoteDataSource{
 
 @LazySingleton(as: HabitRemoteDataSource)
 class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
-
+  
+  Dio dio;
+  HabitRemoteDataSourceImp(this.dio);
   Future<String> getTokenFromLocalStorage()async
   {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
@@ -24,7 +25,6 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   Future<List<HabitModel>> getAllHabits() async {
     try {
       List<HabitModel> list = [];
-      Dio dio = DioClient.getDioObj();
       String token = await getTokenFromLocalStorage();
       Response response = await dio.get('/habits/',
       options: Options(
@@ -73,7 +73,6 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   Future<List<HabitModel>> addHabit(HabitModel habit) async {
     try {
       String token = await getTokenFromLocalStorage();
-      Dio dio = DioClient.getDioObj();
       final json = habit.toJson();
 
       Response response = await dio.post(
@@ -129,7 +128,6 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
 
   Future<List<HabitModel>> updateHabit(HabitModel habit) async {
     try {
-      Dio dio = DioClient.getDioObj();
       String token = await getTokenFromLocalStorage();
       final json = habit.toJson();
 
@@ -187,7 +185,6 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   Future<List<HabitModel>> removeHabit(String habitId) async {
     try {
       String token = await getTokenFromLocalStorage();
-      Dio dio = DioClient.getDioObj();
       
       Response response = await dio.delete(
         '/habits/remove/$habitId',

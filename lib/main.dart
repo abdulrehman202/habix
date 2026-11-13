@@ -4,10 +4,13 @@ import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habix/injection.dart';
 import 'package:habix/presentation/screens/login_screen.dart';
+import 'package:injectable/injectable.dart';
 GetIt getIt = GetIt.instance;
+
+
 void main() async{ 
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies();
+  configureDependencies(Environment.dev);
   runApp( ProviderScope(child: MyApp()));
 }
 
