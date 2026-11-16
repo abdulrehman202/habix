@@ -1,6 +1,8 @@
 import 'package:flutter_riverpod/legacy.dart';
+import 'package:habix/core/Error/Result.dart';
 import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/domain/usecase/habit_usecases.dart';
+import 'package:habix/domain/usecase/user_auth_usecases.dart';
 import 'package:habix/main.dart';
 
 Map<String, dynamic> todaysScreenVariables = {
@@ -12,8 +14,9 @@ Map<String, dynamic> todaysScreenVariables = {
 
 class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>>{
   final HabitUsecases _habitUsecases;
+  final UserAuthUsecases _userAuthUsecases;
 
-  TodayScreenNotifier(this._habitUsecases):super(
+  TodayScreenNotifier(this._habitUsecases, this._userAuthUsecases):super(
     {
   'habits_list':[],
   'selected_date': DateTime.now(),
@@ -98,11 +101,18 @@ void toggle (){
       'data_loading':!currentState,
     };
   }
-
+  
+  Future<bool> logout() async{
+    toggle();
+    Result<bool> result = await _userAuthUsecases.logOut();
+    
+    toggle();
+    return result is Ok;
+  }
 }
 
 final todaysScreenProvider = StateNotifierProvider<TodayScreenNotifier, Map<String, dynamic>>((ref){
 
-return TodayScreenNotifier(getIt<HabitUsecases>());
+return TodayScreenNotifier(getIt<HabitUsecases>(), getIt<UserAuthUsecases>());
 
 });

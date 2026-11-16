@@ -15,4 +15,7 @@ class UserAuthUsecases {
   Future<Result<String>> login(UserAuth user){
     return _userAuthRepositoryImp.login(user);
   }
+  Future<Result<bool>> logOut(){
+    return _userAuthRepositoryImp.logOut();
+  }
 }

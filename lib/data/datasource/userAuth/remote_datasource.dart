@@ -6,6 +6,7 @@ import 'package:injectable/injectable.dart';
 abstract class UserAuthRemoteDataSource{
   Future<String> login(UserAuthModel user);
   Future<bool> signUp(UserAuthModel user);
+  Future<bool> logOut();
 }
 
 @LazySingleton(as: UserAuthRemoteDataSource)
@@ -103,5 +104,43 @@ class UserAuthRemoteDataSourceImp implements UserAuthRemoteDataSource{
       throw UnknownError();
     }
 
+  }
+
+  @override
+  Future<bool> logOut() async{
+    try {
+      Response response = await dio.put('/user/signout/',
+      options: Options(
+          headers: {
+            'Content-Type':
+                'application/json', // Let the server know it is JSON
+          },
+        ),);
+      return response.statusCode == 200;
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+      if(status == 401)
+      {
+        throw AuthError(msg: e.response!.data['message'].toString());
+      }
+  switch (e.type) {
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
+    case DioExceptionType.connectionError:
+      throw const NetworkFailure();
+
+    case DioExceptionType.badResponse:
+      if (status == 404) throw  ServerFailure(statusCode: status??404);
+      throw ServerFailure(statusCode: status??404);
+
+    case DioExceptionType.cancel:
+      throw ServerFailure(statusCode: status??404);
+
+    default:
+      throw ServerFailure(statusCode: status??404);
+  }} catch (e) {
+      throw UnknownError();
+    }
   }
 }

@@ -42,4 +42,18 @@ class UserAuthRepositoryImp implements UserAuthRepository{
       return Result.error(e as Failure);
     }
   }
+
+  @override
+  Future<Result<bool>> logOut() async {
+     try{
+      bool success = await _userAuthRemoteDataSource.logOut();
+      await addDataToLocalStorage('token', '');
+      await addDataToLocalStorage('email', '');
+      return Result.ok(success);
+    }
+    catch(e)
+    {
+      return Result.error(e as Failure);
+    }
+  }
 }

@@ -3,6 +3,7 @@ import 'package:confetti/confetti.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/domain/entity/Habit.dart';
+import 'package:habix/presentation/screens/login_screen.dart';
 import 'package:habix/presentation/screens/widgets/animated_progress_bar.dart';
 import 'package:habix/presentation/screens/widgets/epmty_list_widget.dart';
 import 'package:habix/presentation/screens/widgets/week_strip.dart';
@@ -76,7 +77,19 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
       appBar: AppBar(
         title: Text('Good Afternoon Flex,'),
         actions: [
-          IconButton(onPressed: () {}, icon: Icon(Icons.notifications_none)),
+          IconButton(onPressed: () async 
+          {
+            bool success = await ref.read(todaysScreenProvider.notifier).logout();
+            if(success) {
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => const LoginScreen()));
+            } else {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: Text('Logout failed. Please try again.'),
+                ),
+              );
+            }
+          }, icon: Icon(Icons.power_settings_new_outlined)),
         ],
       ),
       body: Stack(

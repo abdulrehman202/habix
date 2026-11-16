@@ -5,4 +5,5 @@ abstract class UserAuthRepository
 {
   Future<Result<bool>> createUser(UserAuth user);
   Future<Result<String>> login(UserAuth user);
+  Future<Result<bool>> logOut();
 }
