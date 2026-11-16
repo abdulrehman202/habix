@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/domain/entity/UserAuth.dart';
+import 'package:habix/domain/entity/UserProfile.dart';
 import 'package:habix/presentation/providers/create_account_screen.dart';
 import 'package:habix/presentation/screens/login_screen.dart';
+import 'package:habix/presentation/screens/profile_screen.dart';
+import 'package:habix/presentation/screens/user_profile.dart';
 import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/email_text_box.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
@@ -117,7 +120,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                                       .read(signupScreenNotifier.notifier)
                                       .Signup(userAuth);
                                   if (success) {
-                                    _moveToLoginScreen();
+                                    _setProfile();
                                   } else {
                                     await Future.delayed(
                                       Duration(milliseconds: 300),
@@ -160,6 +163,11 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     navigateTo(
       _scaffoldKey.currentContext!,
       LoginScreen(),
+    );
+  }void _setProfile() {
+    navigateTo(
+      _scaffoldKey.currentContext!,
+      UserProfileScreen(),
     );
   }
 }

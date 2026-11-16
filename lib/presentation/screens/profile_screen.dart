@@ -4,8 +4,11 @@ import 'package:habix/presentation/UIModels/userProfileUI.dart';
 import 'package:habix/presentation/providers/profile_screen.dart';
 import 'package:habix/presentation/providers/user_profile.dart';
 import 'package:habix/presentation/screens/user_profile.dart';
+import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/utilities/extensions.dart';
+import 'package:habix/utilities/icon_paths.dart';
+import 'package:habix/utilities/navigator.dart';
 import 'package:habix/utilities/shimmer_animation.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -17,7 +20,7 @@ class ProfileScreen extends ConsumerStatefulWidget {
 
 class _ProfileScreenState extends ConsumerState<ProfileScreen> {
   late Map<String, dynamic> _params;
-  late UserProfileUIModel _userProfileUI;
+  UserProfileUIModel? _userProfileUI;
 
   @override
   void dispose() {
@@ -40,7 +43,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => UserProfile(userProfileUIModel: _params['profile'] as UserProfileUIModel,)),
+            MaterialPageRoute(builder: (context) => UserProfileScreen(userProfileUIModel: _params['profile'] as UserProfileUIModel,)),
           );
           
         }, child: Text('Edit'))],
@@ -49,9 +52,23 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
           ? ShimmerAnimation.listPlaceholder()
           : LayoutBuilder(
               builder: (context, constraints) {
-                _userProfileUI = _params['profile'] as UserProfileUIModel;
+                _userProfileUI = _params['profile'] as UserProfileUIModel?;
 
-                return _portrait(); // _ProfilescreenWidth>maxProfileScreenSizeInPortraitMode?_landscape():_portrait();
+                return _params['profile'] == null ? Column(
+                spacing: 20,
+                  children: [
+                    
+                CircleAvatar(radius: 80, child: Image.asset(profileIcon)),
+                Text("No Profile Found", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
+                    CustomButton(
+                      
+                      buttonWidth: 150,
+                      onButtonTapped: () 
+                      {
+                        navigateTo(context, UserProfileScreen(showSkipButton: false,));
+                        }, buttonText: 'Set Profile', isLoading: false),
+                  ],
+                ) : _portrait(); // _ProfilescreenWidth>maxProfileScreenSizeInPortraitMode?_landscape():_portrait();
               },
             ),
     );
@@ -82,7 +99,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                 ),
               ),
               child: Text(
-                '${_userProfileUI.firstName} ${_userProfileUI.lastName}',
+                '${_userProfileUI!.firstName} ${_userProfileUI!.lastName}',
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   color: Colors.white,
@@ -122,7 +139,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             ),
                           ),
                           Text(
-                            _userProfileUI.age.toString(),
+                            _userProfileUI!.age.toString(),
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white),
                           ),
@@ -157,7 +174,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                             ),
                           ),
                           Text(
-                            '${_userProfileUI.dob.day} ${_userProfileUI.dob.month.monthInAlphabets} ${_userProfileUI.dob.year}',
+                            '${_userProfileUI!.dob.day} ${_userProfileUI!.dob.month.monthInAlphabets} ${_userProfileUI!.dob.year}',
                             textAlign: TextAlign.center,
                             style: TextStyle(color: Colors.white),
                           ),
@@ -195,7 +212,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ),
                         ),
                         Text(
-                          '${_userProfileUI.weight} kg',
+                          '${_userProfileUI!.weight} kg',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white),
                         ),
@@ -229,7 +246,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                           ),
                         ),
                         Text(
-                          '${_userProfileUI.height} cm',
+                          '${_userProfileUI!.height} cm',
                           textAlign: TextAlign.center,
                           style: TextStyle(color: Colors.white),
                         ),
@@ -260,7 +277,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       ),
                     ),
                     Text(
-                      _userProfileUI.gender.name.capitalize,
+                      _userProfileUI!.gender.name.capitalize,
                       textAlign: TextAlign.center,
                       style: TextStyle(color: Colors.white),
                     ),

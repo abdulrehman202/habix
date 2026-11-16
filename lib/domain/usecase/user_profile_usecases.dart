@@ -15,5 +15,8 @@ class UserProfileUsecases {
   Future<Result<UserProfile>> fetchUserDetails(){
     return _userProfileRepositoryImp.fethUserDetails();
   }
+  Future<Result<UserProfile>> setUserProfile(UserProfile user) {
+    return _userProfileRepositoryImp.set(user);
+  }
 
 }

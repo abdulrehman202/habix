@@ -62,6 +62,19 @@ class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
     
     }
 
+  Future<bool> setUserProfile(UserProfileUIModel userUI) async {
+    state = {...state,'loading':true};
+      Result result = await _userProfileUsecase.setUserProfile( userUI.toEntity);
+      state = {...state,'loading':false};
+
+      if(result is Error)
+      {
+        state = {...state,'error_message':result.failure.message};
+      }
+
+      return result is Ok;
+  }
+
 }
     final userProfileScreenNotifier = StateNotifierProvider<UserProfileNotifier, Map<String, dynamic>>((ref){
 

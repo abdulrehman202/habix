@@ -51,4 +51,19 @@ class UserProfileRepositoryImp implements UserProfileRespository {
 
   }
 
+  @override
+  Future<Result<UserProfile>> set(UserProfile user) async {
+    try{
+    UserProfileModel userProfileModel = user.toModel;
+      UserProfileModel userCreated = await _userProfileRemoteDataSource.setProfile(userProfileModel);
+      _userProfileLocalDataSource.addToCache( userCreated.toJson());
+      
+      return Result.ok(userCreated.toEntity);
+    }
+    catch(e)
+    {
+      return Result.error(e as Failure);
+    }
+    }
+
  }

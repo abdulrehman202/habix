@@ -30,6 +30,7 @@ class UserProfileLocalDataSourceImp implements UserProfileLocalDataSource{
   }
 }
 
+// ignore: annotate_overrides
 Future<void> addToCache( Map<String, dynamic> resData)
 async {
   final email = await getDataFromLocalStorage('email');

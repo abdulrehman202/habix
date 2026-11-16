@@ -4,5 +4,6 @@ import 'package:habix/domain/entity/UserProfile.dart';
 abstract class UserProfileRespository{
 
   Future<Result<UserProfile>> updateProfile(UserProfile user);
+  Future<Result<UserProfile>> set(UserProfile user);
   Future<Result<UserProfile>> fethUserDetails();
 }

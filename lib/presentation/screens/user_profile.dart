@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/presentation/UIModels/userProfileUI.dart';
 import 'package:habix/presentation/providers/profile_screen.dart';
 import 'package:habix/presentation/providers/user_profile.dart';
+import 'package:habix/presentation/screens/login_screen.dart';
 import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/name_text_box.dart';
 import 'package:habix/presentation/screens/widgets/selectable_box.dart';
@@ -11,16 +12,17 @@ import 'package:habix/utilities/extensions.dart';
 import 'package:habix/utilities/icon_paths.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 
-class UserProfile extends ConsumerStatefulWidget {
+class UserProfileScreen extends ConsumerStatefulWidget {
   UserProfileUIModel? userProfileUIModel;
+  bool showSkipButton;
 
-  UserProfile({super.key, this.userProfileUIModel});
+  UserProfileScreen({super.key, this.userProfileUIModel, this.showSkipButton = true});
 
   @override
-  ConsumerState<UserProfile> createState() => _UserProfileState();
+  ConsumerState<UserProfileScreen> createState() => _UserProfileState();
 }
 
-class _UserProfileState extends ConsumerState<UserProfile> {
+class _UserProfileState extends ConsumerState<UserProfileScreen> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -71,7 +73,7 @@ class _UserProfileState extends ConsumerState<UserProfile> {
                     _heightInCM,
                   );
 
-                  bool success = await ref.read(userProfileScreenNotifier.notifier).updateProfile(userUI);
+                  bool success = widget.userProfileUIModel == null? await ref.read(userProfileScreenNotifier.notifier).setUserProfile(userUI) : await ref.read(userProfileScreenNotifier.notifier).updateProfile(userUI);
                   if(success)
                   {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -94,7 +96,22 @@ class _UserProfileState extends ConsumerState<UserProfile> {
               isLoading: _params['loading'],
             ),
           ),
+          widget.showSkipButton==null? Container(
+          margin: EdgeInsets.all(8.0),
+          child: CustomButton(
+            onButtonTapped: () async{
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => LoginScreen()),
+              );
+              
+            },
+            buttonText: 'Skip',
+            isLoading: false,
+          ),
+        ):Container() ,
         ],
+        
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
