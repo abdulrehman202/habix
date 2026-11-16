@@ -5,8 +5,8 @@ import 'package:habix/data/datasource/userAuth/remote_datasource.dart';
 import 'package:habix/data/model/user_auth_model.dart';
 import 'package:habix/domain/entity/UserAuth.dart';
 import 'package:habix/domain/repositories/user_auth_repository.dart';
+import 'package:habix/utilities/storage.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 @LazySingleton(as: UserAuthRepository)
 class UserAuthRepositoryImp implements UserAuthRepository{
@@ -27,18 +27,14 @@ class UserAuthRepositoryImp implements UserAuthRepository{
     }
   }
 
-  addTokenToLocalStorage(String token)async
-  {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    sharedPreferences.setString('token', token);
-  }
-
+  
   @override
   Future<Result<String>> login(UserAuth user) async {
     try{
       UserAuthModel userAuthModel = toUserAuthModel(user);
       String token = await _userAuthRemoteDataSource.login(userAuthModel);
-      await addTokenToLocalStorage(token);
+      await addDataToLocalStorage('token', token);
+      await addDataToLocalStorage('email', user.email);
       return Result.ok(token);
     }
     catch(e)

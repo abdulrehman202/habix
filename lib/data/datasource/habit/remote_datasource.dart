@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/data/model/habit_model.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:habix/utilities/storage.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class HabitRemoteDataSource{
@@ -16,16 +16,12 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   
   Dio dio;
   HabitRemoteDataSourceImp(this.dio);
-  Future<String> getTokenFromLocalStorage()async
-  {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getString('token')??'';
-  }
   
+  @override
   Future<List<HabitModel>> getAllHabits() async {
     try {
       List<HabitModel> list = [];
-      String token = await getTokenFromLocalStorage();
+      String token = await getDataFromLocalStorage('token');
       Response response = await dio.get('/habits/',
       options: Options(
           headers: {
@@ -70,9 +66,10 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
     }
   }
 
+  @override
   Future<List<HabitModel>> addHabit(HabitModel habit) async {
     try {
-      String token = await getTokenFromLocalStorage();
+      String token = await getDataFromLocalStorage('token');
       final json = habit.toJson();
 
       Response response = await dio.post(
@@ -126,9 +123,10 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
     }
   }
 
+  @override
   Future<List<HabitModel>> updateHabit(HabitModel habit) async {
     try {
-      String token = await getTokenFromLocalStorage();
+      String token = await getDataFromLocalStorage('token');
       final json = habit.toJson();
 
       Response response = await dio.put(
@@ -182,9 +180,10 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
     }
   }
 
+  @override
   Future<List<HabitModel>> removeHabit(String habitId) async {
     try {
-      String token = await getTokenFromLocalStorage();
+      String token = await getDataFromLocalStorage('token');
       
       Response response = await dio.delete(
         '/habits/remove/$habitId',

@@ -18,7 +18,7 @@ class HabitRepositoryImpl implements HabitRepository {
     try{HabitModel habitModel = toHabitModel(habit);
     List<HabitModel> list = await _habitsListRemoteSource.addHabit(habitModel);
    
-      _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
+     _habitsListLocalSource.addToCache({'list':list});
     return Result.ok(true);
     }
     catch(e)
@@ -36,7 +36,7 @@ class HabitRepositoryImpl implements HabitRepository {
         
       } catch (_) {
         list = await _habitsListRemoteSource.getAllHabits();
-      _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
+      _habitsListLocalSource.addToCache({'list':list});
       }
 
       return Result.ok( list.map((item) => toHabit(item)).toList());
@@ -53,7 +53,7 @@ class HabitRepositoryImpl implements HabitRepository {
     try{
       List<HabitModel> list = await _habitsListRemoteSource.removeHabit(habitId);
    
-      _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
+      _habitsListLocalSource.addToCache( {'list':list});
     return Result.ok(true);
     }
     catch(e)
@@ -69,7 +69,7 @@ class HabitRepositoryImpl implements HabitRepository {
       HabitModel habitModel = toHabitModel(habit);
       List<HabitModel> list = await _habitsListRemoteSource.updateHabit(habitModel);
    
-      _habitsListLocalSource.addToCache('allHabitsList', {'list':list});
+      _habitsListLocalSource.addToCache({'list':list});
     return Result.ok(true);
     }
     catch(e)

@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_cache_manager/flutter_cache_manager.dart';
 import 'package:habix/data/model/user_profile_model.dart';
+import 'package:habix/utilities/storage.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class UserProfileLocalDataSource{
@@ -13,10 +14,12 @@ abstract class UserProfileLocalDataSource{
 class UserProfileLocalDataSourceImp implements UserProfileLocalDataSource{
   final _cache = DefaultCacheManager();
 
-Future<UserProfileModel> getUserProfile() async
+@override
+  Future<UserProfileModel> getUserProfile() async
 {
   try{
-  final fileInfo = await _cache.getFileFromMemory('userProfile');
+  final email = await getDataFromLocalStorage('email');
+  final fileInfo = await _cache.getFileFromMemory('userProfile-$email');
   final File? file = fileInfo?.file;
   final decodedJson = jsonDecode(file!.readAsStringSync());
   return UserProfileModel.fromJson(decodedJson);
@@ -27,10 +30,11 @@ Future<UserProfileModel> getUserProfile() async
   }
 }
 
-void addToCache( Map<String, dynamic> resData)
-{
+Future<void> addToCache( Map<String, dynamic> resData)
+async {
+  final email = await getDataFromLocalStorage('email');
   String jsonString = jsonEncode(resData);
-  _cache.putFile('userProfile', utf8.encode(jsonString));
+  _cache.putFile('userProfile-$email', utf8.encode(jsonString));
 }
 
 }
