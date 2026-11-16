@@ -34,7 +34,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text('ProfileScreen'),
-        actions: [TextButton(onPressed: () 
+        actions: [
+          
+         _params['profile'] == null ?Container(): TextButton(onPressed: () 
         {
           
           

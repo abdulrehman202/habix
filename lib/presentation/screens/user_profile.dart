@@ -96,7 +96,7 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
               isLoading: _params['loading'],
             ),
           ),
-          widget.showSkipButton==null? Container(
+          widget.showSkipButton ? Container(
           margin: EdgeInsets.all(8.0),
           child: CustomButton(
             onButtonTapped: () async{

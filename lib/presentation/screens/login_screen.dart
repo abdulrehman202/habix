@@ -31,7 +31,7 @@ late Map<String, dynamic> _params;
   final clipperHeight = MediaQuery.sizeOf(context).height * 0.3;
   _params = ref.watch(loginScreenNotifier);
 
-  _emailController.text= 'abdulrehman1411@gmail.com';
+  _emailController.text= 'abdulrehmancompsci@gmail.com';
   _passwordController.text = 'abc123';
     return Scaffold(
       key: _scaffoldKey,
