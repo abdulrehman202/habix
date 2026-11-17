@@ -49,16 +49,16 @@ class HabitUsecases {
      return result;
   }
 
-  void incrementProgress(Habit habit) {
-    _habitRepositoryImpl.incrementProgress(habit);
+  Future<Result<bool>> incrementProgress(String habitId) async {
+    return await _habitRepositoryImpl.incrementProgress(habitId);
   }
 
-  void decrementProgress(Habit habit) {
-    _habitRepositoryImpl.decrementProgress(habit);
+  Future<Result<bool>> decrementProgress(String habitId) async{
+    return await _habitRepositoryImpl.decrementProgress(habitId);
   }
 
   void markAsComplete(Habit habit) {
-    _habitRepositoryImpl.markAsComplete(habit);
+    // _habitRepositoryImpl.markAsComplete(habit);
   }
 
   Future<Result<Map<String, int>>> getAllProgressOfDate(DateTime dateTime) async {

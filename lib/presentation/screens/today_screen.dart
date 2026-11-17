@@ -308,7 +308,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                                 try{
                                   if (_params['progress_list'][_params['habits_list'][index].id] <
                                     _params['habits_list'][index].quantity) {
-                                    bool habitCompleted = ref
+                                    bool habitCompleted = await ref
                                       .read(todaysScreenProvider.notifier)
                                       .incrementProgress(
                                         _params['habits_list'][index],

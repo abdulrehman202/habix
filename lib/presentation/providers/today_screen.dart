@@ -6,88 +6,89 @@ import 'package:habix/domain/usecase/user_auth_usecases.dart';
 import 'package:habix/main.dart';
 
 Map<String, dynamic> todaysScreenVariables = {
-  'habits_list':[],
+  'habits_list': [],
   'selected_date': DateTime.now(),
-  'data_loading': false
-
+  'data_loading': false,
 };
 
-class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>>{
+class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
   final HabitUsecases _habitUsecases;
   final UserAuthUsecases _userAuthUsecases;
 
-  TodayScreenNotifier(this._habitUsecases, this._userAuthUsecases):super(
-    {
-  'habits_list':[],
-  'progress_list':{},
-  'selected_date': DateTime.now(),
-  'data_loading': false
-}
-
-  ){
-    
-fetchInitialHabitsList();
+  TodayScreenNotifier(this._habitUsecases, this._userAuthUsecases)
+    : super({
+        'habits_list': [],
+        'progress_list': {},
+        'selected_date': DateTime.now(),
+        'data_loading': false,
+      }) {
+    fetchInitialHabitsList();
   }
 
-fetchInitialHabitsList()async
-  {
-    state={
-      ...state,
-      'data_loading':true,
-    };
+  fetchInitialHabitsList() async {
+    state = {...state, 'data_loading': true};
 
     final list = await _habitUsecases.getAllHabitsOnDate(DateTime.now());
-    Result progressResult = await _habitUsecases.getAllProgressOfDate(DateTime.now());
+    Result progressResult = await _habitUsecases.getAllProgressOfDate(
+      DateTime.now(),
+    );
     Map<String, int> progress = {};
-    progress = progressResult is Ok ? progressResult.value: list.map((e)=> MapEntry(e.id, 0)) as Map<String, int>;
+    progress = progressResult is Ok
+        ? progressResult.value
+        : list.map((e) => MapEntry(e.id, 0)) as Map<String, int>;
 
-    state={
+    state = {
       ...state,
-      'data_loading':false,
-      'habits_list':list,
-      'progress_list':progress
-    };
-  }
-  
-void changeDate (DateTime newDate){
-  
-    state={
-      ...state,
-      'selected_date':newDate
+      'data_loading': false,
+      'habits_list': list,
+      'progress_list': progress,
     };
   }
 
-Future<void> updateList(DateTime dateTime) async{
+  void changeDate(DateTime newDate) {
+    state = {...state, 'selected_date': newDate};
+  }
+
+  Future<void> updateList(DateTime dateTime) async {
     final list = await _habitUsecases.getAllHabitsOnDate(dateTime);
-    state={
-      ...state,
-      'habits_list':list
-    };
+    state = {...state, 'habits_list': list};
   }
 
-bool incrementProgress(Habit habit) {
-    // _habitUsecases.incrementProgress(habit);
+  Future<bool> incrementProgress(Habit habit) async {
+    
     final currentProgress = state['progress_list'];
     currentProgress[habit.id] = (currentProgress[habit.id] ?? 0) + 1;
-    
-    state={
-      ...state,
-      'progress_list': currentProgress
-    };
+
+    state = {...state, 'progress_list': currentProgress};
+
+    Result result = await _habitUsecases.incrementProgress(habit.id);
+    if (result is Error) {
+      final currentProgress = state['progress_list'];
+      currentProgress[habit.id] = (currentProgress[habit.id] ?? 0) - 1;
+
+      state = {...state, 'progress_list': currentProgress};
+    }
 
     return state['progress_list'][habit.id] == habit.quantity;
   }
 
-  void decrementProgress(Habit habit) {
+  void decrementProgress(Habit habit) async {
     
-    // _habitUsecases.decrementProgress(habit);
-    state={
+    state = {
       ...state,
-      'progress_list':{
+      'progress_list': {
         ...state['progress_list'],
-        habit.id: (state['progress_list'][habit.id]??0) - 1
-      }
+        habit.id: (state['progress_list'][habit.id] ?? 0) - 1,
+      },
     };
+
+    Result result = await _habitUsecases.decrementProgress(habit.id);
+    if (result is Error) {
+      final currentProgress = state['progress_list'];
+      currentProgress[habit.id] = (currentProgress[habit.id] ?? 0) + 1;
+
+      state = {...state, 'progress_list': currentProgress};
+    }
   }
 
   void markAsComplete(Habit habit) {
@@ -99,25 +100,24 @@ bool incrementProgress(Habit habit) {
     // state={...state,'habits_list':l};
   }
 
-void toggle (){
+  void toggle() {
     bool currentState = state['data_loading'];
-    state={
-      ...state,
-      'data_loading':!currentState,
-    };
+    state = {...state, 'data_loading': !currentState};
   }
-  
-  Future<bool> logout() async{
+
+  Future<bool> logout() async {
     toggle();
     Result<bool> result = await _userAuthUsecases.logOut();
-    
+
     toggle();
     return result is Ok;
   }
 }
 
-final todaysScreenProvider = StateNotifierProvider<TodayScreenNotifier, Map<String, dynamic>>((ref){
-
-return TodayScreenNotifier(getIt<HabitUsecases>(), getIt<UserAuthUsecases>());
-
-});
+final todaysScreenProvider =
+    StateNotifierProvider<TodayScreenNotifier, Map<String, dynamic>>((ref) {
+      return TodayScreenNotifier(
+        getIt<HabitUsecases>(),
+        getIt<UserAuthUsecases>(),
+      );
+    });

@@ -79,37 +79,31 @@ class HabitRepositoryImpl implements HabitRepository {
   }
 
   @override
-  void incrementProgress(Habit habit) {
-    // TODO: implement incrementProgress
-    // HabitModel habitModel = toHabitModel(habit);
-    // List<HabitModel> l = _habitsListLocalSource.getAllHabits();
-    // int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
-    // l[index].progress++;
-    // if(l[index].progress == l[index].quantity)
-    // {
-    //   l[index].dateFinished = DateTime.now();
-    // }
-    // _habitsListLocalSource.updateList(l);
+  Future<Result<bool>> incrementProgress(String habitId) async {
+    try{
+      
+      bool success = await _habitsListRemoteSource.incrementProgress(habitId);
+   
+    return Result.ok(success);
+    }
+    catch(e)
+    {
+      return Result.error(e as Failure);
+    }
   }
 
   @override
-  void decrementProgress(Habit habit) {
-    //  HabitModel habitModel = toHabitModel(habit);
-    //   List<HabitModel> l = _habitsListLocalSource.getAllHabits();
-    //   int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
-    //   l[index].progress--;
-
-    //   _habitsListLocalSource.updateList(l);
-  }
-
-  @override
-  void markAsComplete(Habit habit) {
-    //  HabitModel habitModel = toHabitModel(habit);
-    //   List<HabitModel> l = _habitsListLocalSource.getAllHabits();
-    //   int index = l.indexWhere( (hm)=> hm.id == habitModel.id);
-    //   l[index].progress = l[index].quantity;
-
-    //   _habitsListLocalSource.updateList(l);
+  Future<Result<bool>> decrementProgress(String habitId) async {
+    try{
+      
+      bool success = await _habitsListRemoteSource.decrementProgress(habitId);
+   
+    return Result.ok(success);
+    }
+    catch(e)
+    {
+      return Result.error(e as Failure);
+    }
   }
 
   @override
