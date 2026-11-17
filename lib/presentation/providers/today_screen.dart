@@ -82,11 +82,12 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
        if (result is Error) {
       final currentProgress = state['progress_list'];
       currentProgress[id] = (currentProgress[id] ?? 0) - _pendings[id];
-      _pendings[id] = 0;
-      _timers[id] = null;
+      
 
       state = {...state, 'progress_list': currentProgress};
     }
+    _pendings[id] = 0;
+    _timers[id] = null;
 
   }
 
