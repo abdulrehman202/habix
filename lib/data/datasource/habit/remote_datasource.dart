@@ -13,7 +13,6 @@ abstract class HabitRemoteDataSource{
 
   Future<bool> incrementProgress(String habitId, int count);
 
-  Future<bool> decrementProgress(String habitId);
 }
 
 @LazySingleton(as: HabitRemoteDataSource)
@@ -264,50 +263,6 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
         }
       }
       return list;
-    } on DioException catch (e) {
-      final status = e.response?.statusCode;
-  switch (e.type) {
-    case DioExceptionType.connectionTimeout:
-    case DioExceptionType.sendTimeout:
-    case DioExceptionType.receiveTimeout:
-      throw const NetworkFailure();
-
-    case DioExceptionType.connectionError:
-      throw const NetworkFailure();
-
-    case DioExceptionType.badResponse:
-      if (status == 404) throw  ServerFailure(statusCode: status??404);
-      throw ServerFailure(statusCode: status??404);
-
-    case DioExceptionType.cancel:
-      throw ServerFailure(statusCode: status??404);
-
-    default:
-      throw ServerFailure(statusCode: status??404);
-  }} catch (e) {
-      throw UnknownError();
-    }
-  }
-
-  @override
-  Future<bool> decrementProgress(String habitId) async {
-    
-    try {
-      String token = await getDataFromLocalStorage('token');
-
-      Response response = await dio.put(
-        '/habits/progress/decrement/$habitId',
-        options: Options(
-          headers: {
-            'Content-Type':
-                'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
-          },
-        ),
-      );
-
-      return response.statusCode==200;
-      
     } on DioException catch (e) {
       final status = e.response?.statusCode;
   switch (e.type) {

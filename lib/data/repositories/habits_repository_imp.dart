@@ -93,20 +93,6 @@ class HabitRepositoryImpl implements HabitRepository {
   }
 
   @override
-  Future<Result<bool>> decrementProgress(String habitId) async {
-    try{
-      
-      bool success = await _habitsListRemoteSource.decrementProgress(habitId);
-   
-    return Result.ok(success);
-    }
-    catch(e)
-    {
-      return Result.error(e as Failure);
-    }
-  }
-
-  @override
   Future<Result<Map<String, int>>> getAllProgressOfDate(DateTime dateTime) async {
     // TODO: implement getAllProgressOfDate
     try {

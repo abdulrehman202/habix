@@ -53,10 +53,6 @@ class HabitUsecases {
     return await _habitRepositoryImpl.incrementProgress(habitId, count);
   }
 
-  Future<Result<bool>> decrementProgress(String habitId) async{
-    return await _habitRepositoryImpl.decrementProgress(habitId);
-  }
-
   void markAsComplete(Habit habit) {
     // _habitRepositoryImpl.markAsComplete(habit);
   }
