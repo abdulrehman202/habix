@@ -5,7 +5,6 @@ class Habit  {
 String name;
 Category category;
 int quantity;
-int progress = 0;
 HabitInterval interval;
 int streaks = 0;
 DateTime dateCreated;

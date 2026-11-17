@@ -19,6 +19,7 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>>{
   TodayScreenNotifier(this._habitUsecases, this._userAuthUsecases):super(
     {
   'habits_list':[],
+  'progress_list':{},
   'selected_date': DateTime.now(),
   'data_loading': false
 }
@@ -36,11 +37,15 @@ fetchInitialHabitsList()async
     };
 
     final list = await _habitUsecases.getAllHabitsOnDate(DateTime.now());
-    
+    Result progressResult = await _habitUsecases.getAllProgressOfDate(DateTime.now());
+    Map<String, int> progress = {};
+    progress = progressResult is Ok ? progressResult.value: list.map((e)=> MapEntry(e.id, 0)) as Map<String, int>;
+
     state={
       ...state,
       'data_loading':false,
-      'habits_list':list
+      'habits_list':list,
+      'progress_list':progress
     };
   }
   
@@ -61,37 +66,37 @@ Future<void> updateList(DateTime dateTime) async{
   }
 
 bool incrementProgress(Habit habit) {
-    _habitUsecases.incrementProgress(habit);
-    List<Habit> l = state['habits_list'];
-    int index = l.indexOf(habit);
-    l[index].progress++;
-    if (l[index].progress == l[index].quantity) {
-      l[index].dateFinished = DateTime.now();
-    }
-    state = {
+    // _habitUsecases.incrementProgress(habit);
+    final currentProgress = state['progress_list'];
+    currentProgress[habit.id] = (currentProgress[habit.id] ?? 0) + 1;
+    
+    state={
       ...state,
-      'habits_list':l
+      'progress_list': currentProgress
     };
 
-    return l[index].progress == l[index].quantity;
+    return state['progress_list'][habit.id] == habit.quantity;
   }
 
   void decrementProgress(Habit habit) {
     
-    _habitUsecases.decrementProgress(habit);
-    List<Habit> l = state['habits_list'];
-    int index = l.indexOf(habit);
-    l[index].progress--;
-    state={...state,'habits_list':l};
+    // _habitUsecases.decrementProgress(habit);
+    state={
+      ...state,
+      'progress_list':{
+        ...state['progress_list'],
+        habit.id: (state['progress_list'][habit.id]??0) - 1
+      }
+    };
   }
 
   void markAsComplete(Habit habit) {
-    _habitUsecases.markAsComplete(habit);
-    List<Habit> l = state['habits_list'];
-    int index = l.indexOf(habit);
-    l[index].progress = l[index].quantity;
-    l[index].dateFinished = DateTime.now();
-    state={...state,'habits_list':l};
+    // _habitUsecases.markAsComplete(habit);
+    // List<Habit> l = state['habits_list'];
+    // int index = l.indexOf(habit);
+    // // l[index].progress = l[index].quantity;
+    // l[index].dateFinished = DateTime.now();
+    // state={...state,'habits_list':l};
   }
 
 void toggle (){

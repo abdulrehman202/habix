@@ -60,4 +60,9 @@ class HabitUsecases {
   void markAsComplete(Habit habit) {
     _habitRepositoryImpl.markAsComplete(habit);
   }
+
+  Future<Result<Map<String, int>>> getAllProgressOfDate(DateTime dateTime) async {
+    // Implementation for fetching progress of all habits on a specific date
+    return _habitRepositoryImpl.getAllProgressOfDate(dateTime);
+  }
 }

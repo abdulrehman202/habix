@@ -9,6 +9,7 @@ abstract class HabitRemoteDataSource{
   Future<List<HabitModel>> addHabit(HabitModel habit);
   Future<List<HabitModel>> updateHabit(HabitModel habit);
   Future<List<HabitModel>> removeHabit(String habitId);
+  Future<Map<String, int>> getAllProgress();
 }
 
 @LazySingleton(as: HabitRemoteDataSource)
@@ -209,6 +210,54 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
     }
     else {
         throw ServerFailure(statusCode: response.statusCode??404);
+      }
+      return list;
+    } on DioException catch (e) {
+      final status = e.response?.statusCode;
+  switch (e.type) {
+    case DioExceptionType.connectionTimeout:
+    case DioExceptionType.sendTimeout:
+    case DioExceptionType.receiveTimeout:
+      throw const NetworkFailure();
+
+    case DioExceptionType.connectionError:
+      throw const NetworkFailure();
+
+    case DioExceptionType.badResponse:
+      if (status == 404) throw  ServerFailure(statusCode: status??404);
+      throw ServerFailure(statusCode: status??404);
+
+    case DioExceptionType.cancel:
+      throw ServerFailure(statusCode: status??404);
+
+    default:
+      throw ServerFailure(statusCode: status??404);
+  }} catch (e) {
+      throw UnknownError();
+    }
+  }
+
+  @override
+  Future<Map<String, int>> getAllProgress() async {
+    try {
+      Map<String, int> list = {};
+      String token = await getDataFromLocalStorage('token');
+      Response response = await dio.get('/habits/progress',
+      options: Options(
+          headers: {
+            'Content-Type':
+                'application/json', // Let the server know it is JSON
+                'Authorization':'Bearer $token'
+          },
+        ),
+      );
+      if (response.statusCode == 200) {
+        final resData = response.data;
+        final decodedJson = resData['allProgressList'] as List;
+
+        for (var listItem in decodedJson) {
+          list[listItem['habitId']] = listItem['progress'];
+        }
       }
       return list;
     } on DioException catch (e) {

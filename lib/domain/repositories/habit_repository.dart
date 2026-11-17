@@ -7,6 +7,7 @@ abstract class HabitRepository {
   Future<Result<bool>> addHabit(Habit habit);
   Future<Result<bool>> removeHabit(String habitId);
   Future<Result<bool>> updateHabit(Habit habit);
+  Future<Result<Map<String, int>>> getAllProgressOfDate(DateTime dateTime);
   void incrementProgress(Habit habit);
   void decrementProgress(Habit habit);
   void markAsComplete(Habit habit);

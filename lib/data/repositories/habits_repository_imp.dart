@@ -111,4 +111,25 @@ class HabitRepositoryImpl implements HabitRepository {
 
     //   _habitsListLocalSource.updateList(l);
   }
+
+  @override
+  Future<Result<Map<String, int>>> getAllProgressOfDate(DateTime dateTime) async {
+    // TODO: implement getAllProgressOfDate
+    try {
+      Map<String, int> progress = {};
+      try {
+        // list = await _habitsListLocalSource.getAllHabits();
+        progress = await _habitsListRemoteSource.getAllProgress();
+        
+      } catch (_) {
+        // progress = await _habitsListRemoteSource.getAllProgress();
+      // _habitsListLocalSource.addToCache({'list':list});
+      }
+
+      return Result.ok( progress);
+    }catch (e) {
+      
+      return Result.error(e as Failure);
+    }
+  }
 }

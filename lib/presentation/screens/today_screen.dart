@@ -164,7 +164,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
         .fold<int>(0,
           (int s,Habit h) =>
           
-              s + (h.progress == h.quantity?1:0)
+              s +(_params['progress_list'][h.id] == h.quantity?1:0) 
         );
 
     double percentageOfCompletedTasks =
@@ -234,8 +234,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                     child: CircularPercentIndicator(
                       radius: 20,
                       lineWidth: 3.0,
-                      percent:
-                          _params['habits_list'][index].progress /
+                      percent: 
+                          _params['progress_list'][_params['habits_list'][index].id] /
                           _params['habits_list'][index].quantity,
                       progressColor:
                           iconsColor[_params['habits_list'][index].category]!,
@@ -265,47 +265,48 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                               return FadeTransition(opacity: animation, child: child);
                             },
                             child: Container(
-                              key: ValueKey<bool>(_params['habits_list'][index].progress ==
+                              key: 
+                              ValueKey<bool>(_params['progress_list'][_params['habits_list'][index].id] ==
                           _params['habits_list'][index].quantity),
-                          child: _params['habits_list'][index].progress ==
+                          child: 
+                          _params['progress_list'][_params['habits_list'][index].id] ==
                           _params['habits_list'][index].quantity
                       ? Icon(Icons.check,color: Colors.green,)
-                      // Container(
-                      //     padding: EdgeInsets.all(8),
-                      //     decoration: BoxDecoration(
-                      //       color: Colors.grey.withValues(alpha: 0.3),
-                      //       borderRadius: BorderRadius.all(
-                      //         Radius.circular(10),
-                      //       ),
-                      //     ),
-                      //     child: Text('Completed'),
-                      //   )
-                      : Row(
+                      
+                      : 
+                      Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             IconButton(
                               onPressed: () {
-                                if (_params['habits_list'][index].progress > 0) {
+                                try{
+                                  if (_params['progress_list'][_params['habits_list'][index].id] > 0) {
                                   ref
                                       .read(todaysScreenProvider.notifier)
                                       .decrementProgress(
                                         _params['habits_list'][index],
                                       );
                                 }
+                                }
+                                // ignore: empty_catches
+                                catch(e) {
+                                }
+                                
                               },
                               icon: Icon(Icons.remove),
                             ),
                             SizedBox(
                               width: 30,
                               child: Text(
-                                _params['habits_list'][index].progress.toString(),
+                               _params['progress_list'][_params['habits_list'][index].id].toString() ?? 0 .toString(),
                                 textAlign: TextAlign.center,
                               ),
                             ),
                             IconButton(
                               onPressed: () async {
-                                if (_params['habits_list'][index].progress <
+                                try{
+                                  if (_params['progress_list'][_params['habits_list'][index].id] <
                                     _params['habits_list'][index].quantity) {
                                     bool habitCompleted = ref
                                       .read(todaysScreenProvider.notifier)
@@ -319,6 +320,12 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                                     
                                   }
                                 }
+                                }
+                                // ignore: empty_catches
+                                catch(e) {
+                                  print('Error incrementing progress: $e');
+                                }
+                                
                               },
                               icon: Icon(Icons.add),
                             ),
@@ -396,7 +403,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
         .fold<int>(0,
           (int s, h) =>
              
-              s += (h.progress == h.quantity?1:0)
+              s += (_params['progress_list'][h.id] == h.quantity?1:0)
               ,
         );
 
