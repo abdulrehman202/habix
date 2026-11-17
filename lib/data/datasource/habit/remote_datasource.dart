@@ -11,7 +11,7 @@ abstract class HabitRemoteDataSource{
   Future<List<HabitModel>> removeHabit(String habitId);
   Future<Map<String, int>> getAllProgress();
 
-  Future<bool> incrementProgress(String habitId);
+  Future<bool> incrementProgress(String habitId, int count);
 
   Future<bool> decrementProgress(String habitId);
 }
@@ -334,14 +334,14 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   }
 
   @override
-  Future<bool> incrementProgress(String habitId) async {
+  Future<bool> incrementProgress(String habitId, int count) async {
     
     
     try {
       String token = await getDataFromLocalStorage('token');
 
       Response response = await dio.put(
-        '/habits/progress/increment/$habitId',
+        '/habits/progress/increment/$habitId/$count',
         options: Options(
           headers: {
             'Content-Type':
