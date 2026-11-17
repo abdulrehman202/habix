@@ -39,7 +39,7 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
     Map<String, int> progress = {};
     progress = progressResult is Ok
         ? progressResult.value
-        : list.map((e) => MapEntry(e.id, 0)) as Map<String, int>;
+        : list.map((e) => progress[e.id] = 0);
 
     state = {
       ...state,

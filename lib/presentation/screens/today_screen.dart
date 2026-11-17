@@ -234,8 +234,8 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                     child: CircularPercentIndicator(
                       radius: 20,
                       lineWidth: 3.0,
-                      percent: 
-                          _params['progress_list'][_params['habits_list'][index].id] /
+                      percent: (_params['progress_list'] as Map<String, int>)[_params['habits_list'][index].id] == null?0:
+                          (_params['progress_list'] as Map<String, int>)[_params['habits_list'][index].id]!/
                           _params['habits_list'][index].quantity,
                       progressColor:
                           iconsColor[_params['habits_list'][index].category]!,
@@ -259,7 +259,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                     maxLines: 1,
                   ),
                   trailing: 
-                  AnimatedSwitcher(
+                  _params['progress_list']==null?Container(): AnimatedSwitcher(
                             duration: const Duration(milliseconds: 200),
                             transitionBuilder: (Widget child, Animation<double> animation) {
                               return FadeTransition(opacity: animation, child: child);
@@ -274,10 +274,10 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                       ? Icon(Icons.check,color: Colors.green,)
                       
                       : 
-                      Row(
+                       Row(
                           mainAxisSize: MainAxisSize.min,
                           mainAxisAlignment: MainAxisAlignment.start,
-                          children: [
+                          children: _params['progress_list'][_params['habits_list'][index].id]== null?[Text('Error fetching progress')]: [
                             IconButton(
                               onPressed: () {
                                 try{
@@ -299,7 +299,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                             SizedBox(
                               width: 30,
                               child: Text(
-                               _params['progress_list'][_params['habits_list'][index].id].toString() ?? 0 .toString(),
+                               (_params['progress_list'][_params['habits_list'][index].id] ?? 0).toString(),
                                 textAlign: TextAlign.center,
                               ),
                             ),
