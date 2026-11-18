@@ -15,7 +15,8 @@ class HabitsCategoryNotifier extends StateNotifier<Map<String, dynamic>>{
     'error':false,
     'error_message':'',
     'loading':false,
-    'removing':false
+    'removing':false,
+    'selecting_categories':false,
     }){
     
 fetchInitialHabitsList();
@@ -54,6 +55,11 @@ fetchInitialHabitsList()async
 
   void toggleLoader (bool toggle){
     state = {...state, 'loading': toggle};
+  }
+
+  void toggleArrow (){
+    bool current = state['selecting_categories'];
+    state = {...state, 'selecting_categories': !current};
   }
 
   void isRemoving (bool toggle){

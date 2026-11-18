@@ -217,8 +217,10 @@ class _AllHabitsState extends ConsumerState<AllHabits>
 
   _selectCategory() {
     return ExpansionTile(
-      
-      trailing: Icon(Icons.arrow_drop_down_sharp),
+      onExpansionChanged: (val){
+        ref.read(habitsCategoryProvider.notifier).toggleArrow();
+      },
+      trailing: Icon(_params['selecting_categories']? Icons.arrow_drop_up_sharp :  Icons.arrow_drop_down_sharp),
       title: Text('${ (_params['selected_categories'] as List<Category>).isEmpty? 'Choose Category': (_params['selected_categories'] as List<Category>).map((categories)=>'${categories.name.capitalize}' )}'),
       children: Category.values
           .map(
