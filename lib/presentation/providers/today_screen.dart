@@ -16,8 +16,8 @@ Map<String, dynamic> todaysScreenVariables = {
 class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
   final HabitUsecases _habitUsecases;
   final UserAuthUsecases _userAuthUsecases;
-  final _timers = {};
-  final _pendings = {};
+  final Map<String, int> _pendings = {};
+  Timer? _timer;
 
   TodayScreenNotifier(this._habitUsecases, this._userAuthUsecases)
     : super({
@@ -42,7 +42,8 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
 
     if (progressResult is Ok) {
       for (var item in list) {
-        progress[item.id] = (progress[item.id] ?? 0) + ( _pendings[item.id]??0) as int;
+        progress[item.id] =
+            (progress[item.id] ?? 0) + (_pendings[item.id] ?? 0);
       }
     }
 
@@ -64,34 +65,35 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
   }
 
   Future<bool> incrementProgress(Habit habit) async {
-    _pendings[habit.id] = _pendings[habit.id] ?? 0;
-    _pendings[habit.id]++;
+    _pendings[habit.id] = (_pendings[habit.id] ?? 0)+1;
     final currentProgress = state['progress_list'];
     currentProgress[habit.id] = (currentProgress[habit.id] ?? 0) + 1;
-      state = {...state, 'progress_list': currentProgress};
-    _timers[habit.id] =
-        _timers[habit.id] ??
-        Timer(Duration(seconds: 5), () async {
+    state = {...state, 'progress_list': currentProgress};
+    
+       _timer = _timer?? Timer(Duration(seconds: 5), () async {
           print(
             'this function ran after 5 seconds ith value ${_pendings[habit.id]} for habit ${habit.id}',
           );
-          await _callServer(habit.id, _pendings[habit.id]);
+          await _callServer();
         });
 
     return state['progress_list'][habit.id] == habit.quantity;
   }
 
-  _callServer(String id, int count) async {
-    Result result = await _habitUsecases.incrementProgress(id, count);
-      final currentProgress = state['progress_list'];
+  _callServer() async {
+    Result result = await _habitUsecases.incrementProgress(_pendings);
+    final currentProgress = state['progress_list'];
 
-    if (result is Error) {
-      currentProgress[id] = (currentProgress[id] ?? 0) - _pendings[id];
-
+    for (var li in state['habits_list']) {
+      if (result is Error) {
+        currentProgress[li.id] =
+            (currentProgress[li.id] ?? 0) - _pendings[li.id];
+      }
+      _pendings[li.id] = 0;
     }
-      state = {...state, 'progress_list': currentProgress};
-    _pendings[id] = 0;
-    _timers[id] = null;
+    state = {...state, 'progress_list': currentProgress};
+    _timer!.cancel();
+    _timer = null;
   }
 
   void decrementProgress(Habit habit) async {
@@ -99,15 +101,12 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
     currentProgress[habit.id] = (currentProgress[habit.id] ?? 0) - 1;
 
     state = {...state, 'progress_list': currentProgress};
-    _pendings[habit.id] = _pendings[habit.id] ?? 0;
-    _pendings[habit.id]--;
-    _timers[habit.id] =
-        _timers[habit.id] ??
-        Timer(Duration(seconds: 5), () async {
+    _pendings[habit.id] = (_pendings[habit.id] ?? 0)-1;
+    _timer = _timer?? Timer(Duration(seconds: 5), () async {
           print(
             'this function ran after 5 seconds ith value ${_pendings[habit.id]} for habit ${habit.id}',
           );
-          await _callServer(habit.id, _pendings[habit.id]);
+          await _callServer();
         });
   }
 

@@ -79,10 +79,10 @@ class HabitRepositoryImpl implements HabitRepository {
   }
 
   @override
-  Future<Result<bool>> incrementProgress(String habitId,int count) async {
+  Future<Result<bool>> incrementProgress(Map<String, int> pendings) async {
     try{
       
-      bool success = await _habitsListRemoteSource.incrementProgress(habitId,count);
+      bool success = await _habitsListRemoteSource.incrementProgress(pendings);
    
     return Result.ok(success);
     }

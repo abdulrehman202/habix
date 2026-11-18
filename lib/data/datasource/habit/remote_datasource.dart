@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/data/model/habit_model.dart';
@@ -10,8 +12,7 @@ abstract class HabitRemoteDataSource{
   Future<List<HabitModel>> updateHabit(HabitModel habit);
   Future<List<HabitModel>> removeHabit(String habitId);
   Future<Map<String, int>> getAllProgress();
-
-  Future<bool> incrementProgress(String habitId, int count);
+  Future<bool> incrementProgress(Map<String, int> pendings);
 
 }
 
@@ -289,14 +290,15 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   }
 
   @override
-  Future<bool> incrementProgress(String habitId, int count) async {
+  Future<bool> incrementProgress(Map<String, int> pendings) async {
     
     
     try {
       String token = await getDataFromLocalStorage('token');
 
       Response response = await dio.put(
-        '/habits/progress/increment/$habitId/$count',
+        '/habits/progress/increment/',
+        data: jsonEncode(pendings),
         options: Options(
           headers: {
             'Content-Type':
