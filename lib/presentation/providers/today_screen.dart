@@ -18,6 +18,7 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
   final UserAuthUsecases _userAuthUsecases;
   final Map<String, int> _pendings = {};
   Timer? _timer;
+  Completer<bool?>? _completer;
 
   TodayScreenNotifier(this._habitUsecases, this._userAuthUsecases)
     : super({
@@ -64,23 +65,30 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
     state = {...state, 'habits_list': list};
   }
 
-  Future<bool> incrementProgress(Habit habit) async {
+  Future<bool?> incrementProgress(Habit habit) async {
     _pendings[habit.id] = (_pendings[habit.id] ?? 0)+1;
     final currentProgress = state['progress_list'];
     currentProgress[habit.id] = (currentProgress[habit.id] ?? 0) + 1;
     state = {...state, 'progress_list': currentProgress};
-    
+
+    bool? success;
+    if (_timer == null || !_timer!.isActive) {
+    _completer = Completer<bool?>();
        _timer = _timer?? Timer(Duration(seconds: 5), () async {
           print(
             'this function ran after 5 seconds ith value ${_pendings[habit.id]} for habit ${habit.id}',
           );
-          await _callServer();
-        });
+          success =  await _callServer();
+         _timer = null;
 
-    return state['progress_list'][habit.id] == habit.quantity;
+      _completer!.complete(success);
+        });
+}
+        return _completer!.future;
+    
   }
 
-  _callServer() async {
+  Future<bool> _callServer() async {
     Result result = await _habitUsecases.incrementProgress(_pendings);
     final currentProgress = state['progress_list'];
 
@@ -94,20 +102,33 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
     state = {...state, 'progress_list': currentProgress};
     _timer!.cancel();
     _timer = null;
+
+    return result is Ok;
   }
 
-  void decrementProgress(Habit habit) async {
+  Future<bool?> decrementProgress(Habit habit) async {
     final currentProgress = state['progress_list'];
     currentProgress[habit.id] = (currentProgress[habit.id] ?? 0) - 1;
 
     state = {...state, 'progress_list': currentProgress};
     _pendings[habit.id] = (_pendings[habit.id] ?? 0)-1;
+    bool success = true;
+
+if (_timer == null || !_timer!.isActive) {
+    _completer = Completer<bool?>();
     _timer = _timer?? Timer(Duration(seconds: 5), () async {
           print(
             'this function ran after 5 seconds ith value ${_pendings[habit.id]} for habit ${habit.id}',
           );
-          await _callServer();
+          success = await _callServer();
+
+          _timer = null;
+
+      _completer!.complete(success);
         });
+}
+        return _completer!.future;
+
   }
 
   void markAsComplete(Habit habit) {

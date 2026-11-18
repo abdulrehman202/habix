@@ -58,6 +58,7 @@ dependencies:
   scroll_date_picker: ^3.8.0
   injectable: ^2.5.0
   get_it: ^8.0.0
+  awesome_shake_widget: ^1.1.1
 
 dev_dependencies:
   flutter_test:
