@@ -321,7 +321,7 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                                       children:
                                           _params['progress_list'][_params['habits_list'][index]
                                                   .id] ==
-                                              null
+                                              {}
                                           ? [Text('Error fetching progress')]
                                           : [
                                               IconButton(
