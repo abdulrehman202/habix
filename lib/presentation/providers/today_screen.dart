@@ -75,9 +75,7 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
     if (_timer == null || !_timer!.isActive) {
     _completer = Completer<bool?>();
        _timer = _timer?? Timer(Duration(seconds: 5), () async {
-          print(
-            'this function ran after 5 seconds ith value ${_pendings[habit.id]} for habit ${habit.id}',
-          );
+          
           success =  await _callServer();
          _timer = null;
 
@@ -117,9 +115,7 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
 if (_timer == null || !_timer!.isActive) {
     _completer = Completer<bool?>();
     _timer = _timer?? Timer(Duration(seconds: 5), () async {
-          print(
-            'this function ran after 5 seconds ith value ${_pendings[habit.id]} for habit ${habit.id}',
-          );
+          
           success = await _callServer();
 
           _timer = null;
