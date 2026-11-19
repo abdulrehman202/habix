@@ -171,8 +171,8 @@ class _AllHabitsState extends ConsumerState<AllHabits>
                               ),
                               builder: (context, child) {
                                 final padValue =100 + (index*20);
-                                return Padding(
-                                  padding: EdgeInsetsGeometry.only(
+                                return Container(
+                                  margin: EdgeInsetsGeometry.only(
                                     left: padValue - _animationController.value * padValue,
                                   ),
                                   child: child,

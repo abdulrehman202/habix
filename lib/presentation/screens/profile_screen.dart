@@ -46,7 +46,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => UserProfileScreen(userProfileUIModel: _params['profile'] as UserProfileUIModel,)),
+            MaterialPageRoute(builder: (context) => UserProfileScreen(showSkipButton: false, userProfileUIModel: _params['profile'] as UserProfileUIModel,)),
           );
           
         }, child: Text('Edit'))],
@@ -68,7 +68,7 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       buttonWidth: 150,
                       onButtonTapped: () 
                       {
-                        navigateTo(context, UserProfileScreen(showSkipButton: false,));
+                        navigateTo(context, UserProfileScreen());
                         }, buttonText: 'Set Profile', isLoading: false),
                   ],
                 ) : _portrait(); // _ProfilescreenWidth>maxProfileScreenSizeInPortraitMode?_landscape():_portrait();
