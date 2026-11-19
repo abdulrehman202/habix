@@ -54,6 +54,7 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
       'habits_list': list,
       'progress_list': progress,
     };
+
   }
 
   void changeDate(DateTime newDate) {

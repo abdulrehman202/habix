@@ -67,11 +67,12 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
       duration: const Duration(seconds: 2),
     );
   }
-
+  
   @override
   Widget build(BuildContext context) {
     _params = ref.watch(todaysScreenProvider);
-
+    _controller.forward();
+    
     return Scaffold(
       appBar: AppBar(
         title: Text('Good Afternoon Flex,'),
@@ -205,11 +206,10 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
   }
 
   Widget _habitsList() {
-    _controller.forward();
+    if(_params['habits_list'].isEmpty)
+    {return EmptyListWidget();}
 
-    return _params['habits_list'].isEmpty
-        ? EmptyListWidget()
-        : ShakeWidget(
+    return ShakeWidget(
                                       key: shakeKey,
                                       customConfig: ShakeConfig(
                                         offset: 20,

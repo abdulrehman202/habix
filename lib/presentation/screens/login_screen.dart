@@ -113,7 +113,8 @@ late Map<String, dynamic> _params;
   }
 
   void _moveToCreateAccountScreen() {
-    Navigator.pushReplacement ( _scaffoldKey.currentContext! , MaterialPageRoute(builder: (ctx)=>CreateAccountScreen()));
+
+    navigateTo(context, CreateAccountScreen());
   
   }
 }
