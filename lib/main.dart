@@ -10,7 +10,7 @@ GetIt getIt = GetIt.instance;
 
 void main() async{ 
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies(Environment.dev);
+  configureDependencies(Environment.prod);
   runApp( ProviderScope(child: MyApp()));
 }
 

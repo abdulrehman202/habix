@@ -50,10 +50,10 @@ class _InfoBoxState extends State<InfoBox> with TickerProviderStateMixin {
             ),
           ),
       builder: (context, child) {
-        return AnimatedScale(
+        return AnimatedSlide(
           curve: Curves.easeOut,
-          scale: 1*_controller.value,
-          duration: Duration(milliseconds: 100),
+          duration: Duration(milliseconds: 500),
+          offset: Offset(1-_controller.value,0),
           child: child
         );
       },
