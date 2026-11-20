@@ -87,7 +87,7 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
                       SnackBar(content: Text('Profile updated successfully!')),
                     );
               ref.invalidate(userProfileScreenNotifier);
-              ref.invalidate(profileScreenNotifier);
+  await Future.delayed(Duration(milliseconds: 300));
                     Navigator.pop(context);
                   }
                   else

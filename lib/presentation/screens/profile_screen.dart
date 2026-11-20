@@ -36,22 +36,35 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
       appBar: AppBar(
         title: Text('ProfileScreen'),
         actions: [
-          
-         _params['profile'] == null ?Container(): TextButton(onPressed: () async
-        {
-          
-          
-    ref.read(userProfileScreenNotifier.notifier).changeGender(_params['profile']?.gender ?? Gender.MALE);
-    ref.read(userProfileScreenNotifier.notifier).changeDOB(_params['profile']?.dob ?? DateTime.now());
+          _params['profile'] == null
+              ? Container()
+              : TextButton(
+                  onPressed: () async {
+                    ref
+                        .read(userProfileScreenNotifier.notifier)
+                        .changeGender(
+                          _params['profile']?.gender ?? Gender.MALE,
+                        );
+                    ref
+                        .read(userProfileScreenNotifier.notifier)
+                        .changeDOB(_params['profile']?.dob ?? DateTime.now());
 
-    await Navigator.push(context, MaterialPageRoute(builder: (context)=>UserProfileScreen(
-showSkipButton: false, userProfileUIModel: _params['profile'] as UserProfileUIModel,
-    )));
-    ref.invalidate(profileScreenNotifier);
-          setState(() {
-            
-          });
-        }, child: Text('Edit'))],
+                    await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => UserProfileScreen(
+                          showSkipButton: false,
+                          userProfileUIModel:
+                              _params['profile'] as UserProfileUIModel,
+                        ),
+                      ),
+                    );
+
+                    _params = ref.refresh(profileScreenNotifier);
+                  },
+                  child: Text('Edit'),
+                ),
+        ],
       ),
       body: _params['loading']
           ? ShimmerAnimation.listPlaceholder()
@@ -59,26 +72,40 @@ showSkipButton: false, userProfileUIModel: _params['profile'] as UserProfileUIMo
               builder: (context, constraints) {
                 _userProfileUI = _params['profile'] as UserProfileUIModel?;
 
-                return _params['profile'] == null ? Column(
-                spacing: 20,
-                  children: [
-                    
-                CircleAvatar(radius: 80, child: Image.asset(profileIcon)),
-                Text("No Profile Found", style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),),
-                    CustomButton(
-                      
-                      buttonWidth: 150,
-                      onButtonTapped: () async
-                      { 
-                        await Navigator.push(context, MaterialPageRoute(builder: (context)=> UserProfileScreen(showSkipButton: false,)));
-                        
-                        ref.invalidate(profileScreenNotifier);
-          setState(() {
-            
-          });
-                        }, buttonText: 'Set Profile', isLoading: false), 
-                  ],
-                ) : _portrait(); // _ProfilescreenWidth>maxProfileScreenSizeInPortraitMode?_landscape():_portrait();
+                return _params['profile'] == null
+                    ? Column(
+                        spacing: 20,
+                        children: [
+                          CircleAvatar(
+                            radius: 80,
+                            child: Image.asset(profileIcon),
+                          ),
+                          Text(
+                            "No Profile Found",
+                            style: TextStyle(
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
+                          ),
+                          CustomButton(
+                            buttonWidth: 150,
+                            onButtonTapped: () async {
+                              await Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                  builder: (context) =>
+                                      UserProfileScreen(showSkipButton: false),
+                                ),
+                              );
+
+                              _params = ref.refresh(profileScreenNotifier);
+                            },
+                            buttonText: 'Set Profile',
+                            isLoading: false,
+                          ),
+                        ],
+                      )
+                    : _portrait(); // _ProfilescreenWidth>maxProfileScreenSizeInPortraitMode?_landscape():_portrait();
               },
             ),
     );
@@ -93,29 +120,43 @@ showSkipButton: false, userProfileUIModel: _params['profile'] as UserProfileUIMo
       margin: EdgeInsets.symmetric(horizontal: 10),
       child: SingleChildScrollView(
         child: Column(
-              spacing: 10,
+          spacing: 10,
           children: [
             Row(
               spacing: 10,
               children: [
-                Expanded(child: InfoBox(text: '${_userProfileUI!.firstName} ${_userProfileUI!.lastName}'))
+                Expanded(
+                  child: InfoBox(
+                    text:
+                        '${_userProfileUI!.firstName} ${_userProfileUI!.lastName}',
+                  ),
+                ),
               ],
             ),
             Row(
               spacing: 10,
               children: [
-                  Expanded(flex: 1, child: InfoBox(gradient: [
-                            Colors.lightGreen,
-                            const Color.fromARGB(255, 194, 228, 0),
-                          ], text: 'Age: ${_userProfileUI!.age.toString()}')),
-                  Expanded(
-                    flex: 2,
-                    child: InfoBox(gradient: [
+                Expanded(
+                  flex: 1,
+                  child: InfoBox(
+                    gradient: [
+                      Colors.lightGreen,
+                      const Color.fromARGB(255, 194, 228, 0),
+                    ],
+                    text: 'Age: ${_userProfileUI!.age.toString()}',
+                  ),
+                ),
+                Expanded(
+                  flex: 2,
+                  child: InfoBox(
+                    gradient: [
                       Colors.red,
-                            const Color.fromARGB(255, 245, 153, 153),
-                          
-                  ], text: 'Date Of Birth: ${_userProfileUI!.dob.day} ${_userProfileUI!.dob.month.monthInAlphabets} ${_userProfileUI!.dob.year}'))
-              
+                      const Color.fromARGB(255, 245, 153, 153),
+                    ],
+                    text:
+                        'Date Of Birth: ${_userProfileUI!.dob.day} ${_userProfileUI!.dob.month.monthInAlphabets} ${_userProfileUI!.dob.year}',
+                  ),
+                ),
               ],
             ),
             Row(
@@ -123,21 +164,31 @@ showSkipButton: false, userProfileUIModel: _params['profile'] as UserProfileUIMo
               children: [
                 Expanded(
                   flex: 2,
-                  child: InfoBox(gradient: [Colors.deepPurple, Colors.purpleAccent], text: 'Weight: ${_userProfileUI!.weight} kg') 
+                  child: InfoBox(
+                    gradient: [Colors.deepPurple, Colors.purpleAccent],
+                    text: 'Weight: ${_userProfileUI!.weight} kg',
+                  ),
                 ),
-                
+
                 Expanded(
                   flex: 1,
-                  child: InfoBox(text: 'Height: ${_userProfileUI!.height} cm', gradient: [Colors.teal, Colors.tealAccent],) 
+                  child: InfoBox(
+                    text: 'Height: ${_userProfileUI!.height} cm',
+                    gradient: [Colors.teal, Colors.tealAccent],
+                  ),
                 ),
                 Expanded(
                   flex: 1,
-                  child: InfoBox(gradient: [Colors.brown, Colors.brown.withValues(alpha: 0.3)], text: 'Gender: ${_userProfileUI!.gender.name.capitalize}')
-                    
+                  child: InfoBox(
+                    gradient: [
+                      Colors.brown,
+                      Colors.brown.withValues(alpha: 0.3),
+                    ],
+                    text: 'Gender: ${_userProfileUI!.gender.name.capitalize}',
+                  ),
                 ),
               ],
             ),
-            
           ],
         ),
       ),
