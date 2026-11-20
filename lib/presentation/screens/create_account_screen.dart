@@ -34,127 +34,129 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
     final clipperHeight = MediaQuery.sizeOf(context).height * 0.4;
     return Scaffold(
       key: _scaffoldKey,
-      body: Stack(
-        children: [
-          ClipPath(
-            clipper: ArcClipper(),
-            child: Container(
-              height: clipperHeight,
-              width: double.infinity,
-              color: Theme.of(context).colorScheme.primary,
-              alignment: Alignment.center,
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  SizedBox(height: 10),
-                  Text(
-                    'Welcome to Habix',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 30,
-                      fontWeight: FontWeight.bold,
+      body: SafeArea(
+        child: Stack(
+          children: [
+            ClipPath(
+              clipper: ArcClipper(),
+              child: Container(
+                height: clipperHeight,
+                width: double.infinity,
+                color: Theme.of(context).colorScheme.primary,
+                alignment: Alignment.center,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    SizedBox(height: 10),
+                    Text(
+                      'Welcome to Habix',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
                     ),
-                  ),
-                  Text(
-                    'Let\'s get started',
-                    style: TextStyle(
-                      color: Theme.of(context).colorScheme.onPrimary,
-                      fontSize: 20,
+                    Text(
+                      'Let\'s get started',
+                      style: TextStyle(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                        fontSize: 20,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.only(
-              top: clipperHeight - 80,
-              left: 10,
-              right: 10,
-            ),
-            child: SingleChildScrollView(
-              child: Column(
-                children: [
-                  Text(
-                    'Create an Account',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
-                  ),
-                  Form(
-                    key: _formKey,
-                    child: Column(
-                      children: [
-                        SizedBox(height: 20),
-                        EmailTextField(controller: _emailController,),
-                        SizedBox(height: 10),
-                        PasswordTextField(
-                          
-                          controller: _passwordController),
-                        SizedBox(height: 10),
-                        PasswordTextField(
-                          
-                          controller: _confirmPasswordController,
-                          hint: 'Confirm Password',
-                        ),
-                      ],
+            Container(
+              margin: EdgeInsets.only(
+                top: clipperHeight - 80,
+                left: 10,
+                right: 10,
+              ),
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Text(
+                      'Create an Account',
+                      style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),
                     ),
-                  ),
-
-                  SizedBox(height: 20),
-
-                  SizedBox(
-                    width: double.infinity,
-                    child: CustomButton(
-                      isLoading: _params['loading'],
-                      buttonText: 'Create Account',
-                      onButtonTapped: () async {
-                              if (_passwordController.text ==
-                                  _confirmPasswordController.text) {
-                                if (_formKey.currentState!.validate()) {
-                                  _formKey.currentState!.save();
-                                  
-                                  UserAuth userAuth = UserAuth(
-                                    email: _emailController.text,
-                                    password: _passwordController.text,
-                                  );
-                                  bool success = await ref
-                                      .read(signupScreenNotifier.notifier)
-                                      .Signup(userAuth);
-                                  if (success) {
-                                    _setProfile();
-                                  } else {
-                                    await Future.delayed(
-                                      Duration(milliseconds: 300),
+                    Form(
+                      key: _formKey,
+                      child: Column(
+                        children: [
+                          SizedBox(height: 20),
+                          EmailTextField(controller: _emailController,),
+                          SizedBox(height: 10),
+                          PasswordTextField(
+                            
+                            controller: _passwordController),
+                          SizedBox(height: 10),
+                          PasswordTextField(
+                            
+                            controller: _confirmPasswordController,
+                            hint: 'Confirm Password',
+                          ),
+                        ],
+                      ),
+                    ),
+        
+                    SizedBox(height: 20),
+        
+                    SizedBox(
+                      width: double.infinity,
+                      child: CustomButton(
+                        isLoading: _params['loading'],
+                        buttonText: 'Create Account',
+                        onButtonTapped: () async {
+                                if (_passwordController.text ==
+                                    _confirmPasswordController.text) {
+                                  if (_formKey.currentState!.validate()) {
+                                    _formKey.currentState!.save();
+                                    
+                                    UserAuth userAuth = UserAuth(
+                                      email: _emailController.text,
+                                      password: _passwordController.text,
                                     );
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                        content: Text(_params['error_message']),
-                                      ),
-                                    );
+                                    bool success = await ref
+                                        .read(signupScreenNotifier.notifier)
+                                        .Signup(userAuth);
+                                    if (success) {
+                                      _setProfile();
+                                    } else {
+                                      await Future.delayed(
+                                        Duration(milliseconds: 300),
+                                      );
+                                      ScaffoldMessenger.of(context).showSnackBar(
+                                        SnackBar(
+                                          content: Text(_params['error_message']),
+                                        ),
+                                      );
+                                    }
                                   }
+                                } else {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                      content: Text('Passwords not matched'),
+                                    ),
+                                  );
                                 }
-                              } else {
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  SnackBar(
-                                    content: Text('Passwords not matched'),
-                                  ),
-                                );
-                              }
-                            },
+                              },
+                      ),
                     ),
-                  ),
-                  SizedBox(height: 10),
-                  SizedBox(
-                    width: double.infinity,
-                    child: TextButton(
-                      onPressed: _moveToLoginScreen,
-                      child: Text('I already have an Account'),
+                    SizedBox(height: 10),
+                    SizedBox(
+                      width: double.infinity,
+                      child: TextButton(
+                        onPressed: _moveToLoginScreen,
+                        child: Text('I already have an Account'),
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

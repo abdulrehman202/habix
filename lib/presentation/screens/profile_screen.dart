@@ -37,17 +37,20 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
         title: Text('ProfileScreen'),
         actions: [
           
-         _params['profile'] == null ?Container(): TextButton(onPressed: () 
+         _params['profile'] == null ?Container(): TextButton(onPressed: () async
         {
           
           
     ref.read(userProfileScreenNotifier.notifier).changeGender(_params['profile']?.gender ?? Gender.MALE);
     ref.read(userProfileScreenNotifier.notifier).changeDOB(_params['profile']?.dob ?? DateTime.now());
 
-    Navigator.push(context, MaterialPageRoute(builder: (context)=>UserProfileScreen(
+    await Navigator.push(context, MaterialPageRoute(builder: (context)=>UserProfileScreen(
 showSkipButton: false, userProfileUIModel: _params['profile'] as UserProfileUIModel,
     )));
-          
+    ref.invalidate(profileScreenNotifier);
+          setState(() {
+            
+          });
         }, child: Text('Edit'))],
       ),
       body: _params['loading']
@@ -65,9 +68,14 @@ showSkipButton: false, userProfileUIModel: _params['profile'] as UserProfileUIMo
                     CustomButton(
                       
                       buttonWidth: 150,
-                      onButtonTapped: () 
+                      onButtonTapped: () async
                       { 
-                        Navigator.push(context, MaterialPageRoute(builder: (context)=> UserProfileScreen(showSkipButton: false,)));
+                        await Navigator.push(context, MaterialPageRoute(builder: (context)=> UserProfileScreen(showSkipButton: false,)));
+                        
+                        ref.invalidate(profileScreenNotifier);
+          setState(() {
+            
+          });
                         }, buttonText: 'Set Profile', isLoading: false), 
                   ],
                 ) : _portrait(); // _ProfilescreenWidth>maxProfileScreenSizeInPortraitMode?_landscape():_portrait();
