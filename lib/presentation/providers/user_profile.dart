@@ -14,7 +14,7 @@ class UserProfileNotifier extends StateNotifier<Map<String, dynamic>>{
     'loading':false,
     'error_message':'',
     'gender': Gender.MALE,
-    'unit_height': HeightUnit.INCH,
+    'unit_height': HeightUnit.CM,
     'unit_weight': WeightUnit.KG,
     'dob': DateTime.now(),
     });

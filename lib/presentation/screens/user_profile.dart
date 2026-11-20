@@ -51,11 +51,17 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
   }
 
   @override
+  void dispose() {
+    if(context.mounted){
+    ref.invalidate(userProfileScreenNotifier);}
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     _params = ref.watch(userProfileScreenNotifier);
    
     return Scaffold(
-      backgroundColor: Colors.lightGreenAccent.withValues(alpha: 0.1),
       bottomNavigationBar: Wrap(
         children: [
           Container(
@@ -79,7 +85,7 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text('Profile updated successfully!')),
                     );
-              ref.invalidate(profileScreenNotifier);
+              ref.invalidate(userProfileScreenNotifier);
                     Navigator.pop(context);
                   }
                   else
@@ -113,220 +119,223 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
         ],
         
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: SingleChildScrollView(
-          child: Form(
-            key: _formKey,
-            child: Column(
-              children: [
-                CircleAvatar(radius: 80, child: Image.asset(profileIcon)),
-                SizedBox(height: 10),
-                Text(
-                  'Tell us about yourself',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                ),
-                SizedBox(height: 10),
-                NameTextField(
-                  controller: _firstNameController,
-                  labelText: 'First Name',
-                ),
-                SizedBox(height: 10),
-                NameTextField(
-                  controller: _lastNameController,
-                  labelText: 'Last Name',
-                ),
-
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 130, child: Text('Date of Birth: ')),
-                    Expanded(
-                      child: Container(
-                        height: 80,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10),
-                          color: Colors.white.withValues(alpha: 0)
-                        ),
-                        child: ScrollDatePicker(
-                          options: DatePickerOptions(
-                            diameterRatio: 6,
-                            isLoop: false,
-                            backgroundColor: Colors.white.withValues(alpha: 0)
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
+                children: [
+                  CircleAvatar(radius: 80, child: Image.asset(profileIcon)),
+                  SizedBox(height: 10),
+                  Text(
+                    'Tell us about yourself',
+                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                  ),
+                  SizedBox(height: 10),
+                  NameTextField(
+                    controller: _firstNameController,
+                    labelText: 'First Name',
+                  ),
+                  SizedBox(height: 10),
+                  NameTextField(
+                    controller: _lastNameController,
+                    labelText: 'Last Name',
+                  ),
+        
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 130, child: Text('Date of Birth: ')),
+                      Expanded(
+                        child: Container(
+                          height: 80,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(10),
+                            color: Colors.white.withValues(alpha: 0)
                           ),
-                          selectedDate: _params['dob']!,
-                          locale: Locale('en'),
-                          onDateTimeChanged: (DateTime value) 
-                          {
-                            ref.read(userProfileScreenNotifier.notifier).changeDOB(value);
-                          },
+                          child: ScrollDatePicker(
+                            options: DatePickerOptions(
+                              diameterRatio: 6,
+                              isLoop: false,
+                              backgroundColor: Colors.white.withValues(alpha: 0)
+                            ),
+                            selectedDate: _params['dob']!,
+                            locale: Locale('en'),
+                            onDateTimeChanged: (DateTime value) 
+                            {
+                              ref.read(userProfileScreenNotifier.notifier).changeDOB(value);
+                            },
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 10),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    SizedBox(width: 130, child: Text('Gender: ')),
-                    Expanded(
-                      child: Container(
-                        margin: EdgeInsets.only(right: 5),
+                    ],
+                  ),
+                  SizedBox(height: 10),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    children: [
+                      SizedBox(width: 130, child: Text('Gender: ')),
+                      Expanded(
+                        child: Container(
+                          margin: EdgeInsets.only(right: 5),
+                          child: SelectableBox(
+                            onOptionSelected: () {
+                              ref
+                                  .read(userProfileScreenNotifier.notifier)
+                                  .changeGender(Gender.MALE);
+                            },
+                            option: Text('Male'),
+                            selectedColor: Colors.blue,
+                            isSelected: _params['gender'] == Gender.MALE,
+                          ),
+                        ),
+                      ),
+                      Expanded(
                         child: SelectableBox(
                           onOptionSelected: () {
                             ref
                                 .read(userProfileScreenNotifier.notifier)
-                                .changeGender(Gender.MALE);
+                                .changeGender(Gender.FEMALE);
                           },
-                          option: Text('Male'),
-                          selectedColor: Colors.blue,
-                          isSelected: _params['gender'] == Gender.MALE,
+                          option: Text('Female'),
+                          selectedColor: Colors.pinkAccent,
+                          isSelected: _params['gender'] == Gender.FEMALE,
                         ),
                       ),
-                    ),
-                    Expanded(
-                      child: SelectableBox(
-                        onOptionSelected: () {
-                          ref
-                              .read(userProfileScreenNotifier.notifier)
-                              .changeGender(Gender.FEMALE);
-                        },
-                        option: Text('Female'),
-                        selectedColor: Colors.pinkAccent,
-                        isSelected: _params['gender'] == Gender.FEMALE,
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      SizedBox(width: 130, child: Text('Weight: ')),
+                      Expanded(
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.trim().isEmpty) {
+                              return 'Field cannot be empty';
+                            }
+                            else if (value == '0') {
+                              return 'Invalid entry';
+                            }
+                            return null;
+                          },
+                          controller: _weightController,
+                          onChanged: (value) {
+                            try{
+                            if(_params['unit_weight'] == WeightUnit.KG){
+                            _weightInKgs = int.parse(value);
+                            _weightInLbs = _weightInKgs.toLbs;}
+                            else{
+                            _weightInLbs = int.parse(value);
+                            _weightInKgs = _weightInLbs.toKg;}
+                            }catch(e){}
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    SizedBox(width: 130, child: Text('Weight: ')),
-                    Expanded(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return 'Field cannot be empty';
-                          }
-                          else if (value == '0') {
-                            return 'Invalid entry';
-                          }
-                          return null;
-                        },
-                        controller: _weightController,
-                        onChanged: (value) {
-                          try{
-                          if(_params['unit_weight'] == WeightUnit.KG){
-                          _weightInKgs = int.parse(value);
-                          _weightInLbs = _weightInKgs.toLbs;}
-                          else{
-                          _weightInLbs = int.parse(value);
-                          _weightInKgs = _weightInLbs.toKg;}
-                          }catch(e){}
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      SizedBox(
+                        width: 150,
+                        child: RadioGroup<WeightUnit>(
+                          groupValue: _params['unit_weight'],
+                          onChanged: (wu) {
+                            ref
+                                .read(userProfileScreenNotifier.notifier)
+                                .changeWeightUnit(wu!);
+        
+                            if (wu == WeightUnit.KG) {
+                              _weightController.text = _weightInKgs
+                                  .toString(); //.toKg.toString();
+                            } else {
+                              _weightController.text = _weightInLbs.toString();
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Radio<WeightUnit>(value: WeightUnit.KG),
+                              SizedBox(width: 24, child: Text('kg')),
+                              Radio<WeightUnit>(value: WeightUnit.LBS),
+                              SizedBox(width: 30, child: Text('lbs', overflow: TextOverflow.ellipsis,)),
+                            ],
                           ),
                         ),
-                        keyboardType: TextInputType.number,
                       ),
-                    ),
-                    SizedBox(
-                      width: 150,
-                      child: RadioGroup<WeightUnit>(
-                        groupValue: _params['unit_weight'],
-                        onChanged: (wu) {
-                          ref
-                              .read(userProfileScreenNotifier.notifier)
-                              .changeWeightUnit(wu!);
-
-                          if (wu == WeightUnit.KG) {
-                            _weightController.text = _weightInKgs
-                                .toString(); //.toKg.toString();
-                          } else {
-                            _weightController.text = _weightInLbs.toString();
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Radio<WeightUnit>(value: WeightUnit.KG),
-                            SizedBox(width: 50, child: Text('kg')),
-                            Radio<WeightUnit>(value: WeightUnit.LBS),
-                            Text('lbs'),
-                          ],
+                    ],
+                  ),
+                  SizedBox(height: 20),
+                  Row(
+                    children: [
+                      SizedBox(width: 130, child: Text('Height: ')),
+                      Expanded(
+                        child: TextFormField(
+                          validator: (value) {
+                            if (value!.trim().isEmpty) {
+                              return 'Field cannot be empty';
+                            }
+                            else if (value == '0') {
+                              return 'Invalid entry';
+                            }
+                            return null;
+                          },
+                          controller: _heightController,
+                          onChanged: (value) {
+                            try{
+                            if(_params['unit_height'] == HeightUnit.INCH){
+                            _heightInInch = int.parse(value);
+                            _heightInCM = _heightInInch.toCm;
+                            }
+                            else{
+                            _heightInCM = int.parse(value);
+                            _heightInInch = _heightInCM.toInch;
+                            }
+                            }catch(e){}
+                          },
+                          decoration: InputDecoration(
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                          ),
+                          keyboardType: TextInputType.number,
                         ),
                       ),
-                    ),
-                  ],
-                ),
-                SizedBox(height: 20),
-                Row(
-                  children: [
-                    SizedBox(width: 130, child: Text('Height: ')),
-                    Expanded(
-                      child: TextFormField(
-                        validator: (value) {
-                          if (value!.trim().isEmpty) {
-                            return 'Field cannot be empty';
-                          }
-                          else if (value == '0') {
-                            return 'Invalid entry';
-                          }
-                          return null;
-                        },
-                        controller: _heightController,
-                        onChanged: (value) {
-                          try{
-                          if(_params['unit_height'] == HeightUnit.INCH){
-                          _heightInInch = int.parse(value);
-                          _heightInCM = _heightInInch.toCm;
-                          }
-                          else{
-                          _heightInCM = int.parse(value);
-                          _heightInInch = _heightInCM.toInch;
-                          }
-                          }catch(e){}
-                        },
-                        decoration: InputDecoration(
-                          border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(10),
+                      SizedBox(
+                        width: 150,
+                        child: RadioGroup<HeightUnit>(
+                          groupValue: _params['unit_height'],
+                          onChanged: (hu) {
+                            ref
+                                .read(userProfileScreenNotifier.notifier)
+                                .changeHeightUnit(hu!);
+        
+                            if (hu == HeightUnit.INCH) {
+                              _heightController.text = _heightInInch
+                                  .toString(); //.toKg.toString();
+                            } else {
+                              _heightController.text = _heightInCM.toString();
+                            }
+                          },
+                          child: Row(
+                            children: [
+                              Radio<HeightUnit>(value: HeightUnit.CM),
+                              SizedBox(width: 24, child: Text('cm')),
+                              Radio<HeightUnit>(value: HeightUnit.INCH),
+                              SizedBox(width: 30, child: Text('inch', overflow: TextOverflow.ellipsis,)),
+                              
+                            ],
                           ),
                         ),
-                        keyboardType: TextInputType.number,
                       ),
-                    ),
-                    SizedBox(
-                      width: 150,
-                      child: RadioGroup<HeightUnit>(
-                        groupValue: _params['unit_height'],
-                        onChanged: (hu) {
-                          ref
-                              .read(userProfileScreenNotifier.notifier)
-                              .changeHeightUnit(hu!);
-
-                          if (hu == HeightUnit.INCH) {
-                            _heightController.text = _heightInInch
-                                .toString(); //.toKg.toString();
-                          } else {
-                            _heightController.text = _heightInCM.toString();
-                          }
-                        },
-                        child: Row(
-                          children: [
-                            Radio<HeightUnit>(value: HeightUnit.INCH),
-                            SizedBox(width: 50, child: Text('inch')),
-                            Radio<HeightUnit>(value: HeightUnit.CM),
-                            Text('cm'),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),
