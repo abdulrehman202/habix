@@ -142,34 +142,38 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                       return AnimatedScale(
                         scale: _animationContoller.isAnimating?_animationContoller.value: 1,//_animationContoller.value,
                         duration: Duration(milliseconds: 500), child: Column(
-                children: [
-                  CircleAvatar(radius: 80 + 80 *(_animationContoller.value), child: Image.asset(profileIcon)),
-                  SizedBox(height: 10),
-                  Text(
-                    _params['loading']?'Sending data...': 'Tell us about yourself',
-                    style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-                  ),
-                  Opacity(opacity: 1-_animationContoller.value,
-                  child: Column(
-                    children: [
-                      
-                  SizedBox(height: 10),
-                  NameTextField(
-                    controller: _firstNameController,
-                    labelText: 'First Name',
-                  ),
-                  SizedBox(height: 10),
-                  NameTextField(
-                    controller: _lastNameController,
-                    labelText: 'Last Name',
-                  ),
-        
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 130, child: Text('Date of Birth: ')),
-                      Expanded(
+                                        children: [
+                                          Container(
+                                            margin: EdgeInsets.only(top: MediaQuery.sizeOf(context).height*0.2*_animationContoller.value ),
+                                            child: CircleAvatar(radius: 80 + 80 *(_animationContoller.value), child: Image.asset(profileIcon))),
+                                          SizedBox(height: 10),
+                                          Text(
+                                            _params['loading']?'Sending data...': 'Tell us about yourself',
+                                            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+                                          ),
+                                          AnimatedScale(
+                                            scale: 1-_animationContoller.value
+                                          , duration: Duration(milliseconds: 500),
+                                          child: Column(
+                                            children: [
+                                              
+                                          SizedBox(height: 10),
+                                          NameTextField(
+                                            controller: _firstNameController,
+                                            labelText: 'First Name',
+                                          ),
+                                          SizedBox(height: 10),
+                                          NameTextField(
+                                            controller: _lastNameController,
+                                            labelText: 'Last Name',
+                                          ),
+                                
+                                          SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(width: 130, child: Text('Date of Birth: ')),
+                                              Expanded(
                         child: Container(
                           height: 80,
                           decoration: BoxDecoration(
@@ -190,15 +194,15 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                             },
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 10),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    children: [
-                      SizedBox(width: 130, child: Text('Gender: ')),
-                      Expanded(
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 10),
+                                          Row(
+                                            mainAxisAlignment: MainAxisAlignment.start,
+                                            children: [
+                                              SizedBox(width: 130, child: Text('Gender: ')),
+                                              Expanded(
                         child: Container(
                           margin: EdgeInsets.only(right: 5),
                           child: SelectableBox(
@@ -212,8 +216,8 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                             isSelected: _params['gender'] == Gender.MALE,
                           ),
                         ),
-                      ),
-                      Expanded(
+                                              ),
+                                              Expanded(
                         child: SelectableBox(
                           onOptionSelected: () {
                             ref
@@ -224,14 +228,14 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                           selectedColor: Colors.pinkAccent,
                           isSelected: _params['gender'] == Gender.FEMALE,
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    children: [
-                      SizedBox(width: 130, child: Text('Weight: ')),
-                      Expanded(
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 20),
+                                          Row(
+                                            children: [
+                                              SizedBox(width: 130, child: Text('Weight: ')),
+                                              Expanded(
                         child: TextFormField(
                           validator: (value) {
                             if (value!.trim().isEmpty) {
@@ -260,8 +264,8 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                           ),
                           keyboardType: TextInputType.number,
                         ),
-                      ),
-                      SizedBox(
+                                              ),
+                                              SizedBox(
                         width: 150,
                         child: RadioGroup<WeightUnit>(
                           groupValue: _params['unit_weight'],
@@ -269,7 +273,7 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                             ref
                                 .read(userProfileScreenNotifier.notifier)
                                 .changeWeightUnit(wu!);
-        
+                                
                             if (wu == WeightUnit.KG) {
                               _weightController.text = _weightInKgs
                                   .toString(); //.toKg.toString();
@@ -286,14 +290,14 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(height: 20),
-                  Row(
-                    children: [
-                      SizedBox(width: 130, child: Text('Height: ')),
-                      Expanded(
+                                              ),
+                                            ],
+                                          ),
+                                          SizedBox(height: 20),
+                                          Row(
+                                            children: [
+                                              SizedBox(width: 130, child: Text('Height: ')),
+                                              Expanded(
                         child: TextFormField(
                           validator: (value) {
                             if (value!.trim().isEmpty) {
@@ -324,8 +328,8 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                           ),
                           keyboardType: TextInputType.number,
                         ),
-                      ),
-                      SizedBox(
+                                              ),
+                                              SizedBox(
                         width: 150,
                         child: RadioGroup<HeightUnit>(
                           groupValue: _params['unit_height'],
@@ -333,7 +337,7 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                             ref
                                 .read(userProfileScreenNotifier.notifier)
                                 .changeHeightUnit(hu!);
-        
+                                
                             if (hu == HeightUnit.INCH) {
                               _heightController.text = _heightInInch
                                   .toString(); //.toKg.toString();
@@ -351,15 +355,15 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                             ],
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                    ],
-                  ),
-                  ),
-                  
-                ],
-              ),) ;
+                                              ),
+                                            ],
+                                          ),
+                                            ],
+                                          ),
+                                          ),
+                                          
+                                        ],
+                                      ),) ;
                     }, animation: _animationContoller,
                     // child: CircleAvatar(radius: 80, child: Image.asset(profileIcon)),
                   ),
