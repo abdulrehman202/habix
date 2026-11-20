@@ -23,7 +23,7 @@ class UserProfileScreen extends ConsumerStatefulWidget {
   ConsumerState<UserProfileScreen> createState() => _UserProfileState();
 }
 
-class _UserProfileState extends ConsumerState<UserProfileScreen> {
+class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProviderStateMixin {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   final _firstNameController = TextEditingController();
   final _lastNameController = TextEditingController();
@@ -34,6 +34,8 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
   int _weightInLbs = 0;
   int _heightInInch = 0; //in inches (by default)
   int _heightInCM = 0;
+
+  late final AnimationController _animationContoller;
 
   initState() {
     super.initState();
@@ -49,6 +51,10 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
     
     _weightController.text = _weightInKgs.toString();
     _heightController.text = _heightInCM.toString();
+
+    _animationContoller = AnimationController(
+    duration: Duration(milliseconds: 500),
+    vsync: this);
   }
 
   @override
@@ -69,6 +75,7 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
             margin: EdgeInsets.all(8.0),
             child: CustomButton(
               onButtonTapped: () async{
+                _animationContoller.forward();
                 if (_formKey.currentState!.validate()) 
                 {
                   UserProfileUIModel userUI = UserProfileUIModel(
@@ -81,6 +88,7 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
                   );
 
                   bool success = widget.userProfileUIModel == null? await ref.read(userProfileScreenNotifier.notifier).setUserProfile(userUI) : await ref.read(userProfileScreenNotifier.notifier).updateProfile(userUI);
+                  
                   if(success)
                   {
                     ScaffoldMessenger.of(context).showSnackBar(
@@ -93,6 +101,7 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
                   else
                   {
                     await Future.delayed(Duration(milliseconds: 500));
+                _animationContoller.reverse();
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(_params['error_message'])),
                     );
@@ -127,14 +136,23 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
           child: SingleChildScrollView(
             child: Form(
               key: _formKey,
-              child: Column(
+              child:
+              AnimatedBuilder(
+                    builder: (context,child) {
+                      return AnimatedScale(
+                        scale: _animationContoller.isAnimating?_animationContoller.value: 1,//_animationContoller.value,
+                        duration: Duration(milliseconds: 500), child: Column(
                 children: [
-                  CircleAvatar(radius: 80, child: Image.asset(profileIcon)),
+                  CircleAvatar(radius: 80 + 80 *(_animationContoller.value), child: Image.asset(profileIcon)),
                   SizedBox(height: 10),
                   Text(
-                    'Tell us about yourself',
+                    _params['loading']?'Sending data...': 'Tell us about yourself',
                     style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
                   ),
+                  Opacity(opacity: 1-_animationContoller.value,
+                  child: Column(
+                    children: [
+                      
                   SizedBox(height: 10),
                   NameTextField(
                     controller: _firstNameController,
@@ -336,8 +354,16 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
                       ),
                     ],
                   ),
+                    ],
+                  ),
+                  ),
+                  
                 ],
-              ),
+              ),) ;
+                    }, animation: _animationContoller,
+                    // child: CircleAvatar(radius: 80, child: Image.asset(profileIcon)),
+                  ),
+               
             ),
           ),
         ),
