@@ -1,7 +1,7 @@
  
  import 'package:flutter/material.dart';
 
-void navigateTo(BuildContext context, Widget page) => Navigator.push(
+void navigateTo(BuildContext context, Widget page) => Navigator.pushReplacement(
   context,
   PageRouteBuilder(
     transitionDuration: const Duration(milliseconds: 400),

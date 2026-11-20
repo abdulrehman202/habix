@@ -15,6 +15,7 @@ import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/presentation/screens/habit_detail.dart';
 import 'package:habix/presentation/screens/widgets/habit_list_tile.dart';
 import 'package:habix/utilities/extensions.dart';
+import 'package:habix/utilities/navigator.dart';
 import 'package:habix/utilities/shimmer_animation.dart';
 import 'package:percent_indicator/circular_percent_indicator.dart';
 
@@ -83,9 +84,9 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                   .read(todaysScreenProvider.notifier)
                   .logout();
               if (success) {
-                Navigator.pushReplacement(
+                navigateTo(
                   context,
-                  MaterialPageRoute(builder: (context) => const LoginScreen()),
+                  LoginScreen()
                 );
               } else {
                 ScaffoldMessenger.of(context).showSnackBar(

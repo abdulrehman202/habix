@@ -10,6 +10,7 @@ import 'package:habix/presentation/screens/widgets/selectable_box.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/utilities/extensions.dart';
 import 'package:habix/utilities/icon_paths.dart';
+import 'package:habix/utilities/navigator.dart';
 import 'package:scroll_date_picker/scroll_date_picker.dart';
 
 class UserProfileScreen extends ConsumerStatefulWidget {
@@ -106,9 +107,9 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> {
           margin: EdgeInsets.all(8.0),
           child: CustomButton(
             onButtonTapped: () async{
-              Navigator.push(
+              navigateTo(
                 context,
-                MaterialPageRoute(builder: (context) => LoginScreen()),
+                LoginScreen()
               );
               
             },

@@ -44,10 +44,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
     ref.read(userProfileScreenNotifier.notifier).changeGender(_params['profile']?.gender ?? Gender.MALE);
     ref.read(userProfileScreenNotifier.notifier).changeDOB(_params['profile']?.dob ?? DateTime.now());
 
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => UserProfileScreen(showSkipButton: false, userProfileUIModel: _params['profile'] as UserProfileUIModel,)),
-          );
+    Navigator.push(context, MaterialPageRoute(builder: (context)=>UserProfileScreen(
+showSkipButton: false, userProfileUIModel: _params['profile'] as UserProfileUIModel,
+    )));
           
         }, child: Text('Edit'))],
       ),
@@ -67,9 +66,9 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
                       
                       buttonWidth: 150,
                       onButtonTapped: () 
-                      {
-                        navigateTo(context, UserProfileScreen());
-                        }, buttonText: 'Set Profile', isLoading: false),
+                      { 
+                        Navigator.push(context, MaterialPageRoute(builder: (context)=> UserProfileScreen(showSkipButton: false,)));
+                        }, buttonText: 'Set Profile', isLoading: false), 
                   ],
                 ) : _portrait(); // _ProfilescreenWidth>maxProfileScreenSizeInPortraitMode?_landscape():_portrait();
               },

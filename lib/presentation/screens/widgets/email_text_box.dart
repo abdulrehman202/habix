@@ -21,12 +21,12 @@ class _EmailTextFieldState extends State<EmailTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       onChanged: (newVal)
-      {try{
+      {
+        try{
         if(newVal[newVal.length-1]==' ')
         {
           widget.controller.text = newVal.trim();
         }}catch(e){}
-        
       },
       selectAllOnFocus: false,
       validator: (emailValue) {
