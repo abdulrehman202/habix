@@ -1,7 +1,6 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/presentation/UIModels/userProfileUI.dart';
-import 'package:habix/presentation/providers/profile_screen.dart';
 import 'package:habix/presentation/providers/user_profile.dart';
 import 'package:habix/presentation/screens/login_screen.dart';
 import 'package:habix/presentation/screens/widgets/custom_button.dart';
@@ -36,7 +35,8 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
   int _heightInCM = 0;
 
   late final AnimationController _animationContoller;
-
+  
+  @override
   initState() {
     super.initState();
     _firstNameController.text = widget.userProfileUIModel?.firstName ?? '';
@@ -94,15 +94,17 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                 
               ref.invalidate(userProfileScreenNotifier);
   await Future.delayed(Duration(milliseconds: 300));
-                    Navigator.pop(context);
+  if(context.mounted){
+                    Navigator.pop(context);}
                   }
                   else
                   {
                     await Future.delayed(Duration(milliseconds: 500));
                 _animationContoller.reverse();
+                if(context.mounted){
                     ScaffoldMessenger.of(context).showSnackBar(
                       SnackBar(content: Text(_params['error_message'])),
-                    );
+                    );}
                   }
                 
                 }

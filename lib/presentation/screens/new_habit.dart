@@ -1,6 +1,5 @@
-import 'package:flutter/material.dart' hide Interval;
+import 'package:material_ui/material_ui.dart' hide Interval;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/presentation/providers/habit_category.dart';
 import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/presentation/screens/widgets/selectable_box.dart';
 import 'package:habix/utilities/constants.dart';
@@ -30,7 +29,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     if (widget.habit != null) {
       _nameController.text = widget.habit!.name;
@@ -43,7 +42,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _nameController.dispose();
     _descriptionController.dispose();
     super.dispose();
@@ -55,7 +53,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
+    
     super.didChangeDependencies();
 
     precacheImage(AssetImage(calendarImagePath), context);

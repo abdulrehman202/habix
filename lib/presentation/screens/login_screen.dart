@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/domain/entity/UserAuth.dart';
@@ -28,7 +28,6 @@ late AnimationController _animationController;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     _animationController = AnimationController(vsync: this,duration: Duration(milliseconds: 500));

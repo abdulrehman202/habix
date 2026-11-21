@@ -1,6 +1,4 @@
-import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
-import 'package:habix/utilities/extensions.dart';
+import 'package:material_ui/material_ui.dart';
 
 class SelectableBox extends StatefulWidget {
   VoidCallback onOptionSelected;

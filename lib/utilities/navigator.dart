@@ -1,5 +1,5 @@
  
- import 'package:flutter/material.dart';
+ import 'package:material_ui/material_ui.dart';
 
 void navigateTo(BuildContext context, Widget page) => Navigator.pushReplacement(
   context,

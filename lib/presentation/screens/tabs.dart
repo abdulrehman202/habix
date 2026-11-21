@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
 import 'package:habix/presentation/providers/profile_screen.dart';
@@ -6,7 +6,6 @@ import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/presentation/screens/habit_screen.dart';
 import 'package:habix/presentation/screens/new_habit.dart';
 import 'package:habix/presentation/screens/profile_screen.dart';
-import 'package:habix/presentation/screens/statistics.dart';
 import 'package:habix/presentation/screens/today_screen.dart';
 
 class TabScreen extends ConsumerStatefulWidget {
@@ -23,7 +22,6 @@ class _TabScreenState extends ConsumerState<TabScreen> with TickerProviderStateM
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500) );
     _animationController.forward();

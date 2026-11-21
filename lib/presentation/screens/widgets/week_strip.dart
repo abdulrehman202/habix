@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:habix/utilities/extensions.dart';
 
 class WeekStrip extends StatelessWidget {

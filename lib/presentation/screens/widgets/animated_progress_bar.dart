@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 
 class AnimatedProgressBar extends StatelessWidget {
   final double value; // Value between 0.0 and 1.0

@@ -1,16 +1,13 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/domain/entity/UserAuth.dart';
-import 'package:habix/domain/entity/UserProfile.dart';
 import 'package:habix/presentation/providers/create_account_screen.dart';
 import 'package:habix/presentation/screens/login_screen.dart';
-import 'package:habix/presentation/screens/profile_screen.dart';
 import 'package:habix/presentation/screens/user_profile.dart';
 import 'package:habix/presentation/screens/widgets/custom_button.dart';
 import 'package:habix/presentation/screens/widgets/email_text_box.dart';
 import 'package:habix/presentation/screens/widgets/password_text_box.dart';
-import 'package:habix/utilities/extensions.dart';
 import 'package:habix/utilities/navigator.dart';
 
 class CreateAccountScreen extends ConsumerStatefulWidget {

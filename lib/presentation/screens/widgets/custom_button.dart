@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_modern_animated_loader/flutter_animated_loader.dart';
 
 class CustomButton extends StatelessWidget {
@@ -29,5 +29,5 @@ class CustomButton extends StatelessWidget {
 Widget _progressLoader()
 {
   return FlutterAnimatedLoader.pulseTrack(color: Colors.black, size: 50);
-;
+
 }

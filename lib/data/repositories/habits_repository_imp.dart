@@ -48,7 +48,6 @@ class HabitRepositoryImpl implements HabitRepository {
 
   @override
   Future<Result<bool>> removeHabit(String habitId) async {
-    // TODO: implement removeHabit
 
     try{
       List<HabitModel> list = await _habitsListRemoteSource.removeHabit(habitId);
@@ -64,7 +63,6 @@ class HabitRepositoryImpl implements HabitRepository {
 
   @override
     Future<Result<bool>> updateHabit(Habit habit)async {
-    // TODO: implement updateHabit
      try{
       HabitModel habitModel = toHabitModel(habit);
       List<HabitModel> list = await _habitsListRemoteSource.updateHabit(habitModel);
@@ -94,7 +92,6 @@ class HabitRepositoryImpl implements HabitRepository {
 
   @override
   Future<Result<Map<String, int>>> getAllProgressOfDate(DateTime dateTime) async {
-    // TODO: implement getAllProgressOfDate
     try {
       Map<String, int> progress = {};
       try {

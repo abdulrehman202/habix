@@ -1,3 +1,4 @@
+// ignore: file_names
 import 'package:habix/core/Error/ErrorInfo.dart';
 
 abstract class Failure {
@@ -7,7 +8,7 @@ abstract class Failure {
 
 class ServerFailure extends Failure {
   int statusCode;
-  ServerFailure({required this.statusCode}) : super(statusCode!.statusCodeErrorMessage);
+  ServerFailure({required this.statusCode}) : super(statusCode.statusCodeErrorMessage);
 }
 
 class NetworkFailure extends Failure {

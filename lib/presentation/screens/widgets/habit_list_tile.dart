@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/utilities/icon_paths.dart';

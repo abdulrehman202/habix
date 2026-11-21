@@ -1,5 +1,4 @@
-import 'package:chips_choice/chips_choice.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:habix/utilities/enums.dart';
@@ -28,14 +27,13 @@ class _AllHabitsState extends ConsumerState<AllHabits>
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
     precacheImage(AssetImage(emptyListPlaceholder), context);
   }
 
   @override
   void initState() {
-    // TODO: implement initState
+    
     super.initState();
     _animationController = AnimationController(
       vsync: this,
@@ -191,7 +189,7 @@ class _AllHabitsState extends ConsumerState<AllHabits>
 
   @override
   void dispose() {
-    // TODO: implement dispose
+    
     _animationController.dispose();
     super.dispose();
   }

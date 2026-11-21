@@ -1,5 +1,4 @@
-import 'package:dio/dio.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:habix/utilities/extensions.dart';
 
 class EmailTextField extends StatefulWidget {
@@ -12,7 +11,6 @@ class EmailTextField extends StatefulWidget {
 class _EmailTextFieldState extends State<EmailTextField> {
   @override
   void dispose() {
-    // TODO: implement dispose
     widget.controller.dispose();
     super.dispose();
   }
@@ -26,7 +24,7 @@ class _EmailTextFieldState extends State<EmailTextField> {
         if(newVal[newVal.length-1]==' ')
         {
           widget.controller.text = newVal.trim();
-        }}catch(e){}
+        }}catch(e) {}
       },
       selectAllOnFocus: false,
       validator: (emailValue) {

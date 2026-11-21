@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:lottie/lottie.dart';
 
 class LottieAnimationWidget extends StatefulWidget {
@@ -15,7 +15,6 @@ class _LottieAnimationWidgetState extends State<LottieAnimationWidget> with Tick
   
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _animationController  = AnimationController(vsync: this,duration: const Duration(milliseconds: 500));
   _animationController.forward();

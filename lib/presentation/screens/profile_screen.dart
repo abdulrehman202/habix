@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/presentation/UIModels/userProfileUI.dart';
 import 'package:habix/presentation/providers/profile_screen.dart';
@@ -9,7 +9,6 @@ import 'package:habix/presentation/screens/widgets/info_box.dart';
 import 'package:habix/utilities/enums.dart';
 import 'package:habix/utilities/extensions.dart';
 import 'package:habix/utilities/icon_paths.dart';
-import 'package:habix/utilities/navigator.dart';
 import 'package:habix/utilities/shimmer_animation.dart';
 
 class ProfileScreen extends ConsumerStatefulWidget {
@@ -25,7 +24,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
 
   @override
   void dispose() {
-    // TODO: implement dispose
     super.dispose();
   }
 
@@ -109,10 +107,6 @@ class _ProfileScreenState extends ConsumerState<ProfileScreen> {
               },
             ),
     );
-  }
-
-  Widget _landscape() {
-    return _portrait();
   }
 
   Widget _portrait() {

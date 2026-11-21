@@ -3,7 +3,7 @@ import 'package:awesome_shake_widget/enum/vibration_type.dart';
 import 'package:awesome_shake_widget/shake_config.dart';
 import 'package:awesome_shake_widget/shake_widget.dart';
 import 'package:confetti/confetti.dart';
-import 'package:flutter/material.dart';
+import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/domain/entity/Habit.dart';
 import 'package:habix/presentation/screens/login_screen.dart';
@@ -42,7 +42,6 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   @override
   void didChangeDependencies() {
-    // TODO: implement didChangeDependencies
     super.didChangeDependencies();
 
     precacheImage(
@@ -53,7 +52,6 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   @override
   void dispose() {
-    // TODO: implement dispose
     _controllerCenter.dispose();
     _audioPlayer.dispose();
     _controller.dispose();
@@ -62,7 +60,6 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _controllerCenter = ConfettiController(
       duration: const Duration(seconds: 2),
