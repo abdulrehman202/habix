@@ -1,53 +1,64 @@
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 
-class LottieAnimation{
+class LottieAnimationWidget extends StatefulWidget {
+  String path,text;
+  
+  LottieAnimationWidget({super.key,required this.path,required this.text});
 
-  static writing()
-  {
-    return Center(
-      child: Column(
-        children: [
-          Expanded(child: Lottie.asset('assets/animations/writing.json')),
-          Expanded(child: Text('Updating Routine'))
-        ],
-      ),
+  @override
+  State<LottieAnimationWidget> createState() => _LottieAnimationWidgetState();
+}
+
+class _LottieAnimationWidgetState extends State<LottieAnimationWidget> with TickerProviderStateMixin{
+  late final AnimationController _animationController; 
+  
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _animationController  = AnimationController(vsync: this,duration: const Duration(milliseconds: 500));
+  _animationController.forward();
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: _animationController,
+      builder: (context, child) {
+        return AnimatedScale(scale: _animationController.value, duration: Duration(milliseconds: 300),
+        child: child,);
+        
+      },
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            SizedBox(height: 150, child: Lottie.asset('assets/animations/${widget.path}.json')),
+            SizedBox(
+              height: 50,
+              child: Text(
+                widget.text,
+                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+              ),
+            ),
+          ],
+        ),
+          ),
     );
   }
+}
 
-  static erasing()
-  {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-                    SizedBox(
-                      height: 150,
-                      child: Lottie.asset('assets/animations/erasing.json')),
-          SizedBox(
-            height: 50,
-            child: Text('Removing Habit',style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),))
-        ],
-      ),
-    );
+class LottieAnimation {
+  static writing() {
+    return LottieAnimationWidget( path: 'writing',text:  'Updating Routine');
   }
 
-  static serverError()
-  {
-    return Center(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          SizedBox(
-            height: 100,
-            child: Lottie.asset('assets/animations/error.json')),
-          SizedBox(
-            height: 100,
-            child: Text('Server Error')),
-        ],
-      ),
-    );
+  static erasing() {
+    return LottieAnimationWidget( path: 'erasing', text: 'Removing Habit');
   }
 
-
+  static serverError() {
+    return LottieAnimationWidget( path: 'error', text:  'Server Error');
+  }
 }

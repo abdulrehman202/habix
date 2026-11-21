@@ -91,9 +91,7 @@ class _UserProfileState extends ConsumerState<UserProfileScreen> with TickerProv
                   
                   if(success)
                   {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Profile updated successfully!')),
-                    );
+                
               ref.invalidate(userProfileScreenNotifier);
   await Future.delayed(Duration(milliseconds: 300));
                     Navigator.pop(context);

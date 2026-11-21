@@ -146,7 +146,7 @@ class _AllHabitsState extends ConsumerState<AllHabits>
                                     ],
                                   ),
                                   child: HabitTile(
-                                    onHabitSelected: () {
+                                    onHabitSelected: () async {
                                       ref
                                           .read(newHabitProvider.notifier)
                                           .changeCategorySelection(
@@ -157,13 +157,15 @@ class _AllHabitsState extends ConsumerState<AllHabits>
                                           .changeIntervalSelection(
                                             list[index].interval,
                                           );
-                                      Navigator.push(
+                                      await Navigator.push(
                                         context,
                                         MaterialPageRoute(
                                           builder: (ctx) =>
                                               NewHabit(habit: list[index]),
                                         ),
                                       );
+                                      await Future.delayed(Duration(milliseconds: 500));
+                                      _params = ref.refresh(habitsCategoryProvider);
                                     },
                                     habit: list[index],
                                   ),

@@ -332,7 +332,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
               ).showSnackBar(SnackBar(content: Text(_params['error_message'])));
             } else {
               ref.invalidate(todaysScreenProvider);
-              ref.invalidate(habitsCategoryProvider);
               _resetStates();
               Navigator.pop(context);
             }

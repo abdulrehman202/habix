@@ -17,14 +17,22 @@ class LoginScreen extends ConsumerStatefulWidget {
   ConsumerState<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _LoginScreenState extends ConsumerState<LoginScreen> {
+class _LoginScreenState extends ConsumerState<LoginScreen> with TickerProviderStateMixin {
 
 final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 final _passwordController = TextEditingController();
 final _emailController = TextEditingController();
 final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-
 late Map<String, dynamic> _params;
+late AnimationController _animationController;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+
+    _animationController = AnimationController(vsync: this,duration: Duration(milliseconds: 500));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -33,61 +41,68 @@ late Map<String, dynamic> _params;
 
     return Scaffold(
       key: _scaffoldKey,
-      body: Stack(
-        children: [
-          ClipPath(
-          clipper:  WaveClipperTwo( flip:  true),
-          child: Container(
-            color: Theme.of(context).colorScheme.primary,
-            height: clipperHeight,
-            width: double.infinity,
-            // child: Image.asset(natureImagePath,fit: BoxFit.cover,),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.center,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text('Habix',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontSize: 30,
-                  fontWeight: FontWeight.bold
-                ),
-                ),
-                Text('Schedule your life',
-                style: TextStyle(
-                  color: Theme.of(context).colorScheme.onPrimary,
-                  fontSize: 13,
-                ),
-                ),
-              ],
-            ),
-          ),
-          ),
-          Container(
-            margin:EdgeInsets.only(top: clipperHeight - 30 , right: 10,left: 10),
-            child: SingleChildScrollView(
-              child: Form(
-                key: _formKey,
+      body: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Opacity(opacity: 1- _animationController.value, child: child);
+          
+        },
+        child: Stack(
+            children: [
+              ClipPath(
+              clipper:  WaveClipperTwo( flip:  true),
+              child: Container(
+                color: Theme.of(context).colorScheme.primary,
+                height: clipperHeight,
+                width: double.infinity,
+                // child: Image.asset(natureImagePath,fit: BoxFit.cover,),
                 child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                  Text('Sign In',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
-                  SizedBox(height: 20,),
-                  EmailTextField(controller: _emailController, ),
-                  SizedBox(height: 10,),
-                  PasswordTextField(controller: _passwordController,),
-                  SizedBox(height: 30,),
-                  CustomButton(onButtonTapped: _login, isLoading: _params['loading'],buttonText:  'Sign In'),
-                    SizedBox(
-                      height: 10,
+                    Text('Habix',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 30,
+                      fontWeight: FontWeight.bold
                     ),
-                   _params['loading']?Container(): SizedBox(
-                    width: double.infinity,
-                    child: TextButton(onPressed: _moveToCreateAccountScreen, child: Text('Create Account')))
-                ],),
+                    ),
+                    Text('Schedule your life',
+                    style: TextStyle(
+                      color: Theme.of(context).colorScheme.onPrimary,
+                      fontSize: 13,
+                    ),
+                    ),
+                  ],
+                ),
               ),
-            ))
-        ],
+              ),
+              Container(
+                margin:EdgeInsets.only(top: clipperHeight - 30 , right: 10,left: 10),
+                child: SingleChildScrollView(
+                  child: Form(
+                    key: _formKey,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                      Text('Sign In',style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30),),
+                      SizedBox(height: 20,),
+                      EmailTextField(controller: _emailController, ),
+                      SizedBox(height: 10,),
+                      PasswordTextField(controller: _passwordController,),
+                      SizedBox(height: 30,),
+                      CustomButton(onButtonTapped: _login, isLoading: _params['loading'],buttonText:  'Sign In'),
+                        SizedBox(
+                          height: 10,
+                        ),
+                       _params['loading']?Container(): SizedBox(
+                        width: double.infinity,
+                        child: TextButton(onPressed: _moveToCreateAccountScreen, child: Text('Create Account')))
+                    ],),
+                  ),
+                ))
+            ],
+          ),
       )
     );
   }
@@ -98,7 +113,10 @@ late Map<String, dynamic> _params;
     UserAuth userAuth = UserAuth(email: _emailController.text, password: _passwordController.text);
     bool success = await ref.read(loginScreenNotifier.notifier).login(userAuth);
     if(success){
+      await _animationController.forward();
+      if(_animationController.isCompleted){
       navigateTo( _scaffoldKey.currentContext! , TabScreen());
+      }
     // Navigator.push( _scaffoldKey.currentContext! , MaterialPageRoute(builder: (ctx)=>TabScreen()));
     }
 

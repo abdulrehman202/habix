@@ -19,14 +19,6 @@ class _NameTextFieldState extends State<NameTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onChanged: (newVal)
-      {
-        if(newVal[newVal.length-1]==' ')
-        {
-          widget.controller.text = newVal.trim();
-        }
-        
-      },
       selectAllOnFocus: false,
       validator: (name) {
         if (name!.trim().isEmpty) {
@@ -35,8 +27,9 @@ class _NameTextFieldState extends State<NameTextField> {
         return null;
       },
       controller: widget.controller,
-      keyboardType: TextInputType.name
-      
+      keyboardType: TextInputType.name,
+
+textCapitalization: TextCapitalization.words     
       ,
       decoration: InputDecoration(
         label: Text(widget.labelText),

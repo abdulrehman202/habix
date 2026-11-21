@@ -16,10 +16,19 @@ class TabScreen extends ConsumerStatefulWidget {
   ConsumerState<TabScreen> createState() => _TabScreenState();
 }
 
-class _TabScreenState extends ConsumerState<TabScreen> {
+class _TabScreenState extends ConsumerState<TabScreen> with TickerProviderStateMixin {
   int _selectedTabIndex = 0;
   Widget activeScreen = Container();
+  late AnimationController _animationController;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500) );
+    _animationController.forward();
+  }
+  
   @override
   Widget build(BuildContext context) {
     if (_selectedTabIndex == 0) {
@@ -36,16 +45,23 @@ class _TabScreenState extends ConsumerState<TabScreen> {
 
     return Scaffold(
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
-      body: PopScope(
-        canPop: false,
-        onPopInvokedWithResult: (val, x) {
-          if (_selectedTabIndex != 0) {
-            setState(() {
-              _selectedTabIndex = 0;
-            });
-          }
+      body: AnimatedBuilder(
+        animation: _animationController,
+        builder: (context, child) {
+          return Opacity(opacity: _animationController.value, child:child);
+           
         },
-        child: activeScreen),
+        child: PopScope(
+            canPop: false,
+            onPopInvokedWithResult: (val, x) {
+              if (_selectedTabIndex != 0) {
+                setState(() {
+                  _selectedTabIndex = 0;
+                });
+              }
+            },
+            child: activeScreen),
+      ),
       floatingActionButton: FloatingActionButton(
         elevation: 9,
         shape: CircleBorder(),
