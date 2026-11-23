@@ -1,3 +1,7 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:habix/firebase_options.dart';
+import 'package:habix/service/notification_service.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
@@ -11,6 +15,8 @@ GetIt getIt = GetIt.instance;
 void main() async{ 
   WidgetsFlutterBinding.ensureInitialized();
   configureDependencies(Environment.prod);
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   runApp( ProviderScope(child: MyApp()));
 }
 

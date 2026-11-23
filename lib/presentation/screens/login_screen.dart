@@ -118,7 +118,8 @@ late AnimationController _animationController;
     UserAuth userAuth = UserAuth(email: _emailController.text, password: _passwordController.text);
     bool success = await ref.read(loginScreenNotifier.notifier).login(userAuth);
     if(success){
-      // await ref.read(notificationServiceProvider).registerDevice();
+      await ref.read(notificationServiceProvider).init();
+      await ref.read(notificationServiceProvider).registerDevice();
       await _animationController.forward();
       if(_animationController.status ==AnimationStatus.completed){
       navigateTo( _scaffoldKey.currentContext! , TabScreen());

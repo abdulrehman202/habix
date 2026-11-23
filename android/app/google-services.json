@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "743948977239",
+    "project_id": "habix-775ad",
+    "storage_bucket": "habix-775ad.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:743948977239:android:7020c22beb0ce09fba0f12",
+        "android_client_info": {
+          "package_name": "com.example.habix"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDYjXiIBSudT6BqfFT4Z6_F-RuuKPIFqaI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

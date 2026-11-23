@@ -60,6 +60,10 @@ dependencies:
   get_it: ^8.0.0
   awesome_shake_widget: ^1.1.1
   material_ui: ^0.0.1
+  firebase_core: ^5.2.0
+  firebase_messaging: ^17.1.0
+  flutter_local_notifications: ^23.0.3
+  
 
 dev_dependencies:
   flutter_test:
