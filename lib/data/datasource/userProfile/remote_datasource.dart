@@ -16,21 +16,13 @@ class UserProfileRemoteDataSourceImp implements UserProfileRemoteDataSource{
 
 UserProfileRemoteDataSourceImp(this.dio);
 
-  Future<String> getTokenFromLocalStorage()async
-  {
-    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-    return sharedPreferences.getString('token')??'';
-  }
-  
   Future<UserProfileModel> getUserProfile() async {
     try {
-      String token = await getTokenFromLocalStorage();
       Response response = await dio.get('/userProfile/',
       options: Options(
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
           },
         ),
       );
@@ -71,7 +63,6 @@ UserProfileRemoteDataSourceImp(this.dio);
 
   Future<UserProfileModel> updateProfile(UserProfileModel userProfile) async {
     try {
-      String token = await getTokenFromLocalStorage();
       final json = userProfile.toJson();
 
       Response response = await dio.put(
@@ -81,7 +72,6 @@ UserProfileRemoteDataSourceImp(this.dio);
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
           },
         ),
       );
@@ -126,7 +116,6 @@ UserProfileRemoteDataSourceImp(this.dio);
   @override
   Future<UserProfileModel> setProfile(UserProfileModel userProfile) async {
     try {
-      String token = await getTokenFromLocalStorage();
       final json = userProfile.toJson();
 
       Response response = await dio.post(
@@ -136,7 +125,6 @@ UserProfileRemoteDataSourceImp(this.dio);
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
           },
         ),
       );

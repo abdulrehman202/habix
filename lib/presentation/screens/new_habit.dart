@@ -47,10 +47,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
     super.dispose();
   }
 
-  _resetStates() {
-    ref.invalidate(newHabitProvider);
-  }
-
   @override
   void didChangeDependencies() {
     
@@ -68,7 +64,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
         actions: [
           IconButton(
             onPressed: () {
-              _resetStates();
               Navigator.pop(context);
             },
             icon: Icon(Icons.close),
@@ -329,8 +324,6 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                 context,
               ).showSnackBar(SnackBar(content: Text(_params['error_message'])));
             } else {
-              ref.invalidate(todaysScreenProvider);
-              _resetStates();
               Navigator.pop(context);
             }
           }

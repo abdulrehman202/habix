@@ -32,7 +32,6 @@ class _TabScreenState extends ConsumerState<TabScreen> with TickerProviderStateM
     if (_selectedTabIndex == 0) {
       activeScreen = TodayScreen();
     } else if (_selectedTabIndex == 1) {
-      ref.invalidate(habitsCategoryProvider);
       activeScreen = AllHabits();
     } else if (_selectedTabIndex == 3) {
       // activeScreen =  Statistics();
@@ -63,11 +62,15 @@ class _TabScreenState extends ConsumerState<TabScreen> with TickerProviderStateM
       floatingActionButton: FloatingActionButton(
         elevation: 9,
         shape: CircleBorder(),
-        onPressed: () {
-          Navigator.push(
+        onPressed: () async {
+          if(context.mounted){
+          await Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => NewHabit()),
           );
+              ref.invalidate(todaysScreenProvider);
+              ref.invalidate(habitsCategoryProvider);
+          }
         },
         child: Icon(Icons.add),
       ),

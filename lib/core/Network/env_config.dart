@@ -1,4 +1,5 @@
 import 'package:dio/dio.dart';
+import 'package:habix/core/Network/interceptors.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class EnvConfig{
@@ -30,7 +31,8 @@ abstract class NetworkModule{
         receiveTimeout: Duration(seconds: 60),
       )
     );
-
+    
+    dio.interceptors.add(AuthInterceptor());
     return dio;
   }
 }

@@ -1,3 +1,4 @@
+import 'package:habix/presentation/providers/notification_provider.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -32,7 +33,11 @@ late AnimationController _animationController;
 
     _animationController = AnimationController(vsync: this,duration: Duration(milliseconds: 500));
   }
-
+  @override
+  void dispose() {
+    _animationController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
   final clipperHeight = MediaQuery.sizeOf(context).height * 0.3;
@@ -105,15 +110,17 @@ late AnimationController _animationController;
       )
     );
   }
-
+  
+  
   _login()async {
     if(_formKey.currentState!.validate()){
     _formKey.currentState!.save();
     UserAuth userAuth = UserAuth(email: _emailController.text, password: _passwordController.text);
     bool success = await ref.read(loginScreenNotifier.notifier).login(userAuth);
     if(success){
+      // await ref.read(notificationServiceProvider).registerDevice();
       await _animationController.forward();
-      if(_animationController.isCompleted){
+      if(_animationController.status ==AnimationStatus.completed){
       navigateTo( _scaffoldKey.currentContext! , TabScreen());
       }
     // Navigator.push( _scaffoldKey.currentContext! , MaterialPageRoute(builder: (ctx)=>TabScreen()));

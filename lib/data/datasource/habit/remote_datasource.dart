@@ -26,13 +26,11 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   Future<List<HabitModel>> getAllHabits() async {
     try {
       List<HabitModel> list = [];
-      String token = await getDataFromLocalStorage('token');
       Response response = await dio.get('/habits/',
       options: Options(
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
           },
         ),
       );
@@ -74,7 +72,7 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   @override
   Future<List<HabitModel>> addHabit(HabitModel habit) async {
     try {
-      String token = await getDataFromLocalStorage('token');
+       
       final json = habit.toJson();
 
       Response response = await dio.post(
@@ -84,7 +82,6 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
           },
         ),
       );
@@ -131,7 +128,7 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   @override
   Future<List<HabitModel>> updateHabit(HabitModel habit) async {
     try {
-      String token = await getDataFromLocalStorage('token');
+       
       final json = habit.toJson();
 
       Response response = await dio.put(
@@ -141,7 +138,6 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
           },
         ),
       );
@@ -188,7 +184,7 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   @override
   Future<List<HabitModel>> removeHabit(String habitId) async {
     try {
-      String token = await getDataFromLocalStorage('token');
+       
       
       Response response = await dio.delete(
         '/habits/remove/$habitId',
@@ -196,7 +192,6 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
           },
         ),
       );
@@ -245,13 +240,12 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
   Future<Map<String, int>> getAllProgress() async {
     try {
       Map<String, int> list = {};
-      String token = await getDataFromLocalStorage('token');
+       
       Response response = await dio.get('/habits/progress',
       options: Options(
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
           },
         ),
       );
@@ -294,7 +288,7 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
     
     
     try {
-      String token = await getDataFromLocalStorage('token');
+       
 
       Response response = await dio.put(
         '/habits/progress/increment/',
@@ -303,7 +297,6 @@ class HabitRemoteDataSourceImp implements HabitRemoteDataSource{
           headers: {
             'Content-Type':
                 'application/json', // Let the server know it is JSON
-                'Authorization':'Bearer $token'
           },
         ),
       );
