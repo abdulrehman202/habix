@@ -68,6 +68,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: ^0.14.4
+
+flutter_launcher_icons:
+  android: "ic_launcher"
+  ios: true
+  image_path: "assets/images/calendar.jpg"
   
   build_runner: ^2.4.0
   injectable_generator: ^2.6.0
