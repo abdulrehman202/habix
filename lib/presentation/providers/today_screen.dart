@@ -75,7 +75,7 @@ class TodayScreenNotifier extends StateNotifier<Map<String, dynamic>> {
     bool? success;
     if (_timer == null || !_timer!.isActive) {
     _completer = Completer<bool?>();
-       _timer = _timer?? Timer(Duration(seconds: 5), () async {
+       _timer = _timer?? Timer(Duration(seconds: 10), () async {
           
           success =  await _callServer();
          _timer = null;
