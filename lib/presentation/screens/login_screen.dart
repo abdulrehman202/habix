@@ -32,7 +32,14 @@ late AnimationController _animationController;
     super.initState();
 
     _animationController = AnimationController(vsync: this,duration: Duration(milliseconds: 500));
+    initializeNotifications();
   }
+  
+  initializeNotifications()async
+  {
+    await ref.read(notificationServiceProvider).init();
+  }
+
   @override
   void dispose() {
     _animationController.dispose();
@@ -118,7 +125,7 @@ late AnimationController _animationController;
     UserAuth userAuth = UserAuth(email: _emailController.text, password: _passwordController.text);
     bool success = await ref.read(loginScreenNotifier.notifier).login(userAuth);
     if(success){
-      await ref.read(notificationServiceProvider).init();
+      
       await ref.read(notificationServiceProvider).registerDevice();
       await _animationController.forward();
       if(_animationController.status ==AnimationStatus.completed){

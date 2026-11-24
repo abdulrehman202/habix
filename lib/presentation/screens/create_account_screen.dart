@@ -1,3 +1,4 @@
+import 'package:habix/presentation/providers/notification_provider.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_custom_clippers/flutter_custom_clippers.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -118,6 +119,7 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                                         .read(signupScreenNotifier.notifier)
                                         .Signup(userAuth);
                                     if (success) {
+                                      
                                       _setProfile();
                                     } else {
                                       await Future.delayed(

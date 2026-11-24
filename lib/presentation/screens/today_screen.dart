@@ -3,6 +3,7 @@ import 'package:awesome_shake_widget/enum/vibration_type.dart';
 import 'package:awesome_shake_widget/shake_config.dart';
 import 'package:awesome_shake_widget/shake_widget.dart';
 import 'package:confetti/confetti.dart';
+import 'package:habix/presentation/providers/notification_provider.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/domain/entity/Habit.dart';
@@ -81,6 +82,9 @@ class _TodayScreenState extends ConsumerState<TodayScreen>
                   .read(todaysScreenProvider.notifier)
                   .logout();
               if (success) {
+                 await ref.read(notificationServiceProvider).unregisterDevice();
+                try{
+                }catch(e){}
                 navigateTo(
                   context,
                   LoginScreen()

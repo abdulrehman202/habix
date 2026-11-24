@@ -14,7 +14,7 @@ GetIt getIt = GetIt.instance;
 
 void main() async{ 
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies(Environment.prod);
+  configureDependencies(Environment.dev);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   runApp( ProviderScope(child: MyApp()));

@@ -26,7 +26,6 @@ class NotificationService {
   );
 
   Future<void> init({void Function(Map<String, dynamic> data)? onTap}) async {
-    // Permission (iOS + Android 13+)
     await _messaging.requestPermission(alert: true, badge: true, sound: true);
 
     // Local notifications setup
@@ -79,6 +78,8 @@ class NotificationService {
 
     // Keep backend in sync if the token rotates
     _messaging.onTokenRefresh.listen(_sendTokenToBackend);
+
+    
   }
 
   /// Call after the user logs in.
@@ -89,11 +90,13 @@ class NotificationService {
 
   /// Call on logout.
   Future<void> unregisterDevice() async {
+    try{
     final token = await _messaging.getToken();
     if (token != null) {
       await _dio.delete('/devices', data: {'token': token});
     }
-    await _messaging.deleteToken();
+    await _messaging.deleteToken();}
+    catch(_){}
   }
 
   Future<void> _sendTokenToBackend(String token) async {

@@ -324,7 +324,10 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                 context,
               ).showSnackBar(SnackBar(content: Text(_params['error_message'])));
             } else {
-              Navigator.pop(context);
+              if(context.mounted) {
+                Navigator.pop(context);
+              }
+              
             }
           }
         },

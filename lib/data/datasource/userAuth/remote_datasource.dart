@@ -16,6 +16,7 @@ class UserAuthRemoteDataSourceImp implements UserAuthRemoteDataSource{
 
   UserAuthRemoteDataSourceImp(this.dio);
 
+  @override
   Future<String> login(UserAuthModel user) async{
     try {
       
@@ -66,6 +67,7 @@ class UserAuthRemoteDataSourceImp implements UserAuthRemoteDataSource{
 
   }
 
+  @override
   Future<bool> signUp(UserAuthModel user) async{
     try {
       final json = user.toJson();
