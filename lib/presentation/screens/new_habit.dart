@@ -1,6 +1,5 @@
 import 'package:material_ui/material_ui.dart' hide Interval;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:habix/presentation/providers/today_screen.dart';
 import 'package:habix/presentation/screens/widgets/selectable_box.dart';
 import 'package:habix/utilities/constants.dart';
 import 'package:habix/utilities/enums.dart';

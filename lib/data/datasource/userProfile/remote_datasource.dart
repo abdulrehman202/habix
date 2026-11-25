@@ -2,7 +2,6 @@ import 'package:dio/dio.dart';
 import 'package:habix/core/Error/Failures.dart';
 import 'package:habix/data/model/user_profile_model.dart';
 import 'package:injectable/injectable.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 
 abstract class UserProfileRemoteDataSource{
   Future<UserProfileModel> getUserProfile();
