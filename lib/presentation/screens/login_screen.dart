@@ -32,7 +32,7 @@ late AnimationController _animationController;
     super.initState();
 
     _animationController = AnimationController(vsync: this,duration: Duration(milliseconds: 500));
-    // initializeNotifications();
+    initializeNotifications();
   }
   
   initializeNotifications()async
