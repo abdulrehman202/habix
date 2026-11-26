@@ -1,4 +1,5 @@
 import 'package:habix/utilities/enums.dart';
+import 'package:material_ui/material_ui.dart';
 
 class Habit  {
   String id;
@@ -6,11 +7,12 @@ String name;
 Category category;
 int quantity;
 HabitInterval interval;
+TimeOfDay reminderTime;
 int streaks = 0;
 DateTime dateCreated;
 DateTime? dateFinished;
 
-Habit( {required this.id, required this.name, required this.category, required this.quantity,required this.interval,required this.dateCreated});
+Habit( {required this.id, required this.name, required this.category, required this.quantity,required this.interval, required this.reminderTime, required this.dateCreated});
 
 String descriptionDetail() {
   return '$quantity Repititons';

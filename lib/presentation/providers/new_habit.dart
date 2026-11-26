@@ -51,7 +51,7 @@ class NewHabitProvider extends StateNotifier<Map<String, dynamic>>{
     return result is Ok;
   }
 
-  void changeState(String key, dynamic value)
+  void changeState(String key, dynamic value) 
   {
     state = {
       ...state,

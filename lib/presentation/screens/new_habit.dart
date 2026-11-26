@@ -293,10 +293,11 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                   .read(newHabitProvider.notifier)
                   .addHabit(
                     Habit(
-                      id: getNewHabitId(),
+                      id: getNewHabitId(), 
                       name: _name,
                       category: _params['category'],
                       quantity: int.parse(_description),
+                      reminderTime: _params['time'],
                       interval: _params['interval'],
                       dateCreated: DateTime.now(),
                     ),
@@ -312,6 +313,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
                       category: _params['category'],
                       quantity: int.parse(_description),
                       interval: _params['interval'],
+                      reminderTime: _params['time'],
                       dateCreated: widget.habit!.dateCreated,
                     ),
                   );
@@ -409,7 +411,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
         final selectedTime = await showTimePicker(
           initialEntryMode: TimePickerEntryMode.inputOnly,
           context: context,
-          initialTime: TimeOfDay.now(),
+          initialTime: _params['time'],
         );
         ref
             .read(newHabitProvider.notifier)
@@ -422,7 +424,7 @@ class _NewHabitState extends ConsumerState<NewHabit> {
       leading: Icon(Icons.alarm),
       title: Text('Reminder', style: TextStyle(fontWeight: FontWeight.bold)),
       trailing: Row(
-        mainAxisSize: MainAxisSize.min,
+        mainAxisSize: MainAxisSize.min, 
         children: [
           Text(
             _params['time'].format(context).toString(),

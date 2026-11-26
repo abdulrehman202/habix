@@ -20,11 +20,13 @@ String name;
 Category category;
 int quantity;
 HabitInterval interval;
+String reminderHour;
+String reminderMinute;
 int streaks = 0;
 DateTime dateCreated;
 DateTime? dateFinished;
 
-HabitModel({required this.id, required this.name, required this.category, required this.quantity, required this.interval,this.streaks=0, required this.dateCreated});
+HabitModel({required this.id, required this.name, required this.category, required this.quantity, required this.interval,required  this.reminderHour,required this.reminderMinute, this.streaks=0, required this.dateCreated});
 
 factory HabitModel.fromJson(Map<String, dynamic> json) {
     return HabitModel(
@@ -33,6 +35,8 @@ factory HabitModel.fromJson(Map<String, dynamic> json) {
       category: catMap[json["category"]] as Category,
       quantity: json["quantity"],
       interval: intervalMap[json["interval"]] as HabitInterval,
+      reminderHour: json['hour'],
+      reminderMinute: json['minute'],
       dateCreated: DateTime.fromMillisecondsSinceEpoch(json['dateCreated']),
       streaks: json["streaks"]??0
     );
@@ -45,6 +49,8 @@ factory HabitModel.fromJson(Map<String, dynamic> json) {
      'category': category.name,
       "quantity": quantity,
       "interval":interval.name,
+      "hour":reminderHour,
+      "minute":reminderMinute,
       'dateCreated': 1791445698546,
       "streaks":streaks
   };}

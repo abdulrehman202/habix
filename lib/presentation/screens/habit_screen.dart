@@ -155,6 +155,12 @@ class _AllHabitsState extends ConsumerState<AllHabits>
                                           .changeIntervalSelection(
                                             list[index].interval,
                                           );
+
+                                          ref
+                                          .read(newHabitProvider.notifier)
+                                          .changeTime(
+                                            list[index].reminderTime,
+                                          );
                                       await Navigator.push(
                                         context,
                                         MaterialPageRoute(
