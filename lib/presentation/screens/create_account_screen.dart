@@ -114,6 +114,22 @@ class _CreateAccountScreenState extends ConsumerState<CreateAccountScreen> {
                                       email: _emailController.text,
                                       password: _passwordController.text,
                                     );
+                                    
+                                    showDialog(context: context,
+                                    builder: (context)=>Scaffold(
+                                      body: Center(
+                                        child: Column(
+                                          mainAxisAlignment: MainAxisAlignment.center,
+                                          children: [
+                                            Text('Click on link sent to ${_emailController.text} to proceed'),
+                                            SizedBox(height: 10,),
+                                            CustomButton(onButtonTapped: ()=>Navigator.pop(context), buttonText: 'OK', isLoading: false)
+                                          ],
+                                        ),
+                                      ),
+                                    )
+                                    );
+
                                     bool success = await ref
                                         .read(signupScreenNotifier.notifier)
                                         .Signup(userAuth);
