@@ -1,3 +1,4 @@
+import 'package:habix/presentation/providers/notification_provider.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:habix/presentation/providers/habit_category.dart';
@@ -25,8 +26,17 @@ class _TabScreenState extends ConsumerState<TabScreen> with TickerProviderStateM
     super.initState();
     _animationController = AnimationController(vsync: this, duration: Duration(milliseconds: 500) );
     _animationController.forward();
+    initializeNotifications();
+  
   }
   
+  initializeNotifications()async
+  {
+    try{
+    await ref.read(notificationServiceProvider).init();}
+    catch(_){}
+  }
+
   @override
   Widget build(BuildContext context) {
     if (_selectedTabIndex == 0) {

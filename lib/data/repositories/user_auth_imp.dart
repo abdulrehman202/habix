@@ -32,10 +32,11 @@ class UserAuthRepositoryImp implements UserAuthRepository{
   Future<Result<String>> login(UserAuth user) async {
     try{
       UserAuthModel userAuthModel = toUserAuthModel(user);
-      String token = await _userAuthRemoteDataSource.login(userAuthModel);
-      await addDataToLocalStorage('token', token);
+      Map<String, String> tokens = await _userAuthRemoteDataSource.login(userAuthModel);
+      await addDataToLocalStorage('token', tokens['token']??'');
+      await addDataToLocalStorage('refreshToken', tokens['refreshToken']??'');
       await addDataToLocalStorage('email', user.email);
-      return Result.ok(token);
+      return Result.ok(tokens['token']??'');
     }
     catch(e)
     {

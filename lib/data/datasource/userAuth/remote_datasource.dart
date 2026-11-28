@@ -4,7 +4,7 @@ import 'package:habix/data/model/user_auth_model.dart';
 import 'package:injectable/injectable.dart';
 
 abstract class UserAuthRemoteDataSource{
-  Future<String> login(UserAuthModel user);
+  Future<Map<String, String>> login(UserAuthModel user);
   Future<bool> signUp(UserAuthModel user);
   Future<bool> logOut();
 }
@@ -17,7 +17,7 @@ class UserAuthRemoteDataSourceImp implements UserAuthRemoteDataSource{
   UserAuthRemoteDataSourceImp(this.dio);
 
   @override
-  Future<String> login(UserAuthModel user) async{
+  Future<Map<String, String>> login(UserAuthModel user) async{
     try {
       
       final json = user.toJson();
@@ -31,8 +31,8 @@ class UserAuthRemoteDataSourceImp implements UserAuthRemoteDataSource{
         ),);
       if (response.statusCode == 200) {
         final resData = response.data;
-        final token = resData['token'].toString();
-      return token;
+        final tokens = {'token':resData['token'].toString(),'refreshToken':resData['refreshToken'].toString()};
+      return tokens;
       }
       
       

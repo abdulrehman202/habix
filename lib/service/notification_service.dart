@@ -86,8 +86,11 @@ class NotificationService {
 
   /// Call after the user logs in.
   Future<void> registerDevice() async {
+    try{
     final token = await _messaging.getToken();
     if (token != null) await _sendTokenToBackend(token);
+    }
+    catch(_){}
   }
 
   /// Call on logout.

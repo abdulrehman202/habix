@@ -8,14 +8,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:get_it/get_it.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:habix/injection.dart';
-import 'package:habix/presentation/screens/login_screen.dart';
 import 'package:injectable/injectable.dart';
 GetIt getIt = GetIt.instance;
 
 
 void main() async{ 
   WidgetsFlutterBinding.ensureInitialized();
-  configureDependencies(Environment.prod);
+  configureDependencies(Environment.dev);
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseMessaging.onBackgroundMessage(firebaseMessagingBackgroundHandler);
   runApp( ProviderScope(child: MyApp()));

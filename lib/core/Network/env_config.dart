@@ -32,7 +32,7 @@ abstract class NetworkModule{
       )
     );
     
-    dio.interceptors.add(AuthInterceptor());
+    dio.interceptors.add(AuthInterceptor(dio: dio ));
     return dio;
   }
 }

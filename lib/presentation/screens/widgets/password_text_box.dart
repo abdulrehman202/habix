@@ -27,14 +27,7 @@ class _PasswordTextFieldState extends State<PasswordTextField> {
       controller: widget.controller,
                   keyboardType: TextInputType.visiblePassword,
                   obscureText: hidePass,
-                  onChanged: (newVal)
-      {
-        if(newVal[newVal.length-1]==' ')
-        {
-          widget.controller.text = newVal.trim();
-        }
-        
-      },
+                  
       selectAllOnFocus: false,
                   validator: (val){
                     if(val!.trim().isEmpty)
